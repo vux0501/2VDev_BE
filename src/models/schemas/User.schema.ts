@@ -12,6 +12,7 @@ interface UserType {
   verify?: UserVerifyStatus
   role?: UserRoleStatus
   level?: UserLevelStatus
+  point?: number
   bio?: string
   location?: string
   website?: string
@@ -35,6 +36,7 @@ export default class User {
   verify: UserVerifyStatus // optional
   role: UserRoleStatus // optional
   level: UserLevelStatus // optional
+  point: number
   bio: string // optional
   location: string // optional
   website: string // optional
@@ -56,6 +58,7 @@ export default class User {
     this.verify = user.verify || UserVerifyStatus.Unverified
     this.role = user.role || UserRoleStatus.User
     this.level = user.level || UserLevelStatus.Normal
+    this.point = user.point || 0
     this.bio = user.bio || ''
     this.location = user.location || ''
     this.website = user.website || ''

@@ -1,0 +1,20 @@
+export const USERS_MESSAGES = {
+  VALIDATION_ERROR: 'Validation error',
+  NAME_IS_REQUIRED: 'Tên không được để trống.',
+  NAME_MUST_BE_A_STRING: 'Tên phải là chuỗi.',
+  NAME_LENGTH_MUST_BE_FROM_1_TO_100: 'Tên chỉ chứa 1 đến 100 ký tự',
+  EMAIL_ALREADY_EXISTS: 'Email đã tồn tại.',
+  EMAIL_IS_REQUIRED: 'Email không được để trống.',
+  EMAIL_IS_INVALID: 'Email không đúng định dạng.',
+  EMAIL_OR_PASSWORD_IS_INCORRECT: 'Email hoặc mật khẩu không chính xác.',
+  PASSWORD_IS_REQUIRED: 'Mật khẩu không được để trống.',
+  PASSWORD_MUST_BE_A_STRING: 'Mật khẩu phải là chuỗi.',
+  PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50: 'Password chỉ chứa 6 đến 50 ký tự',
+  CONFIRM_PASSWORD_IS_REQUIRED: 'Confirm Password không được để trống.',
+  CONFIRM_PASSWORD_MUST_BE_A_STRING: 'Confirm Password phải là chuỗi.',
+  CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50: 'Confirm Password chỉ chứa 6 đến 50 ký tự.',
+  CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD: 'Mật khẩu xác nhận không khớp.',
+  DATE_OF_BIRTH_MUST_BE_ISO8601: 'Ngày sinh phải có dạng ISO8601.',
+  EMAIL_OR_PASSWORD_INCORRECT: 'Tên đăng nhập hoặc mật khẩu không chính xác.',
+  REGISTER_SUCCESS: 'Đăng ký thành công.'
+} as const

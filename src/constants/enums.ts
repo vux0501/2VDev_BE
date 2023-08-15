@@ -13,3 +13,10 @@ export enum UserRoleStatus {
   User, // tào khoản người dùng, mặc định = 0
   Admin // tài khoản admin
 }
+
+export enum TokenType {
+  AccessToken,
+  RefreshToken,
+  ForgotPasswordToken,
+  EmailVerifyToken
+}
