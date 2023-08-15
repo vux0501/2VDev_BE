@@ -7,9 +7,14 @@ export interface RegisterReqBody {
   password: string
   confirm_password: string
 }
+
 export interface LoginReqBody {
   email: string
   password: string
+}
+
+export interface LogoutReqBody {
+  refresh_token: string
 }
 export interface TokenPayload extends JwtPayload {
   user_id: string

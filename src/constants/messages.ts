@@ -17,5 +17,12 @@ export const USERS_MESSAGES = {
   DATE_OF_BIRTH_MUST_BE_ISO8601: 'Ngày sinh phải có dạng ISO8601.',
   EMAIL_OR_PASSWORD_INCORRECT: 'Tên đăng nhập hoặc mật khẩu không chính xác.',
   REGISTER_SUCCESS: 'Đăng ký thành công.',
-  LOGIN_SUCCESS: 'Đăng nhập thành công.'
+  LOGIN_SUCCESS: 'Đăng nhập thành công.',
+  ACCESS_TOKEN_IS_REQUIRED: 'Access Token không được trống.',
+  ACCESS_TOKEN_INVALID: 'Access Token không đúng hoặc đã hết hạn.',
+  REFRESH_TOKEN_IS_REQUIRED: 'Refresh Token không được trống.',
+  REFRESH_TOKEN_INVALID: 'Không đúng định dạng.',
+  REFRESH_TOKEN_SUCCESS: 'Làm mới token thành công.',
+  USED_REFRESH_TOKEN_OR_NOT_EXIST: 'Refresh Token đã được sử dụng hoặc không tồn tại trong database',
+  LOGOUT_SUCCESS: 'Đăng xuất thành công.'
 } as const
