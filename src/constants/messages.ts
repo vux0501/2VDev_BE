@@ -16,5 +16,6 @@ export const USERS_MESSAGES = {
   CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD: 'Mật khẩu xác nhận không khớp.',
   DATE_OF_BIRTH_MUST_BE_ISO8601: 'Ngày sinh phải có dạng ISO8601.',
   EMAIL_OR_PASSWORD_INCORRECT: 'Tên đăng nhập hoặc mật khẩu không chính xác.',
-  REGISTER_SUCCESS: 'Đăng ký thành công.'
+  REGISTER_SUCCESS: 'Đăng ký thành công.',
+  LOGIN_SUCCESS: 'Đăng nhập thành công.'
 } as const

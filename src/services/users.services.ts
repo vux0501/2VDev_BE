@@ -165,6 +165,34 @@ class UsersService {
     const user = await databaseService.users.findOne({ email })
     return Boolean(user)
   }
+
+  async login({
+    user_id,
+    verify,
+    role,
+    level
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    role: UserRoleStatus
+    level: UserLevelStatus
+  }) {
+    const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
+      user_id,
+      verify,
+      role,
+      level
+    })
+    const { iat, exp } = await this.decodeRefreshToken(refresh_token)
+
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
+    )
+    return {
+      access_token,
+      refresh_token
+    }
+  }
 }
 
 const usersService = new UsersService()
