@@ -9,6 +9,9 @@ import dotenv from 'dotenv'
 import { ObjectId } from 'mongodb'
 import RefreshToken from '~/models/requests/RefreshToken.schema'
 import { USERS_MESSAGES } from '~/constants/messages'
+import HTTP_STATUS from '~/constants/httpStatus'
+import { ErrorWithStatus } from '~/models/Errors'
+import { sendVerifyRegisterEmail } from '~/utils/email'
 
 dotenv.config()
 
@@ -137,6 +140,13 @@ class UsersService {
       level: UserLevelStatus.Normal
     })
 
+    try {
+      console.log(`Verify Email Token : ${email_verify_token}`)
+      await sendVerifyRegisterEmail(payload.email, email_verify_token)
+    } catch (error) {
+      throw new ErrorWithStatus({ status: HTTP_STATUS.BAD_REQUEST, message: USERS_MESSAGES.CANNOT_SEND_VERIFY_EMAIL })
+    }
+
     await databaseService.users.insertOne(
       new User({
         ...payload,
@@ -198,6 +208,67 @@ class UsersService {
     await databaseService.refreshTokens.deleteOne({ token: refresh_token })
     return {
       message: USERS_MESSAGES.LOGOUT_SUCCESS
+    }
+  }
+  async verifyEmail(user_id: string) {
+    const [token] = await Promise.all([
+      this.signAccessAndRefreshToken({
+        user_id,
+        verify: UserVerifyStatus.Verified,
+        role: UserRoleStatus.User,
+        level: UserLevelStatus.Normal
+      }),
+      databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
+        {
+          $set: {
+            email_verify_token: '',
+            verify: UserVerifyStatus.Verified,
+            updated_at: '$$NOW'
+          }
+        }
+      ])
+    ])
+    const [access_token, refresh_token] = token
+    const { iat, exp } = await this.decodeRefreshToken(refresh_token)
+
+    await databaseService.refreshTokens.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token, iat, exp })
+    )
+    return {
+      access_token,
+      refresh_token
+    }
+  }
+  async resendVerifyEmail(user_id: string, email: string) {
+    const email_verify_token = await this.signEmailVerifyToken({
+      user_id,
+      verify: UserVerifyStatus.Unverified,
+      role: UserRoleStatus.User,
+      level: UserLevelStatus.Normal
+    })
+
+    try {
+      console.log(`Verify Email Token : ${email_verify_token}`)
+      await sendVerifyRegisterEmail(email, email_verify_token)
+    } catch (error) {
+      throw new ErrorWithStatus({ status: HTTP_STATUS.BAD_REQUEST, message: USERS_MESSAGES.CANNOT_SEND_VERIFY_EMAIL })
+    }
+
+    // Cập nhật lại giá trị email_verify_token trong document user
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          email_verify_token
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+
+    return {
+      message: USERS_MESSAGES.RESEND_VERIFY_EMAIL_SUCCESS
     }
   }
 }

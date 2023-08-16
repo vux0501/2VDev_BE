@@ -16,13 +16,20 @@ export const USERS_MESSAGES = {
   CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD: 'Mật khẩu xác nhận không khớp.',
   DATE_OF_BIRTH_MUST_BE_ISO8601: 'Ngày sinh phải có dạng ISO8601.',
   EMAIL_OR_PASSWORD_INCORRECT: 'Tên đăng nhập hoặc mật khẩu không chính xác.',
-  REGISTER_SUCCESS: 'Đăng ký thành công.',
+
   LOGIN_SUCCESS: 'Đăng nhập thành công.',
+  REGISTER_SUCCESS: 'Đăng ký thành công.',
   ACCESS_TOKEN_IS_REQUIRED: 'Access Token không được trống.',
   ACCESS_TOKEN_INVALID: 'Access Token không đúng hoặc đã hết hạn.',
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh Token không được trống.',
   REFRESH_TOKEN_INVALID: 'Không đúng định dạng.',
   REFRESH_TOKEN_SUCCESS: 'Làm mới token thành công.',
   USED_REFRESH_TOKEN_OR_NOT_EXIST: 'Refresh Token đã được sử dụng hoặc không tồn tại trong database',
-  LOGOUT_SUCCESS: 'Đăng xuất thành công.'
+  LOGOUT_SUCCESS: 'Đăng xuất thành công.',
+  VERIFY_EMAIL_TOKEN_IS_REQUIRED: 'Verify email token không được trống.',
+  USER_NOT_FOUND: 'Không tìm thấy người dùng.',
+  EMAIL_ALREADY_VERIFY: 'Email đã được xác thực trước đó.',
+  EMAIL_VERIFY_SUCCESS: 'Xác thực email thành công.',
+  RESEND_VERIFY_EMAIL_SUCCESS: 'Đã gửi lại email xác thực.',
+  CANNOT_SEND_VERIFY_EMAIL: 'Không thể gửi email xác thực do email không tồn tại.'
 } as const
