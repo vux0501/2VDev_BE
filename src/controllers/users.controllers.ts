@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express'
 import {
   LoginReqBody,
   LogoutReqBody,
+  RefreshTokenReqBody,
   RegisterReqBody,
   TokenPayload,
   VerifyEmailReqBody
@@ -86,4 +87,17 @@ export const resendVerifyEmailController = async (req: Request, res: Response, n
   }
   const result = await usersService.resendVerifyEmail(user_id, user.email)
   return res.json(result)
+}
+
+export const refreshTokenController = async (
+  req: Request<ParamsDictionary, any, RefreshTokenReqBody>,
+  res: Response
+) => {
+  const { refresh_token } = req.body
+  const { user_id, verify, role, level, exp } = req.decoded_refresh_token as TokenPayload
+  const result = await usersService.refreshToken({ user_id, refresh_token, verify, role, level, exp })
+  return res.json({
+    message: USERS_MESSAGES.REFRESH_TOKEN_SUCCESS,
+    result
+  })
 }

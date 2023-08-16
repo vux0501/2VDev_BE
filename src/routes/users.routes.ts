@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   loginController,
   logoutController,
+  refreshTokenController,
   registerController,
   resendVerifyEmailController,
   verifyEmailController
@@ -57,5 +58,14 @@ userRouters.post('/verify-email', emailVerifyTokenValidator, wrapRequestHandler(
  * Body: {}
  */
 userRouters.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
+
+/*
+Description: Refresh Token
+Path: /refresh-token
+Method: POST
+Header: {Authorization: Bearer <access_token>}
+Body: {refresh_token: string}
+*/
+userRouters.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshTokenController))
 
 export default userRouters
