@@ -80,3 +80,19 @@ export const sendVerifyRegisterEmail = (
       .replace('{{link}}', `${process.env.CLIENT_URL}/email-verifications?token=${email_verify_token}`)
   )
 }
+
+export const sendForgotPasswordEmail = (
+  toAddress: string,
+  forgot_password_token: string,
+  template: string = verifyEmailTemplate
+) => {
+  return sendVerifyEmail(
+    toAddress,
+    'Forgot Password',
+    template
+      .replace('{{title}}', 'Quên mật khẩu')
+      .replace('{{content}}', 'Nhấn vào đây để cập nhập mật khẩu mới.')
+      .replace('{{titleLink}}', 'Cập nhật mật khẩu')
+      .replace('{{link}}', `${process.env.CLIENT_URL}/forgot-password?token=${forgot_password_token}`)
+  )
+}

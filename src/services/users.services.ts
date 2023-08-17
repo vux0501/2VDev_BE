@@ -11,7 +11,7 @@ import RefreshToken from '~/models/requests/RefreshToken.schema'
 import { USERS_MESSAGES } from '~/constants/messages'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/Errors'
-import { sendVerifyRegisterEmail } from '~/utils/email'
+import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
 
 dotenv.config()
 
@@ -106,7 +106,32 @@ class UsersService {
       }
     })
   }
-  /*sign forgot password token*/
+
+  private signForgotPasswordToken({
+    user_id,
+    verify,
+    role,
+    level
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    role: UserRoleStatus
+    level: UserLevelStatus
+  }) {
+    return signToken({
+      payload: {
+        user_id,
+        token_type: TokenType.ForgotPasswordToken,
+        verify,
+        role,
+        level
+      },
+      privateKey: process.env.JWT_SECRET_FORGOT_PASSWORD_TOKEN as string,
+      options: {
+        expiresIn: process.env.FORGOT_PASSWORD_TOKEN_EXPIRES_IN
+      }
+    })
+  }
 
   private signAccessAndRefreshToken({
     user_id,
@@ -303,6 +328,56 @@ class UsersService {
     return {
       access_token: new_access_token,
       refresh_token: new_refresh_token
+    }
+  }
+  async forgotPassword({
+    user_id,
+    verify,
+    role,
+    level,
+    email
+  }: {
+    user_id: string
+    email: string
+    verify: UserVerifyStatus
+    role: UserRoleStatus
+    level: UserLevelStatus
+  }) {
+    const forgot_password_token = await this.signForgotPasswordToken({
+      user_id,
+      verify,
+      role,
+      level
+    })
+    await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, [
+      {
+        $set: {
+          forgot_password_token,
+          updated_at: '$$NOW'
+        }
+      }
+    ])
+    await sendForgotPasswordEmail(email, forgot_password_token)
+
+    return {
+      message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
+    }
+  }
+  async resetPassword(user_id: string, password: string) {
+    databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          forgot_password_token: '',
+          password: hashPassword(password)
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+    return {
+      message: USERS_MESSAGES.RESET_PASSWORD_SUCCESS
     }
   }
 }
