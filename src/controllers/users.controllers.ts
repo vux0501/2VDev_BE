@@ -175,7 +175,9 @@ export const getProfileController = async (req: Request<GetProfileReqParams>, re
 }
 
 export const getListUsersController = async (req: Request, res: Response, next: NextFunction) => {
-  const list_user = await usersService.getListUsers()
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const list_user = await usersService.getListUsers({ limit, page })
   return res.json({
     message: USERS_MESSAGES.GET_LIST_USER_SUCCESS,
     result: list_user

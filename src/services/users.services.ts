@@ -12,6 +12,7 @@ import { USERS_MESSAGES } from '~/constants/messages'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/Errors'
 import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
+import { skip } from 'node:test'
 
 dotenv.config()
 
@@ -408,7 +409,7 @@ class UsersService {
     return user
   }
 
-  async getListUsers() {
+  async getListUsers({ limit, page }: { limit: number; page: number }) {
     const list_users = await databaseService.users
       .find(
         {},
@@ -422,7 +423,12 @@ class UsersService {
           }
         }
       )
+      .skip((page - 1) * limit)
+      .limit(limit)
       .toArray()
+
+    const totalUser = await databaseService.users.countDocuments()
+    const totalPage = Math.ceil(totalUser / limit)
 
     if (list_users === null) {
       throw new ErrorWithStatus({
@@ -430,7 +436,7 @@ class UsersService {
         status: HTTP_STATUS.NOT_FOUND
       })
     }
-    return list_users
+    return { list_users, currentPage: page, userPerPage: limit, totalUser: totalUser, totalPage: totalPage }
   }
 }
 

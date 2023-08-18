@@ -145,7 +145,7 @@ userRouters.patch(
 
 /**
  * Description: Get all user
- * Path: /list-users
+ * Path: /list-users?limit={limit}&page={page}
  * Method: GET
  */
 userRouters.get('/list-users', wrapRequestHandler(getListUsersController))
