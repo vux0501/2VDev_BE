@@ -5,8 +5,8 @@ interface UserType {
   _id?: ObjectId
   name: string
   email: string
-  date_of_birth?: Date
   password: string
+  date_of_birth?: Date
   email_verify_token?: string
   forgot_password_token?: string
   verify?: UserVerifyStatus

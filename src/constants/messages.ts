@@ -39,5 +39,20 @@ export const USERS_MESSAGES = {
   VERIFY_FORGOT_PASSWORD_SUCCESS: 'Xác thực Forgot password token thành công',
   RESET_PASSWORD_SUCCESS: 'Reset mật khẩu thành công.',
 
-  GET_ME_SUCCESS: 'Lấy thông tin tài khoản hiện tại thành công.'
+  GET_ME_SUCCESS: 'Lấy thông tin tài khoản hiện tại thành công.',
+  USER_NOT_VERIFIED: 'Tài khoản chưa được xác thực.',
+  NOT_ADMIN: 'Chỉ tài khoản admin mới được sử dụng chức năng này.',
+  IMAGE_URL_MUST_BE_STRING: 'Link hình ảnh không hợp lệ.',
+  IMAGE_URL_LENGTH: 'Kích thước link hình ảnh không hợp lệ',
+  BIO_MUST_BE_STRING: 'Bio phải là chuỗi.',
+  BIO_LENGTH: 'Bio chỉ được chứa 1-200 ký tự.',
+  LOCATION_MUST_BE_STRING: 'Địa chỉ phải là chuỗi.',
+  LOCATION_LENGTH: 'Địa chỉ chỉ được chứa 1-200 ký tự.',
+  WEBSITE_MUST_BE_STRING: 'Website phải là chuỗi.',
+  WEBSITE_LENGTH: 'Website chỉ được chứa 1-200 ký tự',
+  USERNAME_MUST_BE_STRING: 'Username phải là chuỗi.',
+  USERNAME_INVALID:
+    'Username phải chứa 4-15 ký tự chứa cả chữ, số (có thể sử dụng ký tự đặc biệt là dấu shift gạch). Ex: user01, user_01',
+  USERNAME_EXISTED: 'Username đã tồn tại.',
+  UPDATE_ME_SUCCESS: 'Cập nhập thông tin cá nhân thành công.'
 } as const

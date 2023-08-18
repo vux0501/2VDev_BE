@@ -7,6 +7,7 @@ import {
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
+  UpdateMeReqBody,
   VerifyEmailReqBody,
   VerifyForgotPasswordReqBody
 } from '~/models/requests/User.request'
@@ -37,8 +38,7 @@ export const loginController = async (req: Request<ParamsDictionary, any, LoginR
   const result = await usersService.login({
     user_id: user_id.toString(),
     verify: user.verify,
-    role: user.role,
-    level: user.level
+    role: user.role
   })
   return res.json({
     message: USERS_MESSAGES.LOGIN_SUCCESS,
@@ -97,8 +97,8 @@ export const refreshTokenController = async (
   res: Response
 ) => {
   const { refresh_token } = req.body
-  const { user_id, verify, role, level, exp } = req.decoded_refresh_token as TokenPayload
-  const result = await usersService.refreshToken({ user_id, refresh_token, verify, role, level, exp })
+  const { user_id, verify, role, exp } = req.decoded_refresh_token as TokenPayload
+  const result = await usersService.refreshToken({ user_id, refresh_token, verify, role, exp })
   return res.json({
     message: USERS_MESSAGES.REFRESH_TOKEN_SUCCESS,
     result
@@ -110,12 +110,11 @@ export const forgotPasswordController = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { _id, verify, role, level, email } = req.user as User
+  const { _id, verify, role, email } = req.user as User
   const result = await usersService.forgotPassword({
     user_id: (_id as ObjectId).toString(),
     verify,
     role,
-    level,
     email
   })
   return res.json(result)
@@ -147,6 +146,20 @@ export const getMeController = async (req: Request, res: Response, next: NextFun
   const user = await usersService.getMe(user_id)
   return res.json({
     message: USERS_MESSAGES.GET_ME_SUCCESS,
+    result: user
+  })
+}
+
+export const updateMeController = async (
+  req: Request<ParamsDictionary, any, UpdateMeReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { body } = req
+  const user = await usersService.updateMe(user_id, body)
+  return res.json({
+    message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
     result: user
   })
 }
