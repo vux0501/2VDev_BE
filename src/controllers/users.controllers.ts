@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import {
   ForgotPasswordReqBody,
+  GetProfileReqParams,
   LoginReqBody,
   LogoutReqBody,
   RefreshTokenReqBody,
@@ -161,5 +162,22 @@ export const updateMeController = async (
   return res.json({
     message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
     result: user
+  })
+}
+
+export const getProfileController = async (req: Request<GetProfileReqParams>, res: Response, next: NextFunction) => {
+  const { username } = req.params
+  const user = await usersService.getProfile(username)
+  return res.json({
+    message: USERS_MESSAGES.GET_PROFILE_SUCCESS,
+    result: user
+  })
+}
+
+export const getListUsersController = async (req: Request, res: Response, next: NextFunction) => {
+  const list_user = await usersService.getListUsers()
+  return res.json({
+    message: USERS_MESSAGES.GET_LIST_USER_SUCCESS,
+    result: list_user
   })
 }

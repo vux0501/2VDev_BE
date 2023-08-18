@@ -385,6 +385,53 @@ class UsersService {
     )
     return user.value
   }
+
+  async getProfile(username: string) {
+    const user = await databaseService.users.findOne(
+      { username },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0,
+          verify: 0,
+          created_at: 0
+        }
+      }
+    )
+    if (user === null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return user
+  }
+
+  async getListUsers() {
+    const list_users = await databaseService.users
+      .find(
+        {},
+        {
+          projection: {
+            password: 0,
+            email_verify_token: 0,
+            forgot_password_token: 0,
+            verify: 0,
+            created_at: 0
+          }
+        }
+      )
+      .toArray()
+
+    if (list_users === null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.LIST_USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return list_users
+  }
 }
 
 const usersService = new UsersService()

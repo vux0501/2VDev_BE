@@ -54,5 +54,9 @@ export const USERS_MESSAGES = {
   USERNAME_INVALID:
     'Username phải chứa 4-15 ký tự chứa cả chữ, số (có thể sử dụng ký tự đặc biệt là dấu shift gạch). Ex: user01, user_01',
   USERNAME_EXISTED: 'Username đã tồn tại.',
-  UPDATE_ME_SUCCESS: 'Cập nhập thông tin cá nhân thành công.'
+  UPDATE_ME_SUCCESS: 'Cập nhập thông tin cá nhân thành công.',
+
+  GET_PROFILE_SUCCESS: 'Lấy thông tin user thành công.',
+  GET_LIST_USER_SUCCESS: 'Lấy thông tin tất cả user thành công.',
+  LIST_USER_NOT_FOUND: 'Danh sách user trống.'
 } as const
