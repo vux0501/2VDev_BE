@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import {
+  ChangePasswordReqBody,
   ForgotPasswordReqBody,
   GetProfileReqParams,
   LoginReqBody,
@@ -182,4 +183,15 @@ export const getListUsersController = async (req: Request, res: Response, next: 
     message: USERS_MESSAGES.GET_LIST_USER_SUCCESS,
     result: list_user
   })
+}
+
+export const changePasswordController = async (
+  req: Request<ParamsDictionary, any, ChangePasswordReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { password } = req.body
+  const result = await usersService.changePassword(user_id, password)
+  return res.json(result)
 }

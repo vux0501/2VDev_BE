@@ -58,5 +58,8 @@ export const USERS_MESSAGES = {
 
   GET_PROFILE_SUCCESS: 'Lấy thông tin user thành công.',
   GET_LIST_USER_SUCCESS: 'Lấy thông tin tất cả user thành công.',
-  LIST_USER_NOT_FOUND: 'Danh sách user trống.'
+  LIST_USER_NOT_FOUND: 'Danh sách user trống.',
+
+  OLD_PASSWORD_NOT_MATCH: 'Mật khẩu cũ không chính xác.',
+  CHANGE_PASSWORD_SUCCESS: 'Đổi mật khẩu thành công.'
 } as const
