@@ -9,6 +9,7 @@ import {
   RegisterReqBody,
   ResetPasswordReqBody,
   TokenPayload,
+  UpdateAccountReqBody,
   UpdateMeReqBody,
   VerifyEmailReqBody,
   VerifyForgotPasswordReqBody
@@ -160,6 +161,20 @@ export const updateMeController = async (
   const { user_id } = req.decoded_authorization as TokenPayload
   const { body } = req
   const user = await usersService.updateMe(user_id, body)
+  return res.json({
+    message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
+    result: user
+  })
+}
+
+export const updateAccountController = async (
+  req: Request<ParamsDictionary, any, UpdateAccountReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.params
+  const { body } = req
+  const user = await usersService.updateAccount(user_id, body)
   return res.json({
     message: USERS_MESSAGES.UPDATE_ME_SUCCESS,
     result: user

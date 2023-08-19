@@ -61,5 +61,6 @@ export const USERS_MESSAGES = {
   LIST_USER_NOT_FOUND: 'Danh sách user trống.',
 
   OLD_PASSWORD_NOT_MATCH: 'Mật khẩu cũ không chính xác.',
-  CHANGE_PASSWORD_SUCCESS: 'Đổi mật khẩu thành công.'
+  CHANGE_PASSWORD_SUCCESS: 'Đổi mật khẩu thành công.',
+  PARAMS_NOT_FOUND: 'Không tìm thấy params'
 } as const

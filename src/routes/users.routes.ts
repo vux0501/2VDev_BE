@@ -11,6 +11,7 @@ import {
   registerController,
   resendVerifyEmailController,
   resetPasswordController,
+  updateAccountController,
   updateMeController,
   verifyEmailController,
   verifyForgotPasswordController
@@ -21,15 +22,17 @@ import {
   changePasswordValidator,
   emailVerifyTokenValidator,
   forgotPasswordValidator,
+  isAdminValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
+  updateAccountValidator,
   updateMeValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidator
 } from '~/middlewares/users.middlewares'
-import { UpdateMeReqBody } from '~/models/requests/User.request'
+import { UpdateAccountReqBody, UpdateMeReqBody } from '~/models/requests/User.request'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const userRouters = Router()
@@ -172,6 +175,35 @@ userRouters.put(
   verifiedUserValidator,
   changePasswordValidator,
   wrapRequestHandler(changePasswordController)
+)
+
+//for admin
+/**
+ * Description: Update profile - admin
+ * Path: /update-account/:user_id
+ * Method: PATCH
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: UserSchema
+ */
+userRouters.patch(
+  '/update-account/:user_id',
+  accessTokenValidator,
+  isAdminValidator,
+  updateAccountValidator,
+  filterMiddleware<UpdateAccountReqBody>([
+    'name',
+    'date_of_birth',
+    'bio',
+    'location',
+    'website',
+    'username',
+    'avatar',
+    'cover_photo',
+    'verify',
+    'role',
+    'level'
+  ]),
+  wrapRequestHandler(updateAccountController)
 )
 
 export default userRouters

@@ -51,6 +51,21 @@ export interface UpdateMeReqBody {
   cover_photo?: string
 }
 
+export interface UpdateAccountReqBody {
+  user_id?: string
+  name?: string
+  date_of_birth?: string
+  bio?: string
+  location?: string
+  website?: string
+  username?: string
+  avatar?: string
+  cover_photo?: string
+  verify?: UserVerifyStatus
+  role?: UserRoleStatus
+  level?: UserLevelStatus
+}
+
 export interface GetProfileReqParams extends ParamsDictionary {
   username: string
 }
