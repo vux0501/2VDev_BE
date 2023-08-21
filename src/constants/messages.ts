@@ -62,5 +62,7 @@ export const USERS_MESSAGES = {
 
   OLD_PASSWORD_NOT_MATCH: 'Mật khẩu cũ không chính xác.',
   CHANGE_PASSWORD_SUCCESS: 'Đổi mật khẩu thành công.',
-  PARAMS_NOT_FOUND: 'Không tìm thấy params'
+  PARAMS_NOT_FOUND: 'Không tìm thấy params',
+
+  GMAIL_NOT_VERIFIED: 'Gmail chưa được xác thực'
 } as const

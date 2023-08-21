@@ -22,6 +22,8 @@ import { ObjectId } from 'mongodb'
 import databaseService from '~/services/database.services'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { UserVerifyStatus } from '~/constants/enums'
+import dotenv from 'dotenv'
+dotenv.config()
 
 export const registerController = async (
   req: Request<ParamsDictionary, any, RegisterReqBody>,
@@ -209,4 +211,12 @@ export const changePasswordController = async (
   const { password } = req.body
   const result = await usersService.changePassword(user_id, password)
   return res.json(result)
+}
+
+export const oauthController = async (req: Request, res: Response) => {
+  const { code } = req.query
+
+  const result = await usersService.oauth(code as string)
+  const urlRedirect = `${process.env.CLIENT_REDIRECT_CALLBACK}?access_token=${result.access_token}&refresh_token=${result.refresh_token}&new_user=${result.newUser}&verify=${result.verify}&role=${result.role}`
+  return res.redirect(urlRedirect)
 }

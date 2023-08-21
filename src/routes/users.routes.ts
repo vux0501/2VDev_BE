@@ -7,6 +7,7 @@ import {
   getProfileController,
   loginController,
   logoutController,
+  oauthController,
   refreshTokenController,
   registerController,
   resendVerifyEmailController,
@@ -177,7 +178,16 @@ userRouters.put(
   wrapRequestHandler(changePasswordController)
 )
 
+/**
+ * Description. OAuth with Google
+ * Path: /oauth/google
+ * Method: GET
+ * Query: { code: string }
+ */
+userRouters.get('/oauth/google', wrapRequestHandler(oauthController))
+
 //for admin
+
 /**
  * Description: Update profile - admin
  * Path: /update-account/:user_id
