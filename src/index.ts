@@ -1,11 +1,13 @@
 import express from 'express'
-
 import dotenv from 'dotenv'
 import route from './routes/index'
 import databaseService from '~/services/database.services'
 import { defaultErrorHandler } from './middlewares/errors.middlewares'
 import cors from 'cors'
 import { initFolder } from './utils/file'
+import argv from 'minimist'
+const options = argv(process.argv.slice(2))
+console.log(options.development)
 
 // Connect Database
 databaseService.connect()
