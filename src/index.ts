@@ -5,11 +5,15 @@ import route from './routes/index'
 import databaseService from '~/services/database.services'
 import { defaultErrorHandler } from './middlewares/errors.middlewares'
 import cors from 'cors'
+import { initFolder } from './utils/file'
 
 // Connect Database
 databaseService.connect()
 
 const app = express()
+
+// Tạo folder upload
+initFolder()
 
 // Config
 dotenv.config()

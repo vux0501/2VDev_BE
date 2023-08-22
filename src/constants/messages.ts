@@ -64,5 +64,6 @@ export const USERS_MESSAGES = {
   CHANGE_PASSWORD_SUCCESS: 'Đổi mật khẩu thành công.',
   PARAMS_NOT_FOUND: 'Không tìm thấy params',
 
-  GMAIL_NOT_VERIFIED: 'Gmail chưa được xác thực'
+  GMAIL_NOT_VERIFIED: 'Gmail chưa được xác thực',
+  UPLOAD_SUCCESS: 'Upload thành công.'
 } as const
