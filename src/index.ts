@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import route from './routes/index'
 import databaseService from '~/services/database.services'
 import { defaultErrorHandler } from './middlewares/errors.middlewares'
+import cors from 'cors'
 
 // Connect Database
 databaseService.connect()
@@ -12,6 +13,7 @@ const app = express()
 
 // Config
 dotenv.config()
+app.use(cors())
 app.use(express.json())
 
 // Connect route
