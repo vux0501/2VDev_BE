@@ -22,7 +22,6 @@ initFolder()
 dotenv.config()
 app.use(cors())
 app.use(express.json())
-app.use('/static', express.static(UPLOAD_IMAGE_DIR))
 
 // Connect route
 route(app)
