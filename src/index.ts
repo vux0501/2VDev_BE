@@ -6,8 +6,9 @@ import { defaultErrorHandler } from './middlewares/errors.middlewares'
 import cors from 'cors'
 import { initFolder } from './utils/file'
 import argv from 'minimist'
+import path from 'path'
+import { UPLOAD_IMAGE_DIR } from './constants/dir'
 const options = argv(process.argv.slice(2))
-console.log(options.development)
 
 // Connect Database
 databaseService.connect()
@@ -21,6 +22,7 @@ initFolder()
 dotenv.config()
 app.use(cors())
 app.use(express.json())
+app.use('/static', express.static(UPLOAD_IMAGE_DIR))
 
 // Connect route
 route(app)
