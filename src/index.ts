@@ -5,11 +5,7 @@ import databaseService from '~/services/database.services'
 import { defaultErrorHandler } from './middlewares/errors.middlewares'
 import cors from 'cors'
 import { initFolder } from './utils/file'
-import argv from 'minimist'
-import path from 'path'
-import { UPLOAD_IMAGE_DIR } from './constants/dir'
-const options = argv(process.argv.slice(2))
-
+import '~/utils/s3'
 // Connect Database
 databaseService.connect()
 
