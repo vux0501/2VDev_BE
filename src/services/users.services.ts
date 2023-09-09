@@ -161,7 +161,7 @@ class UsersService {
       new User({
         ...payload,
         _id: user_id,
-        username: `user${user_id.toString()}`,
+        username: `user${user_id.toString().substring(0, 8)}`,
         email_verify_token,
         password: hashPassword(payload.password),
         avatar: 'https://res.cloudinary.com/dozeyxrdy/image/upload/v1692167930/2VDev-logo_cenlul.png',
