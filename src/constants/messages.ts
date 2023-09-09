@@ -52,7 +52,7 @@ export const USERS_MESSAGES = {
   WEBSITE_LENGTH: 'Website chỉ được chứa 1-200 ký tự',
   USERNAME_MUST_BE_STRING: 'Username phải là chuỗi.',
   USERNAME_INVALID:
-    'Username phải chứa 4-15 ký tự chứa cả chữ, số (có thể sử dụng ký tự đặc biệt là dấu shift gạch). Ex: user01, user_01',
+    'Username phải chứa 4-30 ký tự chứa cả chữ, số (có thể sử dụng ký tự đặc biệt là dấu shift gạch). Ex: user01, user_01',
   USERNAME_EXISTED: 'Username đã tồn tại.',
   UPDATE_ME_SUCCESS: 'Cập nhập thông tin cá nhân thành công.',
 
