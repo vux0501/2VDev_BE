@@ -5,8 +5,11 @@ export enum UserVerifyStatus {
 }
 
 export enum UserLevelStatus {
-  Normal, // tài khoản thường, mặc định = 0
-  Master // tài khoản tích xanh
+  Bronze, //mặc định = 0
+  Silver,
+  Gold,
+  Platinum,
+  Diamond
 }
 
 export enum UserRoleStatus {
