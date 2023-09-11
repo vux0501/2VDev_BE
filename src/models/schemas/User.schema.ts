@@ -57,7 +57,7 @@ export default class User {
     this.forgot_password_token = user.forgot_password_token || ''
     this.verify = user.verify || UserVerifyStatus.Unverified
     this.role = user.role || UserRoleStatus.User
-    this.level = user.level || UserLevelStatus.Normal
+    this.level = user.level || UserLevelStatus.Bronze
     this.point = user.point || 0
     this.bio = user.bio || ''
     this.location = user.location || ''
