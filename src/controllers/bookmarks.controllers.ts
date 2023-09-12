@@ -13,7 +13,7 @@ export const bookmarkPostController = async (
   const { user_id } = req.decoded_authorization as TokenPayload
   const result = await bookmarksService.bookmarkPost(user_id, req.body.post_id)
   return res.json({
-    message: 'Create new bookmark successfully!',
+    message: BOOKMARK_MESSAGES.BOOKMARK_SUCCESSFULLY,
     data: result
   })
 }

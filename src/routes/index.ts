@@ -5,6 +5,7 @@ import staticRouter from './static.routes'
 import postRouters from './posts.routes'
 import hashtagRouters from './hashtags.routes'
 import bookmarkRouters from './bookmark.routes'
+import voteRouters from './vote.routes'
 
 function route(app: Express) {
   app.use('/', userRouters)
@@ -13,6 +14,7 @@ function route(app: Express) {
   app.use('/posts', postRouters)
   app.use('/hashtags', hashtagRouters)
   app.use('/bookmarks', bookmarkRouters)
+  app.use('/votes', voteRouters)
 }
 
 export default route

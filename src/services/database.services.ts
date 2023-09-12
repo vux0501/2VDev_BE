@@ -5,6 +5,7 @@ import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Post from '~/models/schemas/Post.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
 import Bookmark from '~/models/schemas/Bookmark.schema'
+import Vote from '~/models/schemas/Vote.schema'
 
 dotenv.config()
 
@@ -42,6 +43,9 @@ class DatabaseService {
 
   get bookmarks(): Collection<Bookmark> {
     return this.db.collection(process.env.DB_BOOKMARKS_COLLECTION as string)
+  }
+  get votes(): Collection<Vote> {
+    return this.db.collection(process.env.DB_VOTES_COLLECTION as string)
   }
 }
 

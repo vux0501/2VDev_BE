@@ -91,5 +91,11 @@ export const POSTS_MESSAGES = {
 } as const
 
 export const BOOKMARK_MESSAGES = {
+  BOOKMARK_SUCCESSFULLY: 'bookmark thành công',
   UNBOOKMARK_SUCCESSFULLY: 'Unbookmark thành công'
+}
+
+export const VOTE_MESSAGES = {
+  VOTE_SUCCESSFULLY: 'Vote thành công',
+  UNVOTE_SUCCESSFULLY: 'Unvote thành công'
 }
