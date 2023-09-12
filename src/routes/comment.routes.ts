@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createCommentController } from '~/controllers/comments.controller'
+import { createCommentController, getAllCommentOfPost } from '~/controllers/comments.controller'
 import { getAllHashtagsController } from '~/controllers/hashtags.controller'
 import { createPostController } from '~/controllers/posts.controllers'
 import { createCommentValidator } from '~/middlewares/comment.middleware'
@@ -12,7 +12,8 @@ const commentRouters = Router()
 /*
 Description: Create new comment
 Path: /
-Method: CommentRequestBody
+Method: POST
+Body: CommentRequestBody
 */
 commentRouters.post(
   '/',
@@ -21,5 +22,13 @@ commentRouters.post(
   createCommentValidator,
   wrapRequestHandler(createCommentController)
 )
+
+/*
+Description: Get all comment of post
+Path: /get/:post_id
+Method: GET
+Body: None
+*/
+commentRouters.get('/get/:post_id', wrapRequestHandler(getAllCommentOfPost))
 
 export default commentRouters

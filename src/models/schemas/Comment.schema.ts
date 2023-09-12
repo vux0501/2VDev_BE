@@ -10,6 +10,7 @@ interface CommentConstructor {
   choosed?: ChoosedType
   content: string
   medias: Media[]
+  vote?: number
   created_at?: Date
   updated_at?: Date
 }
@@ -22,6 +23,7 @@ export default class CommentAns {
   choosed: ChoosedType
   content: string
   medias: Media[]
+  vote: number
   created_at?: Date
   updated_at?: Date
   constructor({
@@ -32,6 +34,7 @@ export default class CommentAns {
     choosed,
     content,
     medias,
+    vote,
     created_at,
     updated_at
   }: CommentConstructor) {
@@ -43,6 +46,7 @@ export default class CommentAns {
     this.comment_parent_id = comment_parent_id ? new ObjectId(comment_parent_id) : null
     this.medias = medias
     this.choosed = choosed || ChoosedType.unChoosed
+    this.vote = vote || 0
     this.created_at = created_at || date
     this.updated_at = updated_at || date
   }
