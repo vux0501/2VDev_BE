@@ -1,6 +1,6 @@
 import { checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
-import { MediaType } from '~/constants/enums'
+import { MediaType, PostType } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
@@ -9,10 +9,33 @@ import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
 
 const mediaTypes = numberEnumToArray(MediaType)
+const postTypes = numberEnumToArray(PostType)
 
 export const createPostValidator = validate(
   checkSchema(
     {
+      type: {
+        isIn: {
+          options: [postTypes],
+          errorMessage: POSTS_MESSAGES.INVALID_TYPE
+        }
+      },
+      parent_id: {
+        custom: {
+          options: (value, { req }) => {
+            const type = req.body.type as PostType
+            // Nếu `type` là repost, comment, quotepost thì `parent_id` phải là `id` của post cha
+            if ([PostType.Repost, PostType.Comment, PostType.Quotepost].includes(type) && !ObjectId.isValid(value)) {
+              throw new Error(POSTS_MESSAGES.PARENT_ID_MUST_BE_A_VALID_POST_ID)
+            }
+            // nếu `type` là post thì `parent_id` phải là `null`
+            if (type === PostType.Post && value !== null) {
+              throw new Error(POSTS_MESSAGES.PARENT_ID_MUST_BE_NULL)
+            }
+            return true
+          }
+        }
+      },
       title: {
         notEmpty: {
           errorMessage: POSTS_MESSAGES.TITLE_IS_REQUIRED

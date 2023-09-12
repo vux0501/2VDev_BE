@@ -83,7 +83,11 @@ export const POSTS_MESSAGES = {
   MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Meida phải là mảng của những đối tượng media',
 
   POST_ID_INVALID: 'Id post không đúng định dạng.',
-  POST_NOT_FOUND: 'Không tìm thấy bài post này.'
+  POST_NOT_FOUND: 'Không tìm thấy bài post này.',
+  INVALID_TYPE: 'Kiểu của bài viết không đúng',
+
+  PARENT_ID_MUST_BE_A_VALID_POST_ID: 'parent_id phải là id của bài viết cha',
+  PARENT_ID_MUST_BE_NULL: 'Bài viết gốc nên parent_id phải là null'
 } as const
 
 export const BOOKMARK_MESSAGES = {
