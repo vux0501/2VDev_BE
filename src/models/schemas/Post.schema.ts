@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { ApprovedType, ResolvedType } from '~/constants/enums'
+import { ApprovedType, PostType, ResolvedType } from '~/constants/enums'
 import { Media } from '~/models/Other'
 
 interface PostConstructor {
@@ -7,6 +7,8 @@ interface PostConstructor {
   user_id: ObjectId
   title: string
   content: string
+  type: PostType
+  parent_id: null | string
   hashtags: ObjectId[]
   medias: Media[]
   approved?: ApprovedType
@@ -24,6 +26,8 @@ export default class Post {
   content: string
   hashtags: ObjectId[]
   medias: Media[]
+  type: PostType
+  parent_id: null | ObjectId
   approved: ApprovedType
   resolved: ResolvedType
   guest_views: number
@@ -35,6 +39,8 @@ export default class Post {
     user_id,
     title,
     content,
+    parent_id,
+    type,
     hashtags,
     medias,
     resolved,
@@ -48,6 +54,8 @@ export default class Post {
     this._id = _id
     this.user_id = user_id
     this.title = title
+    this.type = type
+    this.parent_id = parent_id ? new ObjectId(parent_id) : null
     this.content = content
     this.hashtags = hashtags
     this.medias = medias

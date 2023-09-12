@@ -4,7 +4,6 @@ import { BOOKMARK_MESSAGES } from '~/constants/messages'
 import { BookmarkRequestBody } from '~/models/requests/Bookmark.request'
 import { TokenPayload } from '~/models/requests/User.request'
 import bookmarksService from '~/services/bookmark.services'
-import commentsService from '~/services/comment.services'
 
 export const bookmarkPostController = async (
   req: Request<ParamsDictionary, any, BookmarkRequestBody>,

@@ -86,15 +86,6 @@ export const POSTS_MESSAGES = {
   POST_NOT_FOUND: 'Không tìm thấy bài post này.'
 } as const
 
-export const COMMENTS_MESSAGE = {
-  COMMENT_IS_REQUIRED: 'Bình luận không được để trống.',
-  COMMENT_LENGTH: 'Bình luận phải từ 20 đến 255 ký tự.',
-  COMMENT_MUST_BE_A_STRING: 'Bình luận phải là chuỗi ký tự.',
-
-  POSTID_IS_REQUIRED: 'Post ID không được để trống.',
-  POSTID_MUST_BE_A_STRING: 'Post ID phải là chuỗi ký tự.'
-}
-
 export const BOOKMARK_MESSAGES = {
   UNBOOKMARK_SUCCESSFULLY: 'Unbookmark thành công'
 }

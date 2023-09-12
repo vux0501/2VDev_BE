@@ -4,7 +4,6 @@ import mediaRouters from './medias.routes'
 import staticRouter from './static.routes'
 import postRouters from './posts.routes'
 import hashtagRouters from './hashtags.routes'
-import commentRouters from './comment.routes'
 import bookmarkRouters from './bookmark.routes'
 
 function route(app: Express) {
@@ -13,7 +12,6 @@ function route(app: Express) {
   app.use('/static', staticRouter)
   app.use('/posts', postRouters)
   app.use('/hashtags', hashtagRouters)
-  app.use('/comments', commentRouters)
   app.use('/bookmarks', bookmarkRouters)
 }
 

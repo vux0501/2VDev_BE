@@ -31,7 +31,9 @@ class PostsService {
         title: body.title,
         content: body.content,
         hashtags,
-        medias: body.medias
+        medias: body.medias,
+        parent_id: body.parent_id,
+        type: body.type
       })
     )
     const post = await databaseService.posts.findOne({ _id: result.insertedId })

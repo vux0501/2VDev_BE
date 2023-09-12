@@ -29,6 +29,13 @@ export enum MediaType {
   Video
 }
 
+export enum PostType {
+  Post,
+  Repost,
+  Comment,
+  Quotepost
+}
+
 export enum ApprovedType {
   unApproved,
   Approved
