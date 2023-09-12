@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import User from '~/models/schemas/User.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Post from '~/models/schemas/Post.schema'
+import Hashtag from '~/models/schemas/Hashtag.schema'
 
 dotenv.config()
 
@@ -33,6 +34,9 @@ class DatabaseService {
   }
   get posts(): Collection<Post> {
     return this.db.collection(process.env.DB_POSTS_COLLECTION as string)
+  }
+  get hashtags(): Collection<Hashtag> {
+    return this.db.collection(process.env.DB_HASHTAGS_COLLECTION as string)
   }
 }
 
