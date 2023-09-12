@@ -38,3 +38,8 @@ export enum ResolvedType {
   unResolved,
   Resolved
 }
+
+export enum ChoosedType {
+  unChoosed,
+  Choosed
+}

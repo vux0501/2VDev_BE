@@ -4,6 +4,7 @@ import User from '~/models/schemas/User.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Post from '~/models/schemas/Post.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
+import CommentAns from '~/models/schemas/Comment.schema'
 
 dotenv.config()
 
@@ -37,6 +38,9 @@ class DatabaseService {
   }
   get hashtags(): Collection<Hashtag> {
     return this.db.collection(process.env.DB_HASHTAGS_COLLECTION as string)
+  }
+  get comments(): Collection<CommentAns> {
+    return this.db.collection(process.env.DB_COMMENTS_COLLECTION as string)
   }
 }
 

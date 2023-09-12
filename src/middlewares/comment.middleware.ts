@@ -1,51 +1,35 @@
 import { checkSchema } from 'express-validator'
 import { MediaType } from '~/constants/enums'
-import { POSTS_MESSAGES } from '~/constants/messages'
+import { COMMENTS_MESSAGE, POSTS_MESSAGES } from '~/constants/messages'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
 
 const mediaTypes = numberEnumToArray(MediaType)
 
-export const createPostValidator = validate(
+export const createCommentValidator = validate(
   checkSchema(
     {
-      title: {
-        notEmpty: {
-          errorMessage: POSTS_MESSAGES.TITLE_IS_REQUIRED
-        },
-        isLength: {
-          options: { min: 20, max: 50 },
-          errorMessage: POSTS_MESSAGES.TITLE_LENGTH
-        },
-        isString: {
-          errorMessage: POSTS_MESSAGES.TITLE_MUST_BE_A_STRING
-        },
-        trim: true
-      },
       content: {
         notEmpty: {
-          errorMessage: POSTS_MESSAGES.CONTENT_IS_REQUIRED
+          errorMessage: COMMENTS_MESSAGE.COMMENT_IS_REQUIRED
         },
         isLength: {
-          options: { min: 20, max: 500 },
-          errorMessage: POSTS_MESSAGES.CONTENT_LENGTH
+          options: { min: 20, max: 255 },
+          errorMessage: COMMENTS_MESSAGE.COMMENT_LENGTH
         },
         isString: {
-          errorMessage: POSTS_MESSAGES.CONTENT_MUST_BE_A_STRING
+          errorMessage: COMMENTS_MESSAGE.COMMENT_MUST_BE_A_STRING
         },
         trim: true
       },
-      hashtags: {
-        isArray: true,
-        custom: {
-          options: (value, { req }) => {
-            // Yêu cầu mỗi phần từ trong array là string
-            if (value.some((item: any) => typeof item !== 'string')) {
-              throw new Error(POSTS_MESSAGES.HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING)
-            }
-            return true
-          }
-        }
+      post_id: {
+        notEmpty: {
+          errorMessage: COMMENTS_MESSAGE.POSTID_IS_REQUIRED
+        },
+        isString: {
+          errorMessage: COMMENTS_MESSAGE.POSTID_MUST_BE_A_STRING
+        },
+        trim: true
       },
       medias: {
         isArray: true,
