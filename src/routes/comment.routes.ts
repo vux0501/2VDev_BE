@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { createCommentController, getAllCommentOfPost } from '~/controllers/comments.controller'
-import { getAllHashtagsController } from '~/controllers/hashtags.controller'
+import { createCommentController, getAllCommentOfPost } from '~/controllers/comments.controllers'
+import { getAllHashtagsController } from '~/controllers/hashtags.controllers'
 import { createPostController } from '~/controllers/posts.controllers'
 import { createCommentValidator } from '~/middlewares/comment.middleware'
 import { createPostValidator } from '~/middlewares/posts.middleware'

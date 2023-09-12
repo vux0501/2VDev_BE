@@ -1,6 +1,10 @@
 import { checkSchema } from 'express-validator'
+import { ObjectId } from 'mongodb'
 import { MediaType } from '~/constants/enums'
+import HTTP_STATUS from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
+import { ErrorWithStatus } from '~/models/Errors'
+import databaseService from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
 
@@ -65,5 +69,31 @@ export const createPostValidator = validate(
       }
     },
     ['body']
+  )
+)
+
+export const postIdValidator = validate(
+  checkSchema(
+    {
+      post_id: {
+        isMongoId: {
+          errorMessage: POSTS_MESSAGES.POST_ID_INVALID
+        },
+        custom: {
+          options: async (value, { req }) => {
+            const post = await databaseService.posts.findOne({
+              _id: new ObjectId(value)
+            })
+            if (!post) {
+              throw new ErrorWithStatus({
+                status: HTTP_STATUS.NOT_FOUND,
+                message: POSTS_MESSAGES.POST_NOT_FOUND
+              })
+            }
+          }
+        }
+      }
+    },
+    ['params', 'body']
   )
 )

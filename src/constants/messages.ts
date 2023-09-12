@@ -80,7 +80,10 @@ export const POSTS_MESSAGES = {
 
   HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING: 'Hashtag phải là một mảng chuỗi ký tự.',
 
-  MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Meida phải là mảng của những đối tượng media'
+  MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Meida phải là mảng của những đối tượng media',
+
+  POST_ID_INVALID: 'Id post không đúng định dạng.',
+  POST_NOT_FOUND: 'Không tìm thấy bài post này.'
 } as const
 
 export const COMMENTS_MESSAGE = {
@@ -90,4 +93,8 @@ export const COMMENTS_MESSAGE = {
 
   POSTID_IS_REQUIRED: 'Post ID không được để trống.',
   POSTID_MUST_BE_A_STRING: 'Post ID phải là chuỗi ký tự.'
+}
+
+export const BOOKMARK_MESSAGES = {
+  UNBOOKMARK_SUCCESSFULLY: 'Unbookmark thành công'
 }

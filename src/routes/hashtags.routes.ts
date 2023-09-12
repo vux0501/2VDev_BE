@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getAllHashtagsController } from '~/controllers/hashtags.controller'
+import { getAllHashtagsController } from '~/controllers/hashtags.controllers'
 import { createPostController } from '~/controllers/posts.controllers'
 import { createPostValidator } from '~/middlewares/posts.middleware'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
