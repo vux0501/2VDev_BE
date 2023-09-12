@@ -67,3 +67,18 @@ export const USERS_MESSAGES = {
   GMAIL_NOT_VERIFIED: 'Gmail chưa được xác thực',
   UPLOAD_SUCCESS: 'Upload thành công.'
 } as const
+
+export const POSTS_MESSAGES = {
+  VALIDATION_ERROR: 'Validation error',
+  TITLE_IS_REQUIRED: 'Tiêu đề không được để trống.',
+  TITLE_LENGTH: 'Tiêu đề phải từ 20 đến 50 ký tự.',
+  TITLE_MUST_BE_A_STRING: 'Tiêu đề phải là chuỗi ký tự.',
+
+  CONTENT_IS_REQUIRED: 'Nội dung không được để trống.',
+  CONTENT_LENGTH: 'Nội dung phải từ 20 đến 500 ký tự.',
+  CONTENT_MUST_BE_A_STRING: 'Nội dung phải là chuỗi ký tự.',
+
+  HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING: 'Hashtag phải là một mảng chuỗi ký tự.',
+
+  MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Meida phải là mảng của những đối tượng media'
+} as const

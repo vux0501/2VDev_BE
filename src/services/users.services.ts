@@ -7,7 +7,7 @@ import { TokenType, UserRoleStatus, UserVerifyStatus } from '~/constants/enums'
 import dotenv from 'dotenv'
 
 import { ObjectId } from 'mongodb'
-import RefreshToken from '~/models/requests/RefreshToken.schema'
+import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import { USERS_MESSAGES } from '~/constants/messages'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/Errors'

@@ -17,7 +17,7 @@ import {
   verifyEmailController,
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
-import { filterMiddleware } from '~/middlewares/common.midleware'
+import { filterMiddleware } from '~/middlewares/common.middleware'
 import {
   accessTokenValidator,
   changePasswordValidator,

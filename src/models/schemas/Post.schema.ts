@@ -17,7 +17,7 @@ interface PostConstructor {
   updated_at?: Date
 }
 
-export default class Tweet {
+export default class Post {
   _id?: ObjectId
   user_id: ObjectId
   title: string
