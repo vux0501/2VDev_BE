@@ -6,6 +6,7 @@ import Post from '~/models/schemas/Post.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
 import Bookmark from '~/models/schemas/Bookmark.schema'
 import Vote from '~/models/schemas/Vote.schema'
+import ReportPost from '~/models/schemas/Report.schema'
 
 dotenv.config()
 
@@ -46,6 +47,9 @@ class DatabaseService {
   }
   get votes(): Collection<Vote> {
     return this.db.collection(process.env.DB_VOTES_COLLECTION as string)
+  }
+  get reports(): Collection<ReportPost> {
+    return this.db.collection(process.env.DB_REPORTS_COLLECTION as string)
   }
 }
 

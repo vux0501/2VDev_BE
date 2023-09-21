@@ -39,6 +39,31 @@ class PostsService {
     const post = await databaseService.posts.findOne({ _id: result.insertedId })
     return post
   }
+  async increaseView(post_id: string, user_id?: string) {
+    const inc = user_id ? { user_views: 1 } : { guest_views: 1 }
+    const result = await databaseService.posts.findOneAndUpdate(
+      { _id: new ObjectId(post_id) },
+      {
+        $inc: inc,
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after',
+        projection: {
+          guest_views: 1,
+          user_views: 1,
+          updated_at: 1
+        }
+      }
+    )
+    return result.value as WithId<{
+      guest_views: number
+      user_views: number
+      updated_at: Date
+    }>
+  }
 }
 
 const postsService = new PostsService()

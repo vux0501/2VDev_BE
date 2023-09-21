@@ -16,3 +16,17 @@ export const createPostController = async (
     data: result
   })
 }
+
+export const getPostController = async (req: Request, res: Response) => {
+  const result = await postsService.increaseView(req.params.post_id, req.decoded_authorization?.user_id)
+  const post = {
+    ...req.post,
+    guest_views: result.guest_views,
+    user_views: result.user_views,
+    updated_at: result.updated_at
+  }
+  return res.json({
+    message: 'Get Tweet Successfully',
+    result: post
+  })
+}

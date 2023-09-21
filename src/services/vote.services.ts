@@ -1,6 +1,7 @@
 import Bookmark from '~/models/schemas/Bookmark.schema'
 import databaseService from './database.services'
 import { ObjectId, WithId } from 'mongodb'
+import Vote from '~/models/schemas/Vote.schema'
 
 class VotesService {
   async votePost(user_id: string, post_id: string) {
@@ -10,7 +11,7 @@ class VotesService {
         post_id: new ObjectId(post_id)
       },
       {
-        $setOnInsert: new Bookmark({
+        $setOnInsert: new Vote({
           user_id: new ObjectId(user_id),
           post_id: new ObjectId(post_id)
         })
@@ -20,7 +21,7 @@ class VotesService {
         returnDocument: 'after'
       }
     )
-    return result.value as WithId<Bookmark>
+    return result.value as WithId<Vote>
   }
 
   async unVotePost(user_id: string, post_id: string) {

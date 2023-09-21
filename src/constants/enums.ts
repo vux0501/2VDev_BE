@@ -36,11 +36,6 @@ export enum PostType {
   Quotepost
 }
 
-export enum ApprovedType {
-  unApproved,
-  Approved
-}
-
 export enum ResolvedType {
   unResolved,
   Resolved

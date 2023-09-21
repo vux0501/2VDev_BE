@@ -37,17 +37,20 @@ export const createPostValidator = validate(
         }
       },
       title: {
-        notEmpty: {
-          errorMessage: POSTS_MESSAGES.TITLE_IS_REQUIRED
-        },
-        isLength: {
-          options: { min: 20, max: 50 },
-          errorMessage: POSTS_MESSAGES.TITLE_LENGTH
-        },
-        isString: {
-          errorMessage: POSTS_MESSAGES.TITLE_MUST_BE_A_STRING
-        },
-        trim: true
+        custom: {
+          options: (value, { req }) => {
+            const type = req.body.type as PostType
+
+            // nếu `type` là post thì `title` phải khác rỗng
+            if (type === PostType.Post && value === null) {
+              throw new Error(POSTS_MESSAGES.TITLE_IS_REQUIRED)
+            }
+            if ((type === PostType.Post && value.length < 10) || (type === PostType.Post && value.length > 255)) {
+              throw new Error(POSTS_MESSAGES.TITLE_LENGTH)
+            }
+            return true
+          }
+        }
       },
       content: {
         notEmpty: {

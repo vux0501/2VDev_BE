@@ -70,9 +70,8 @@ export const USERS_MESSAGES = {
 
 export const POSTS_MESSAGES = {
   VALIDATION_ERROR: 'Validation error',
-  TITLE_IS_REQUIRED: 'Tiêu đề không được để trống.',
-  TITLE_LENGTH: 'Tiêu đề phải từ 20 đến 50 ký tự.',
-  TITLE_MUST_BE_A_STRING: 'Tiêu đề phải là chuỗi ký tự.',
+  TITLE_IS_REQUIRED: 'Tiêu đề của bài viết gốc không được rỗng.',
+  TITLE_LENGTH: 'Tiêu đề của bài viết từ 10 đến 255 ký tự.',
 
   CONTENT_IS_REQUIRED: 'Nội dung không được để trống.',
   CONTENT_LENGTH: 'Nội dung phải từ 20 đến 500 ký tự.',
@@ -98,4 +97,9 @@ export const BOOKMARK_MESSAGES = {
 export const VOTE_MESSAGES = {
   VOTE_SUCCESSFULLY: 'Vote thành công',
   UNVOTE_SUCCESSFULLY: 'Unvote thành công'
+}
+
+export const REPORT_MESSAGES = {
+  REPORT_SUCCESSFULLY: 'Report thành công',
+  UNREPORT_SUCCESSFULLY: 'Unreport thành công'
 }
