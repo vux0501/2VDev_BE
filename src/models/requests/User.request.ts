@@ -1,5 +1,5 @@
 import { JwtPayload } from 'jsonwebtoken'
-import { TokenType, UserLevelStatus, UserRoleStatus, UserVerifyStatus } from '~/constants/enums'
+import { TokenType, UserRoleStatus, UserVerifyStatus } from '~/constants/enums'
 import { ParamsDictionary } from 'express-serve-static-core'
 
 export interface RegisterReqBody {
@@ -63,7 +63,6 @@ export interface UpdateAccountReqBody {
   cover_photo?: string
   verify?: UserVerifyStatus
   role?: UserRoleStatus
-  level?: UserLevelStatus
 }
 
 export interface GetProfileReqParams extends ParamsDictionary {
@@ -81,7 +80,6 @@ export interface TokenPayload extends JwtPayload {
   token_type: TokenType
   verify: UserVerifyStatus
   role: UserRoleStatus
-  level: UserLevelStatus
   exp: number
   iat: number
 }

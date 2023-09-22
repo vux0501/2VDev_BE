@@ -114,7 +114,32 @@ export const postIdValidator = validate(
                 .aggregate<Post>([
                   {
                     $match: {
-                      _id: new ObjectId(value)
+                      _id: new ObjectId('650d2acba59ec7fe7ef63278')
+                    }
+                  },
+                  {
+                    $lookup: {
+                      from: 'users',
+                      localField: 'user_id',
+                      foreignField: '_id',
+                      as: 'user_detail'
+                    }
+                  },
+                  {
+                    $addFields: {
+                      user_detail: {
+                        $map: {
+                          input: '$user_detail',
+                          as: 'user',
+                          in: {
+                            _id: '$$user._id',
+                            name: '$$user.name',
+                            avatar: '$$user.avatar',
+                            role: '$$user.role',
+                            point: '$$user.point'
+                          }
+                        }
+                      }
                     }
                   },
                   {
@@ -211,13 +236,13 @@ export const postIdValidator = validate(
                   },
                   {
                     $project: {
-                      post_children: 0
+                      post_children: 0,
+                      user_id: 0
                     }
                   }
                 ])
                 .toArray()
             )[0]
-            console.log(post)
             if (!post) {
               throw new ErrorWithStatus({
                 status: HTTP_STATUS.NOT_FOUND,

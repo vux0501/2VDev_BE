@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import { UserLevelStatus, UserRoleStatus, UserVerifyStatus } from '~/constants/enums'
+import { UserRoleStatus, UserVerifyStatus } from '~/constants/enums'
 
 interface UserType {
   _id?: ObjectId
@@ -11,7 +11,6 @@ interface UserType {
   forgot_password_token?: string
   verify?: UserVerifyStatus
   role?: UserRoleStatus
-  level?: UserLevelStatus
   point?: number
   bio?: string
   location?: string
@@ -35,7 +34,6 @@ export default class User {
   forgot_password_token: string // jwt hoặc '' nếu đã xác thực email
   verify: UserVerifyStatus // optional
   role: UserRoleStatus // optional
-  level: UserLevelStatus // optional
   point: number
   bio: string // optional
   location: string // optional
@@ -57,7 +55,6 @@ export default class User {
     this.forgot_password_token = user.forgot_password_token || ''
     this.verify = user.verify || UserVerifyStatus.Unverified
     this.role = user.role || UserRoleStatus.User
-    this.level = user.level || UserLevelStatus.Bronze
     this.point = user.point || 0
     this.bio = user.bio || ''
     this.location = user.location || ''

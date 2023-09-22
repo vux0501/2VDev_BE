@@ -4,14 +4,6 @@ export enum UserVerifyStatus {
   Banned // bị khóa
 }
 
-export enum UserLevelStatus {
-  Bronze, //mặc định = 0
-  Silver,
-  Gold,
-  Platinum,
-  Diamond
-}
-
 export enum UserRoleStatus {
   User, // tào khoản người dùng, mặc định = 0
   Admin // tài khoản admin

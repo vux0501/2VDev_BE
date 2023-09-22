@@ -210,8 +210,7 @@ userRouters.patch(
     'avatar',
     'cover_photo',
     'verify',
-    'role',
-    'level'
+    'role'
   ]),
   wrapRequestHandler(updateAccountController)
 )
