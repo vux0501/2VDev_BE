@@ -1,6 +1,11 @@
 import { Router } from 'express'
-import { createPostController, getPostController } from '~/controllers/posts.controllers'
-import { createPostValidator, postIdValidator } from '~/middlewares/posts.middleware'
+import { createPostController, getPostChildrenController, getPostController } from '~/controllers/posts.controllers'
+import {
+  createPostValidator,
+  getPostChildrenValidator,
+  paginationValidator,
+  postIdValidator
+} from '~/middlewares/posts.middleware'
 import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -32,6 +37,23 @@ postRouters.get(
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),
   wrapRequestHandler(getPostController)
+)
+
+/**
+ * Description: Get post children
+ * Path: /:post_id/children
+ * Method: GET
+ * Header: { Authorization?: Bearer <access_token> }
+ * Query: {limit: number, page: number, post_type: PostType}
+ */
+postRouters.get(
+  '/:post_id/children',
+  postIdValidator,
+  paginationValidator,
+  getPostChildrenValidator,
+  isUserLoggedInValidator(accessTokenValidator),
+  isUserLoggedInValidator(verifiedUserValidator),
+  wrapRequestHandler(getPostChildrenController)
 )
 
 export default postRouters

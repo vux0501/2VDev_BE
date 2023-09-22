@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
+import { PostType } from '~/constants/enums'
 import { PostRequestBody } from '~/models/requests/Post.request'
 import { TokenPayload } from '~/models/requests/User.request'
 import postsService from '~/services/posts.services'
@@ -28,5 +29,28 @@ export const getPostController = async (req: Request, res: Response) => {
   return res.json({
     message: 'Get post Successfully',
     result: post
+  })
+}
+
+export const getPostChildrenController = async (req: Request, res: Response) => {
+  const post_type = Number(req.query.post_type as string)
+  const limit = Number(req.query.limit as string)
+  const page = Number(req.query.page as string)
+  const { total_children, post_children } = await postsService.getPostChildren({
+    post_id: req.params.post_id,
+    post_type: post_type,
+    limit: limit,
+    page: page
+  })
+  return res.json({
+    message: 'Get children Successfully',
+    result: {
+      post_children: post_children,
+      post_type: post_type,
+      limit: limit,
+      page: page,
+      total_children,
+      total_page: Math.ceil(total_children / limit)
+    }
   })
 }
