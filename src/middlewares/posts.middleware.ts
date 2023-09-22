@@ -1,9 +1,11 @@
+import { Request } from 'express'
 import { checkSchema } from 'express-validator'
 import { ObjectId } from 'mongodb'
 import { MediaType, PostType } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
+import Post from '~/models/schemas/Post.schema'
 import databaseService from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/commons'
 import { validate } from '~/utils/validation'
@@ -25,7 +27,7 @@ export const createPostValidator = validate(
           options: (value, { req }) => {
             const type = req.body.type as PostType
             // Nếu `type` là repost, comment, quotepost thì `parent_id` phải là `id` của post cha
-            if ([PostType.Repost, PostType.Comment, PostType.Quotepost].includes(type) && !ObjectId.isValid(value)) {
+            if ([PostType.Repost, PostType.Comment].includes(type) && !ObjectId.isValid(value)) {
               throw new Error(POSTS_MESSAGES.PARENT_ID_MUST_BE_A_VALID_POST_ID)
             }
             // nếu `type` là post thì `parent_id` phải là `null`
@@ -107,15 +109,123 @@ export const postIdValidator = validate(
         },
         custom: {
           options: async (value, { req }) => {
-            const post = await databaseService.posts.findOne({
-              _id: new ObjectId(value)
-            })
+            const post = (
+              await databaseService.posts
+                .aggregate<Post>([
+                  {
+                    $match: {
+                      _id: new ObjectId(value)
+                    }
+                  },
+                  {
+                    $lookup: {
+                      from: 'hashtags',
+                      localField: 'hashtags',
+                      foreignField: '_id',
+                      as: 'hashtags'
+                    }
+                  },
+                  {
+                    $addFields: {
+                      hashtags: {
+                        $map: {
+                          input: '$hashtags',
+                          as: 'hashtag',
+                          in: {
+                            _id: '$$hashtag._id',
+                            name: '$$hashtag.name'
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    $lookup: {
+                      from: 'bookmarks',
+                      localField: '_id',
+                      foreignField: 'post_id',
+                      as: 'bookmarks_count'
+                    }
+                  },
+                  {
+                    $lookup: {
+                      from: 'votes',
+                      localField: '_id',
+                      foreignField: 'post_id',
+                      as: 'votes_count'
+                    }
+                  },
+                  {
+                    $lookup: {
+                      from: 'reports',
+                      localField: '_id',
+                      foreignField: 'post_id',
+                      as: 'reports_count'
+                    }
+                  },
+                  {
+                    $lookup: {
+                      from: 'posts',
+                      localField: '_id',
+                      foreignField: 'parent_id',
+                      as: 'post_children'
+                    }
+                  },
+                  {
+                    $addFields: {
+                      bookmarks_count: {
+                        $size: '$bookmarks_count'
+                      },
+                      votes_count: {
+                        $size: '$votes_count'
+                      },
+                      reports_count: {
+                        $size: '$reports_count'
+                      },
+                      repost_count: {
+                        $size: {
+                          $filter: {
+                            input: '$post_children',
+                            as: 'item',
+                            cond: {
+                              $eq: ['$$item.type', 1]
+                            }
+                          }
+                        }
+                      },
+                      comment_count: {
+                        $size: {
+                          $filter: {
+                            input: '$post_children',
+                            as: 'item',
+                            cond: {
+                              $eq: ['$$item.type', 2]
+                            }
+                          }
+                        }
+                      },
+                      views_count: {
+                        $add: ['$user_views', '$guest_views']
+                      }
+                    }
+                  },
+                  {
+                    $project: {
+                      post_children: 0
+                    }
+                  }
+                ])
+                .toArray()
+            )[0]
+            console.log(post)
             if (!post) {
               throw new ErrorWithStatus({
                 status: HTTP_STATUS.NOT_FOUND,
                 message: POSTS_MESSAGES.POST_NOT_FOUND
               })
             }
+            ;(req as Request).post = post as any
+            return true
           }
         }
       }

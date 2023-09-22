@@ -26,7 +26,7 @@ export const getPostController = async (req: Request, res: Response) => {
     updated_at: result.updated_at
   }
   return res.json({
-    message: 'Get Tweet Successfully',
+    message: 'Get post Successfully',
     result: post
   })
 }

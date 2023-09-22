@@ -32,8 +32,7 @@ export enum MediaType {
 export enum PostType {
   Post,
   Repost,
-  Comment,
-  Quotepost
+  Comment
 }
 
 export enum ResolvedType {
