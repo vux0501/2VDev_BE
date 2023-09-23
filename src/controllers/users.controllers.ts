@@ -227,6 +227,27 @@ export const getListUsersFollowingController = async (req: Request, res: Respons
   })
 }
 
+export const getListUsersFollowerController = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id } = req.body
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+
+  const { list_users_following, totalPage, totalUser, currentPage, userPerPage } =
+    await usersService.getListUsersFollower({
+      user_id,
+      limit,
+      page
+    })
+  return res.json({
+    message: USERS_MESSAGES.GET_LIST_USER_SUCCESS,
+    result: list_users_following,
+    totalPage,
+    totalUser,
+    currentPage,
+    userPerPage
+  })
+}
+
 export const changePasswordController = async (
   req: Request<ParamsDictionary, any, ChangePasswordReqBody>,
   res: Response,

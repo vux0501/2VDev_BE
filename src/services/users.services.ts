@@ -644,6 +644,71 @@ class UsersService {
     return { list_users_following, currentPage: page, userPerPage: limit, totalUser: totalUser, totalPage: totalPage }
   }
 
+  async getListUsersFollower({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const list_users_following = await databaseService.followers
+      .aggregate([
+        {
+          $match: {
+            followed_user_id: new ObjectId(user_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user_follower_detail'
+          }
+        },
+        {
+          $addFields: {
+            user_follower_detail: {
+              $map: {
+                input: '$user_follower_detail',
+                as: 'item',
+                in: {
+                  _id: '$$item._id',
+                  name: '$$item.name',
+                  username: '$$item.username',
+                  avatar: '$$item.avatar',
+                  point: '$$item.point'
+                }
+              }
+            }
+          }
+        },
+        {
+          $unwind: {
+            path: '$user_follower_detail'
+          }
+        },
+        {
+          $project: {
+            user_follower_detail: 1,
+            _id: 0
+          }
+        },
+        {
+          $skip: (page - 1) * limit
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+
+    const totalUser = await list_users_following.length
+    const totalPage = Math.ceil(totalUser / limit)
+
+    if (list_users_following === null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.LIST_USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return { list_users_following, currentPage: page, userPerPage: limit, totalUser: totalUser, totalPage: totalPage }
+  }
+
   async changePassword(user_id: string, new_password: string) {
     await databaseService.users.updateOne(
       { _id: new ObjectId(user_id) },

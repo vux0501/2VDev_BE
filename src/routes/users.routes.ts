@@ -4,6 +4,7 @@ import {
   followController,
   forgotPasswordController,
   getListUsersController,
+  getListUsersFollowerController,
   getListUsersFollowingController,
   getMeController,
   getProfileController,
@@ -262,6 +263,19 @@ userRouters.get(
   '/followers/list-users-following',
   accessTokenValidator,
   wrapRequestHandler(getListUsersFollowingController)
+)
+
+/**
+ * Description: Get follower
+ * Path: /followers/list-users-follower?limit={limit}&page={page}
+ * Method: GET
+ * Body: user_id: string
+ * Header: { Authorization: Bearer <access_token> }
+ */
+userRouters.get(
+  '/followers/list-users-follower',
+  accessTokenValidator,
+  wrapRequestHandler(getListUsersFollowerController)
 )
 
 export default userRouters
