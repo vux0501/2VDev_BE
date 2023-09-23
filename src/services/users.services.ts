@@ -450,7 +450,7 @@ class UsersService {
     return user.value
   }
 
-  async getProfile(username: string) {
+  async getProfile(user_id: string, username: string) {
     const user = (
       await databaseService.users
         .aggregate([
@@ -482,6 +482,15 @@ class UsersService {
               },
               followers: {
                 $size: '$followers'
+              },
+              is_followed: {
+                $cond: {
+                  if: {
+                    $in: [new ObjectId(user_id), '$followers.user_id']
+                  },
+                  then: 1,
+                  else: 0
+                }
               }
             }
           },
@@ -504,7 +513,7 @@ class UsersService {
     return user
   }
 
-  async getListUsers({ limit, page }: { limit: number; page: number }) {
+  async getListUsers({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
     const list_users = await databaseService.users
       .aggregate([
         {
@@ -530,6 +539,15 @@ class UsersService {
             },
             followers: {
               $size: '$followers'
+            },
+            is_followed: {
+              $cond: {
+                if: {
+                  $in: [new ObjectId(user_id), '$followers.user_id']
+                },
+                then: 1,
+                else: 0
+              }
             }
           }
         },
@@ -540,7 +558,6 @@ class UsersService {
             email_verify_token: 0
           }
         },
-
         {
           $skip: (page - 1) * limit
         },
@@ -560,6 +577,71 @@ class UsersService {
       })
     }
     return { list_users, currentPage: page, userPerPage: limit, totalUser: totalUser, totalPage: totalPage }
+  }
+
+  async getListUsersFollowing({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const list_users_following = await databaseService.followers
+      .aggregate([
+        {
+          $match: {
+            user_id: new ObjectId(user_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'followed_user_id',
+            foreignField: '_id',
+            as: 'user_following_detail'
+          }
+        },
+        {
+          $addFields: {
+            user_following_detail: {
+              $map: {
+                input: '$user_following_detail',
+                as: 'item',
+                in: {
+                  _id: '$$item._id',
+                  name: '$$item.name',
+                  username: '$$item.username',
+                  avatar: '$$item.avatar',
+                  point: '$$item.point'
+                }
+              }
+            }
+          }
+        },
+        {
+          $unwind: {
+            path: '$user_following_detail'
+          }
+        },
+        {
+          $project: {
+            user_following_detail: 1,
+            _id: 0
+          }
+        },
+        {
+          $skip: (page - 1) * limit
+        },
+        {
+          $limit: limit
+        }
+      ])
+      .toArray()
+
+    const totalUser = await list_users_following.length
+    const totalPage = Math.ceil(totalUser / limit)
+
+    if (list_users_following === null) {
+      throw new ErrorWithStatus({
+        message: USERS_MESSAGES.LIST_USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return { list_users_following, currentPage: page, userPerPage: limit, totalUser: totalUser, totalPage: totalPage }
   }
 
   async changePassword(user_id: string, new_password: string) {

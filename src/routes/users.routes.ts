@@ -4,6 +4,7 @@ import {
   followController,
   forgotPasswordController,
   getListUsersController,
+  getListUsersFollowingController,
   getMeController,
   getProfileController,
   loginController,
@@ -158,14 +159,16 @@ userRouters.patch(
  * Path: /list-users?limit={limit}&page={page}
  * Method: GET
  */
-userRouters.get('/list-users', wrapRequestHandler(getListUsersController))
+userRouters.get('/list-users', accessTokenValidator, wrapRequestHandler(getListUsersController))
 
 /**
  * Description: Get user profile
  * Path: /:username
+ * Header: { Authorization: Bearer <access_token> }
  * Method: GET
+
  */
-userRouters.get('/:username', wrapRequestHandler(getProfileController))
+userRouters.get('/:username', accessTokenValidator, wrapRequestHandler(getProfileController))
 
 /**
  * Description: Change password
@@ -246,6 +249,19 @@ userRouters.delete(
   verifiedUserValidator,
   unfollowValidator,
   wrapRequestHandler(unfollowController)
+)
+
+/**
+ * Description: Get following
+ * Path: /followers/list-users-following?limit={limit}&page={page}
+ * Method: GET
+ * Body: user_id: string
+ * Header: { Authorization: Bearer <access_token> }
+ */
+userRouters.get(
+  '/followers/list-users-following',
+  accessTokenValidator,
+  wrapRequestHandler(getListUsersFollowingController)
 )
 
 export default userRouters

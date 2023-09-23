@@ -187,7 +187,8 @@ export const updateAccountController = async (
 
 export const getProfileController = async (req: Request<GetProfileReqParams>, res: Response, next: NextFunction) => {
   const { username } = req.params
-  const user = await usersService.getProfile(username)
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const user = await usersService.getProfile(user_id, username)
   return res.json({
     message: USERS_MESSAGES.GET_PROFILE_SUCCESS,
     result: user
@@ -195,12 +196,34 @@ export const getProfileController = async (req: Request<GetProfileReqParams>, re
 }
 
 export const getListUsersController = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const list_user = await usersService.getListUsers({ limit, page })
+  const list_user = await usersService.getListUsers({ user_id, limit, page })
   return res.json({
     message: USERS_MESSAGES.GET_LIST_USER_SUCCESS,
     result: list_user
+  })
+}
+
+export const getListUsersFollowingController = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id } = req.body
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+
+  const { list_users_following, totalPage, totalUser, currentPage, userPerPage } =
+    await usersService.getListUsersFollowing({
+      user_id,
+      limit,
+      page
+    })
+  return res.json({
+    message: USERS_MESSAGES.GET_LIST_USER_SUCCESS,
+    result: list_users_following,
+    totalPage,
+    totalUser,
+    currentPage,
+    userPerPage
   })
 }
 
