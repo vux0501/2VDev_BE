@@ -13,6 +13,7 @@ import HTTP_STATUS from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/models/Errors'
 import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
 import axios from 'axios'
+import Follower from '~/models/schemas/Follower.schema'
 
 dotenv.config()
 
@@ -350,16 +351,50 @@ class UsersService {
   }
 
   async getMe(user_id: string) {
-    const user = await databaseService.users.findOne(
-      { _id: new ObjectId(user_id) },
-      {
-        projection: {
-          password: 0,
-          email_verify_token: 0,
-          forgot_password_token: 0
-        }
-      }
-    )
+    const user = (
+      await databaseService.users
+        .aggregate([
+          {
+            $match: {
+              _id: new ObjectId(user_id)
+            }
+          },
+          {
+            $lookup: {
+              from: 'followers',
+              localField: '_id',
+              foreignField: 'user_id',
+              as: 'following'
+            }
+          },
+          {
+            $lookup: {
+              from: 'followers',
+              localField: '_id',
+              foreignField: 'followed_user_id',
+              as: 'followers'
+            }
+          },
+          {
+            $addFields: {
+              following: {
+                $size: '$following'
+              },
+              followers: {
+                $size: '$followers'
+              }
+            }
+          },
+          {
+            $project: {
+              password: 0,
+              forgot_password_token: 0,
+              email_verify_token: 0
+            }
+          }
+        ])
+        .toArray()
+    )[0]
     return user
   }
 
@@ -416,16 +451,50 @@ class UsersService {
   }
 
   async getProfile(username: string) {
-    const user = await databaseService.users.findOne(
-      { username },
-      {
-        projection: {
-          password: 0,
-          email_verify_token: 0,
-          forgot_password_token: 0
-        }
-      }
-    )
+    const user = (
+      await databaseService.users
+        .aggregate([
+          {
+            $match: {
+              username: username
+            }
+          },
+          {
+            $lookup: {
+              from: 'followers',
+              localField: '_id',
+              foreignField: 'user_id',
+              as: 'following'
+            }
+          },
+          {
+            $lookup: {
+              from: 'followers',
+              localField: '_id',
+              foreignField: 'followed_user_id',
+              as: 'followers'
+            }
+          },
+          {
+            $addFields: {
+              following: {
+                $size: '$following'
+              },
+              followers: {
+                $size: '$followers'
+              }
+            }
+          },
+          {
+            $project: {
+              password: 0,
+              forgot_password_token: 0,
+              email_verify_token: 0
+            }
+          }
+        ])
+        .toArray()
+    )[0]
     if (user === null) {
       throw new ErrorWithStatus({
         message: USERS_MESSAGES.USER_NOT_FOUND,
@@ -437,18 +506,48 @@ class UsersService {
 
   async getListUsers({ limit, page }: { limit: number; page: number }) {
     const list_users = await databaseService.users
-      .find(
-        {},
+      .aggregate([
         {
-          projection: {
-            password: 0,
-            email_verify_token: 0,
-            forgot_password_token: 0
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'user_id',
+            as: 'following'
           }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: '_id',
+            foreignField: 'followed_user_id',
+            as: 'followers'
+          }
+        },
+        {
+          $addFields: {
+            following: {
+              $size: '$following'
+            },
+            followers: {
+              $size: '$followers'
+            }
+          }
+        },
+        {
+          $project: {
+            password: 0,
+            forgot_password_token: 0,
+            email_verify_token: 0
+          }
+        },
+
+        {
+          $skip: (page - 1) * limit
+        },
+        {
+          $limit: limit
         }
-      )
-      .skip((page - 1) * limit)
-      .limit(limit)
+      ])
       .toArray()
 
     const totalUser = await databaseService.users.countDocuments()
@@ -561,6 +660,49 @@ class UsersService {
         confirm_password: password
       })
       return { ...data, newUser: 1, verify: UserVerifyStatus.Unverified, role: UserRoleStatus }
+    }
+  }
+  async follow(user_id: string, followed_user_id: string) {
+    const follower = await databaseService.followers.findOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id)
+    })
+    if (follower === null) {
+      await databaseService.followers.insertOne(
+        new Follower({
+          user_id: new ObjectId(user_id),
+          followed_user_id: new ObjectId(followed_user_id)
+        })
+      )
+      return {
+        message: USERS_MESSAGES.FOLLOW_SUCCESS
+      }
+    }
+    return {
+      message: USERS_MESSAGES.FOLLOWED
+    }
+  }
+
+  async unfollow(user_id: string, followed_user_id: string) {
+    const follower = await databaseService.followers.findOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id)
+    })
+    // Không tìm thấy document follower
+    // nghĩa là chưa follow người này
+    if (follower === null) {
+      return {
+        message: USERS_MESSAGES.ALREADY_UNFOLLOWED
+      }
+    }
+    // Tìm thấy document follower
+    // Nghĩa là đã follow người này rồi, thì ta tiến hành xóa document này
+    await databaseService.followers.deleteOne({
+      user_id: new ObjectId(user_id),
+      followed_user_id: new ObjectId(followed_user_id)
+    })
+    return {
+      message: USERS_MESSAGES.UNFOLLOW_SUCCESS
     }
   }
 }

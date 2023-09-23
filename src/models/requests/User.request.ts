@@ -83,3 +83,11 @@ export interface TokenPayload extends JwtPayload {
   exp: number
   iat: number
 }
+
+export interface FollowReqBody {
+  followed_user_id: string
+}
+
+export interface UnfollowReqParams extends ParamsDictionary {
+  user_id: string
+}

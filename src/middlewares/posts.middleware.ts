@@ -59,7 +59,7 @@ export const createPostValidator = validate(
           errorMessage: POSTS_MESSAGES.CONTENT_IS_REQUIRED
         },
         isLength: {
-          options: { min: 20, max: 500 },
+          options: { min: 20, max: 5000 },
           errorMessage: POSTS_MESSAGES.CONTENT_LENGTH
         },
         isString: {
@@ -114,7 +114,7 @@ export const postIdValidator = validate(
                 .aggregate<Post>([
                   {
                     $match: {
-                      _id: new ObjectId('650d2acba59ec7fe7ef63278')
+                      _id: new ObjectId(value)
                     }
                   },
                   {

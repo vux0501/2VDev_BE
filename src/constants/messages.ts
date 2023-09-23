@@ -16,6 +16,7 @@ export const USERS_MESSAGES = {
   CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD: 'Mật khẩu xác nhận không khớp.',
   DATE_OF_BIRTH_MUST_BE_ISO8601: 'Ngày sinh phải có dạng ISO8601.',
   EMAIL_OR_PASSWORD_INCORRECT: 'Tên đăng nhập hoặc mật khẩu không chính xác.',
+  INVALID_USER_ID: 'user_id không đúng',
 
   LOGIN_SUCCESS: 'Đăng nhập thành công.',
   REGISTER_SUCCESS: 'Đăng ký thành công.',
@@ -65,16 +66,21 @@ export const USERS_MESSAGES = {
   PARAMS_NOT_FOUND: 'Không tìm thấy params',
 
   GMAIL_NOT_VERIFIED: 'Gmail chưa được xác thực',
-  UPLOAD_SUCCESS: 'Upload thành công.'
+  UPLOAD_SUCCESS: 'Upload thành công.',
+
+  FOLLOW_SUCCESS: 'Follow thành công',
+  FOLLOWED: 'Đã follow rồi người ngày rồi.',
+  ALREADY_UNFOLLOWED: 'Đã unfollow người này rồi.',
+  UNFOLLOW_SUCCESS: 'Unfollow thành công'
 } as const
 
 export const POSTS_MESSAGES = {
   VALIDATION_ERROR: 'Validation error',
   TITLE_IS_REQUIRED: 'Tiêu đề của bài viết gốc không được rỗng.',
-  TITLE_LENGTH: 'Tiêu đề của bài viết từ 10 đến 255 ký tự.',
+  TITLE_LENGTH: 'Tiêu đề của bài viết từ 10 đến 5000 ký tự.',
 
   CONTENT_IS_REQUIRED: 'Nội dung không được để trống.',
-  CONTENT_LENGTH: 'Nội dung phải từ 20 đến 500 ký tự.',
+  CONTENT_LENGTH: 'Nội dung phải từ 20 đến 5000 ký tự.',
   CONTENT_MUST_BE_A_STRING: 'Nội dung phải là chuỗi ký tự.',
 
   HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING: 'Hashtag phải là một mảng chuỗi ký tự.',

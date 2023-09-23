@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   changePasswordController,
+  followController,
   forgotPasswordController,
   getListUsersController,
   getMeController,
@@ -12,6 +13,7 @@ import {
   registerController,
   resendVerifyEmailController,
   resetPasswordController,
+  unfollowController,
   updateAccountController,
   updateMeController,
   verifyEmailController,
@@ -22,12 +24,14 @@ import {
   accessTokenValidator,
   changePasswordValidator,
   emailVerifyTokenValidator,
+  followValidator,
   forgotPasswordValidator,
   isAdminValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
+  unfollowValidator,
   updateAccountValidator,
   updateMeValidator,
   verifiedUserValidator,
@@ -213,6 +217,35 @@ userRouters.patch(
     'role'
   ]),
   wrapRequestHandler(updateAccountController)
+)
+
+/**
+ * Description: Follow someone
+ * Path: /follow
+ * Method: POST
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: { followed_user_id: string }
+ */
+userRouters.post(
+  '/follow',
+  accessTokenValidator,
+  verifiedUserValidator,
+  followValidator,
+  wrapRequestHandler(followController)
+)
+
+/**
+ * Description: Follow someone
+ * Path: /follow/user_id
+ * Method: DELETE
+ * Header: { Authorization: Bearer <access_token> }
+ */
+userRouters.delete(
+  '/follow/:user_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  unfollowValidator,
+  wrapRequestHandler(unfollowController)
 )
 
 export default userRouters
