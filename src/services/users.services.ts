@@ -579,7 +579,17 @@ class UsersService {
     return { list_users, currentPage: page, userPerPage: limit, totalUser: totalUser, totalPage: totalPage }
   }
 
-  async getListUsersFollowing({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+  async getListUsersFollowing({
+    current_user_id,
+    user_id,
+    limit,
+    page
+  }: {
+    current_user_id: string
+    user_id: string
+    limit: number
+    page: number
+  }) {
     const list_users_following = await databaseService.followers
       .aggregate([
         {
@@ -618,9 +628,31 @@ class UsersService {
           }
         },
         {
+          $lookup: {
+            from: 'followers',
+            localField: 'user_following_detail._id',
+            foreignField: 'followed_user_id',
+            as: 'result'
+          }
+        },
+        {
+          $addFields: {
+            is_followed: {
+              $cond: {
+                if: {
+                  $in: [new ObjectId(current_user_id), '$result.user_id']
+                },
+                then: 1,
+                else: 0
+              }
+            }
+          }
+        },
+        {
           $project: {
             user_following_detail: 1,
-            _id: 0
+            _id: 0,
+            is_followed: 1
           }
         },
         {
@@ -644,7 +676,17 @@ class UsersService {
     return { list_users_following, currentPage: page, userPerPage: limit, totalUser: totalUser, totalPage: totalPage }
   }
 
-  async getListUsersFollower({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+  async getListUsersFollower({
+    current_user_id,
+    user_id,
+    limit,
+    page
+  }: {
+    current_user_id: string
+    user_id: string
+    limit: number
+    page: number
+  }) {
     const list_users_following = await databaseService.followers
       .aggregate([
         {
@@ -683,9 +725,31 @@ class UsersService {
           }
         },
         {
+          $lookup: {
+            from: 'followers',
+            localField: 'user_follower_detail._id',
+            foreignField: 'followed_user_id',
+            as: 'result'
+          }
+        },
+        {
+          $addFields: {
+            is_followed: {
+              $cond: {
+                if: {
+                  $in: [new ObjectId(current_user_id), '$result.user_id']
+                },
+                then: 1,
+                else: 0
+              }
+            }
+          }
+        },
+        {
           $project: {
             user_follower_detail: 1,
-            _id: 0
+            _id: 0,
+            is_followed: 1
           }
         },
         {

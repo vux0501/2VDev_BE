@@ -207,12 +207,14 @@ export const getListUsersController = async (req: Request, res: Response, next: 
 }
 
 export const getListUsersFollowingController = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id: current_user_id } = req.decoded_authorization as TokenPayload
   const { user_id } = req.body
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
 
   const { list_users_following, totalPage, totalUser, currentPage, userPerPage } =
     await usersService.getListUsersFollowing({
+      current_user_id,
       user_id,
       limit,
       page
@@ -228,12 +230,15 @@ export const getListUsersFollowingController = async (req: Request, res: Respons
 }
 
 export const getListUsersFollowerController = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id: current_user_id } = req.decoded_authorization as TokenPayload
+
   const { user_id } = req.body
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
 
   const { list_users_following, totalPage, totalUser, currentPage, userPerPage } =
     await usersService.getListUsersFollower({
+      current_user_id,
       user_id,
       limit,
       page
