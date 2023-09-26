@@ -13,6 +13,7 @@ import {
   UnfollowReqParams,
   UpdateAccountReqBody,
   UpdateMeReqBody,
+  UpdatePointReqBody,
   VerifyEmailReqBody,
   VerifyForgotPasswordReqBody
 } from '~/models/requests/User.request'
@@ -287,5 +288,11 @@ export const unfollowController = async (req: Request<UnfollowReqParams>, res: R
   const { user_id } = req.decoded_authorization as TokenPayload
   const { user_id: followed_user_id } = req.params
   const result = await usersService.unfollow(user_id, followed_user_id)
+  return res.json(result)
+}
+
+export const updatePointController = async (req: Request<UpdatePointReqBody>, res: Response, next: NextFunction) => {
+  const { user_id, point } = req.body
+  const result = await usersService.updatePoint(user_id, point)
   return res.json(result)
 }

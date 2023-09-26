@@ -18,6 +18,7 @@ import {
   unfollowController,
   updateAccountController,
   updateMeController,
+  updatePointController,
   verifyEmailController,
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
@@ -277,5 +278,13 @@ userRouters.get(
   accessTokenValidator,
   wrapRequestHandler(getListUsersFollowerController)
 )
+
+/**
+ * Description: Update point
+ * Path: /update-point
+ * Method: POST
+ * Body: {user_id: string, point: number}
+ */
+userRouters.post('/update-point', wrapRequestHandler(updatePointController))
 
 export default userRouters
