@@ -23,8 +23,8 @@ bookmarkRouters.post(
 )
 
 /**
- * Description: Unbookmark Tweet
- * Path: /tweets/:tweet_id
+ * Description: Unbookmark Post
+ * Path: /posts/:post_id
  * Method: DELETE
  * Header: { Authorization: Bearer <access_token> }
  */

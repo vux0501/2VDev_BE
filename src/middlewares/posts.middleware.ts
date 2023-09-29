@@ -144,6 +144,48 @@ export const postIdValidator = validate(
                   },
                   {
                     $lookup: {
+                      from: 'reports',
+                      localField: '_id',
+                      foreignField: 'post_id',
+                      as: 'reports'
+                    }
+                  },
+                  {
+                    $addFields: {
+                      is_reported: {
+                        $cond: {
+                          if: {
+                            $in: [new ObjectId(req.decoded_authorization?.user_id), '$reports.user_id']
+                          },
+                          then: 1,
+                          else: 0
+                        }
+                      }
+                    }
+                  },
+                  {
+                    $lookup: {
+                      from: 'votes',
+                      localField: '_id',
+                      foreignField: 'post_id',
+                      as: 'votes'
+                    }
+                  },
+                  {
+                    $addFields: {
+                      is_voted: {
+                        $cond: {
+                          if: {
+                            $in: [new ObjectId(req.decoded_authorization?.user_id), '$votes.user_id']
+                          },
+                          then: 1,
+                          else: 0
+                        }
+                      }
+                    }
+                  },
+                  {
+                    $lookup: {
                       from: 'hashtags',
                       localField: 'hashtags',
                       foreignField: '_id',
@@ -235,9 +277,16 @@ export const postIdValidator = validate(
                     }
                   },
                   {
+                    $unwind: {
+                      path: '$user_detail'
+                    }
+                  },
+                  {
                     $project: {
                       post_children: 0,
-                      user_id: 0
+                      user_id: 0,
+                      votes: 0,
+                      reports: 0
                     }
                   }
                 ])

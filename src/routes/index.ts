@@ -10,9 +10,9 @@ import reportRouters from './reports.routes'
 
 function route(app: Express) {
   app.use('/', userRouters)
+  app.use('/posts', postRouters)
   app.use('/medias', mediaRouters)
   app.use('/static', staticRouter)
-  app.use('/posts', postRouters)
   app.use('/hashtags', hashtagRouters)
   app.use('/bookmarks', bookmarkRouters)
   app.use('/votes', voteRouters)

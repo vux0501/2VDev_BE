@@ -66,11 +66,13 @@ class PostsService {
     }>
   }
   async getPostChildren({
+    user_id,
     post_id,
     post_type,
     limit,
     page
   }: {
+    user_id: string
     post_id: string
     post_type: PostType
     limit: number
@@ -90,6 +92,48 @@ class PostsService {
             localField: 'user_id',
             foreignField: '_id',
             as: 'user_detail'
+          }
+        },
+        {
+          $lookup: {
+            from: 'reports',
+            localField: '_id',
+            foreignField: 'post_id',
+            as: 'reports'
+          }
+        },
+        {
+          $addFields: {
+            is_reported: {
+              $cond: {
+                if: {
+                  $in: [new ObjectId(user_id), '$reports.user_id']
+                },
+                then: 1,
+                else: 0
+              }
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'votes',
+            localField: '_id',
+            foreignField: 'post_id',
+            as: 'votes'
+          }
+        },
+        {
+          $addFields: {
+            is_voted: {
+              $cond: {
+                if: {
+                  $in: [new ObjectId(user_id), '$votes.user_id']
+                },
+                then: 1,
+                else: 0
+              }
+            }
           }
         },
         {
@@ -155,13 +199,20 @@ class PostsService {
           }
         },
         {
+          $unwind: {
+            path: '$user_detail'
+          }
+        },
+        {
           $project: {
             post_children: 0,
             user_id: 0,
             title: 0,
             hashtags: 0,
             guest_views: 0,
-            user_views: 0
+            user_views: 0,
+            votes: 0,
+            reports: 0
           }
         },
         {
@@ -177,6 +228,554 @@ class PostsService {
       type: post_type
     })
     return { post_children, total_children }
+  }
+  async getNewFeeds({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const [posts, total] = await Promise.all([
+      databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              type: PostType.Post
+            }
+          },
+          {
+            $lookup: {
+              from: 'votes',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'votes'
+            }
+          },
+          {
+            $addFields: {
+              is_voted: {
+                $cond: {
+                  if: {
+                    $in: [new ObjectId(user_id), '$votes.user_id']
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'bookmarks',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'bookmarks'
+            }
+          },
+          {
+            $addFields: {
+              is_bookmarked: {
+                $cond: {
+                  if: {
+                    $in: [new ObjectId(user_id), '$bookmarks.user_id']
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'reports',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'reports'
+            }
+          },
+          {
+            $addFields: {
+              is_reported: {
+                $cond: {
+                  if: {
+                    $in: [new ObjectId(user_id), '$reports.user_id']
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user_detail'
+            }
+          },
+          {
+            $addFields: {
+              user_detail: {
+                $map: {
+                  input: '$user_detail',
+                  as: 'user',
+                  in: {
+                    _id: '$$user._id',
+                    name: '$$user.name',
+                    avatar: '$$user.avatar',
+                    role: '$$user.role',
+                    point: '$$user.point'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $skip: limit * (page - 1) // Công thức phân trang
+          },
+          {
+            $limit: limit
+          },
+          {
+            $lookup: {
+              from: 'hashtags',
+              localField: 'hashtags',
+              foreignField: '_id',
+              as: 'hashtags'
+            }
+          },
+          {
+            $addFields: {
+              hashtags: {
+                $map: {
+                  input: '$hashtags',
+                  as: 'hashtag',
+                  in: {
+                    _id: '$$hashtag._id',
+                    name: '$$hashtag.name'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'bookmarks',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'bookmarks_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'votes',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'votes_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'reports',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'reports_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              localField: '_id',
+              foreignField: 'parent_id',
+              as: 'post_children'
+            }
+          },
+          {
+            $addFields: {
+              bookmarks_count: {
+                $size: '$bookmarks_count'
+              },
+              votes_count: {
+                $size: '$votes_count'
+              },
+              reports_count: {
+                $size: '$reports_count'
+              },
+              repost_count: {
+                $size: {
+                  $filter: {
+                    input: '$post_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', PostType.Repost]
+                    }
+                  }
+                }
+              },
+              comment_count: {
+                $size: {
+                  $filter: {
+                    input: '$post_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', PostType.Comment]
+                    }
+                  }
+                }
+              },
+              views_count: {
+                $add: ['$user_views', '$guest_views']
+              }
+            }
+          },
+          {
+            $unwind: {
+              path: '$user_detail'
+            }
+          },
+          {
+            $project: {
+              post_children: 0,
+              user_id: 0,
+              votes: 0,
+              bookmarks: 0,
+              reports: 0
+            }
+          }
+        ])
+        .toArray(),
+      databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              type: PostType.Post
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user'
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+    const post_ids = posts.map((post) => post._id as ObjectId)
+    const date = new Date()
+    await databaseService.posts.updateMany(
+      {
+        _id: {
+          $in: post_ids
+        }
+      },
+      {
+        $inc: { user_views: 1 },
+        $set: {
+          updated_at: date
+        }
+      }
+    )
+
+    posts.forEach((post) => {
+      post.updated_at = date
+      post.user_views += 1
+    })
+
+    return {
+      posts,
+      total: total[0].total
+    }
+  }
+  async getNewFeedsFollow({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+    const user_id_obj = new ObjectId(user_id)
+    const followed_user_ids = await databaseService.followers
+      .find(
+        {
+          user_id: user_id_obj
+        },
+        {
+          projection: {
+            followed_user_id: 1,
+            _id: 0
+          }
+        }
+      )
+      .toArray()
+    const ids = followed_user_ids.map((item) => item.followed_user_id)
+    ids.push(user_id_obj)
+    const [posts, total] = await Promise.all([
+      databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              user_id: {
+                $in: ids
+              },
+              type: PostType.Post
+            }
+          },
+          {
+            $lookup: {
+              from: 'votes',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'votes'
+            }
+          },
+          {
+            $addFields: {
+              is_voted: {
+                $cond: {
+                  if: {
+                    $in: [new ObjectId(user_id), '$votes.user_id']
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'bookmarks',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'bookmarks'
+            }
+          },
+          {
+            $addFields: {
+              is_bookmarked: {
+                $cond: {
+                  if: {
+                    $in: [new ObjectId(user_id), '$bookmarks.user_id']
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'reports',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'reports'
+            }
+          },
+          {
+            $addFields: {
+              is_reported: {
+                $cond: {
+                  if: {
+                    $in: [new ObjectId(user_id), '$reports.user_id']
+                  },
+                  then: 1,
+                  else: 0
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user_detail'
+            }
+          },
+          {
+            $addFields: {
+              user_detail: {
+                $map: {
+                  input: '$user_detail',
+                  as: 'user',
+                  in: {
+                    _id: '$$user._id',
+                    name: '$$user.name',
+                    avatar: '$$user.avatar',
+                    role: '$$user.role',
+                    point: '$$user.point'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $skip: limit * (page - 1) // Công thức phân trang
+          },
+          {
+            $limit: limit
+          },
+          {
+            $lookup: {
+              from: 'hashtags',
+              localField: 'hashtags',
+              foreignField: '_id',
+              as: 'hashtags'
+            }
+          },
+          {
+            $addFields: {
+              hashtags: {
+                $map: {
+                  input: '$hashtags',
+                  as: 'hashtag',
+                  in: {
+                    _id: '$$hashtag._id',
+                    name: '$$hashtag.name'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'bookmarks',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'bookmarks_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'votes',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'votes_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'reports',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'reports_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              localField: '_id',
+              foreignField: 'parent_id',
+              as: 'post_children'
+            }
+          },
+          {
+            $addFields: {
+              bookmarks_count: {
+                $size: '$bookmarks_count'
+              },
+              votes_count: {
+                $size: '$votes_count'
+              },
+              reports_count: {
+                $size: '$reports_count'
+              },
+              repost_count: {
+                $size: {
+                  $filter: {
+                    input: '$post_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', PostType.Repost]
+                    }
+                  }
+                }
+              },
+              comment_count: {
+                $size: {
+                  $filter: {
+                    input: '$post_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', PostType.Comment]
+                    }
+                  }
+                }
+              },
+              views_count: {
+                $add: ['$user_views', '$guest_views']
+              }
+            }
+          },
+          {
+            $unwind: {
+              path: '$user_detail'
+            }
+          },
+          {
+            $project: {
+              post_children: 0,
+              user_id: 0,
+              votes: 0,
+              bookmarks: 0,
+              reports: 0
+            }
+          }
+        ])
+        .toArray(),
+      databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              user_id: {
+                $in: ids
+              },
+              type: PostType.Post
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user'
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+    const post_ids = posts.map((post) => post._id as ObjectId)
+    const date = new Date()
+    await databaseService.posts.updateMany(
+      {
+        _id: {
+          $in: post_ids
+        }
+      },
+      {
+        $inc: { user_views: 1 },
+        $set: {
+          updated_at: date
+        }
+      }
+    )
+
+    posts.forEach((post) => {
+      post.updated_at = date
+      post.user_views += 1
+    })
+
+    return {
+      posts,
+      total: total[0].total
+    }
   }
 }
 
