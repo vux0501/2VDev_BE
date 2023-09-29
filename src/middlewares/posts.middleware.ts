@@ -78,22 +78,6 @@ export const createPostValidator = validate(
             return true
           }
         }
-      },
-      medias: {
-        isArray: true,
-        custom: {
-          options: (value, { req }) => {
-            // Yêu cầu mỗi phần từ trong array là Media Object
-            if (
-              value.some((item: any) => {
-                return typeof item.url !== 'string' || !mediaTypes.includes(item.type)
-              })
-            ) {
-              throw new Error(POSTS_MESSAGES.MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT)
-            }
-            return true
-          }
-        }
       }
     },
     ['body']

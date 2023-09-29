@@ -86,8 +86,6 @@ export const POSTS_MESSAGES = {
 
   HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING: 'Hashtag phải là một mảng chuỗi ký tự.',
 
-  MEDIAS_MUST_BE_AN_ARRAY_OF_MEDIA_OBJECT: 'Meida phải là mảng của những đối tượng media',
-
   POST_ID_INVALID: 'Id post không đúng định dạng.',
   POST_NOT_FOUND: 'Không tìm thấy bài post này.',
   INVALID_TYPE: 'Kiểu của bài viết không đúng',
