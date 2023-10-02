@@ -61,43 +61,37 @@ export const getNewFeedsController = async (req: Request<ParamsDictionary, any, 
   const user_id = req.decoded_authorization?.user_id as string
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const result = await postsService.getNewFeeds({
-    user_id,
-    limit,
-    page
-  })
+  const type = req.query.type
 
-  return res.json({
-    message: 'Get New Feeds Successfully',
-    result: {
-      posts: result.posts,
+  if (type === 'new') {
+    const result = await postsService.getNewFeeds({
+      user_id,
       limit,
-      page,
-      total_page: Math.ceil(result.total / limit)
-    }
-  })
-}
-
-export const getNewFeedsFollowController = async (
-  req: Request<ParamsDictionary, any, any, Pagination>,
-  res: Response
-) => {
-  const user_id = req.decoded_authorization?.user_id as string
-  const limit = Number(req.query.limit)
-  const page = Number(req.query.page)
-  const result = await postsService.getNewFeedsFollow({
-    user_id,
-    limit,
-    page
-  })
-
-  return res.json({
-    message: 'Get New Feeds Follow Successfully',
-    result: {
-      posts: result.posts,
+      page
+    })
+    return res.json({
+      message: 'Get New Feeds Successfully',
+      result: {
+        posts: result.posts,
+        limit,
+        page,
+        total_page: Math.ceil(result.total / limit)
+      }
+    })
+  } else if (type === 'follow') {
+    const result = await postsService.getNewFeedsFollow({
+      user_id,
       limit,
-      page,
-      total_page: Math.ceil(result.total / limit)
-    }
-  })
+      page
+    })
+    return res.json({
+      message: 'Get New Feeds Follow Successfully',
+      result: {
+        posts: result.posts,
+        limit,
+        page,
+        total_page: Math.ceil(result.total / limit)
+      }
+    })
+  }
 }

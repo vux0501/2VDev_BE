@@ -2,7 +2,6 @@ import { Router } from 'express'
 import {
   createPostController,
   getNewFeedsController,
-  getNewFeedsFollowController,
   getPostChildrenController,
   getPostController
 } from '~/controllers/posts.controllers'
@@ -29,6 +28,21 @@ postRouters.post(
   verifiedUserValidator,
   createPostValidator,
   wrapRequestHandler(createPostController)
+)
+
+/**
+ * Description: Get new feeds
+ * Path: /newfeeds
+ * Method: GET
+ * Header: { Authorization?: Bearer <access_token> }
+ * Query: {limit: number, page: number, type: string}
+ */
+postRouters.get(
+  '/newfeeds',
+  paginationValidator,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(getNewFeedsController)
 )
 
 /**
@@ -62,36 +76,6 @@ postRouters.get(
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),
   wrapRequestHandler(getPostChildrenController)
-)
-
-/**
- * Description: Get new feeds
- * Path: /newfeeds
- * Method: GET
- * Header: { Authorization?: Bearer <access_token> }
- * Query: {limit: number, page: number, post_type: PostType}
- */
-postRouters.get(
-  '/newfeeds/new',
-  paginationValidator,
-  accessTokenValidator,
-  verifiedUserValidator,
-  wrapRequestHandler(getNewFeedsController)
-)
-
-/**
- * Description: Get new feeds (follow)
- * Path: /newfeeds-follow
- * Method: GET
- * Header: { Authorization?: Bearer <access_token> }
- * Query: {limit: number, page: number, post_type: PostType}
- */
-postRouters.get(
-  '/newfeeds/follow',
-  paginationValidator,
-  accessTokenValidator,
-  verifiedUserValidator,
-  wrapRequestHandler(getNewFeedsFollowController)
 )
 
 export default postRouters

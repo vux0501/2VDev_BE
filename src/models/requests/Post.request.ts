@@ -22,4 +22,5 @@ export interface PostQuery extends Pagination, Query {
 export interface Pagination {
   limit: string
   page: string
+  type: string
 }
