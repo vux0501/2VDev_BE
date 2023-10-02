@@ -102,6 +102,96 @@ paths:
         '422':
           description: Invalid input
 
+  /users/verify-email:
+    post:
+      tags:
+        - users
+      summary: Xác thực email
+      description: Xác thực email
+      operationId: verify email
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Thông tin đăng ký
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmailBody'
+        required: true
+      responses:
+        '200':
+          description: Đăng ký thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Xác thực email thành công.
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
+
+        '422':
+          description: Invalid input
+
+  /users/resend-verify-email:
+    post:
+      tags:
+        - users
+      summary: Gửi lại xác nhận email
+      description: Gửi lại xác nhận email
+      operationId: resend verify email
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Gửi lại email xác nhận thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Gửi lại email xác nhận thành công.
+
+        '422':
+          description: Invalid input
+
+  /users/refresh_token:
+    post:
+      tags:
+        - users
+      summary: Làm mới token
+      description: Làm mới access_token
+      operationId: refresh token
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Access token
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenBody'
+        required: true
+      responses:
+        '200':
+          description: Làm mới access_token thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Làm mới access_token thành công.
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
+
+        '422':
+          description: Invalid input
+
   /users/logout:
     post:
       tags:
@@ -109,6 +199,8 @@ paths:
       summary: Đăng xuất
       description: Đăng xuất
       operationId: logout
+      security:
+        - BearerAuth: []
       requestBody:
         description: Đăng xuất khỏi hệ thống
         content:
@@ -127,6 +219,93 @@ paths:
                   message:
                     type: string
                     example: Đăng xuất thành công.
+
+        '422':
+          description: Invalid input
+
+  /users/forgot-password:
+    post:
+      tags:
+        - users
+      summary: Quên mật khẩu
+      description: Quên mật khẩu
+      operationId: forgot password
+      requestBody:
+        description: Nhập email cần lấy lại mật khẩu.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordBody'
+        required: true
+      responses:
+        '200':
+          description: Lấy mật khẩu thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Kiểm tra hòm thư email để lấy lại mật khẩu..
+
+        '422':
+          description: Invalid input
+
+  /users/verify-forgot-password:
+    post:
+      tags:
+        - users
+      summary: Xác thực token quên mật khẩu
+      description: Xác thực token quên mật khẩu
+      operationId: verify forgot_password_token
+      requestBody:
+        description: Xác thực forgot_password_token lấy từ hộp thư email
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyForgotPasswordTokenBody'
+        required: true
+      responses:
+        '200':
+          description: Xác thực thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Xác thực thành công.
+
+        '422':
+          description: Invalid input
+
+  /users/reset-password:
+    post:
+      tags:
+        - users
+      summary: Khôi phục mật khẩu mới
+      description: Reset mật khẩu
+      operationId: reset password
+      requestBody:
+        description: Nhập mật khẩu và token lấy lại mật khẩu.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordBody'
+        required: true
+      responses:
+        '200':
+          description: Khôi phục mật khẩu thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Reset mật khẩu thành công.
 
         '422':
           description: Invalid input
@@ -156,6 +335,37 @@ paths:
 
         '422':
           description: Invalid input
+    patch:
+      tags:
+        - users
+      summary: Cập nhập thông tin cá nhân
+      description: Cập nhập thông tin cá nhân
+      operationId: updateMe
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Nhập email cần lấy lại mật khẩu.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeBody'
+        required: true
+      responses:
+        '200':
+          description: Cập nhập thông tin cá nhân thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cập nhập thông tin cá nhân thành công.
+                  result:
+                    $ref: '#/components/schemas/User'
+
+        '422':
+          description: Invalid input
 
 components:
   schemas:
@@ -167,7 +377,7 @@ components:
           example: 'hvudtkt@gmail.com'
         password:
           type: string
-          example: '12345678'
+          example: '123456'
     SuccessAuthentication:
       type: object
       properties:
@@ -192,10 +402,75 @@ components:
         name:
           type: string
           example: 'Nguyen Hoang Vu'
+    VerifyEmailBody:
+      type: object
+      properties:
+        verify_email_token:
+          type: string
+          example: 'token'
+    RefreshTokenBody:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          example: 'token'
     LogoutBody:
       type: object
       properties:
         refresh_token:
+          type: string
+          example: 'token'
+    ForgotPasswordBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'hvudtkt@gmail.com'
+    UpdateMeBody:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Nguyen Hoang Vu'
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: '2001-05-01T00:00:00.000Z'
+        bio:
+          type: string
+          example: 'no bio yet'
+        location:
+          type: string
+          example: 'TPHCM'
+        website:
+          type: string
+          example: '2vdev.com'
+        username:
+          type: string
+          example: 'vudeptrai12'
+        avatar:
+          type: string
+          example: https://res.cloudinary.com/dozeyxrdy/image/upload/v1692167930/2VDev-logo_cenlul.png
+        cover_photo:
+          type: string
+          example: https://res.cloudinary.com/dozeyxrdy/image/upload/v1692167930/2VDev-logo_cenlul.png
+
+    VerifyForgotPasswordTokenBody:
+      type: object
+      properties:
+        forgot_password_token:
+          type: string
+          example: 'token'
+    ResetPasswordBody:
+      type: object
+      properties:
+        password:
+          type: string
+          example: '12345678'
+        confirm_password:
+          type: string
+          example: '12345678'
+        forgot_password_token:
           type: string
           example: 'token'
     User:
@@ -261,7 +536,7 @@ components:
     UserVerifyStatus:
       type: number
       enum: [Unverify, Verified, Banned]
-      example: 2
+      example: 1
     UserRoleStatus:
       type: number
       enum: [User, Admin]
