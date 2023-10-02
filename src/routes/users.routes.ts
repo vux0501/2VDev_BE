@@ -49,7 +49,7 @@ const userRouters = Router()
 Description: Register
 Path: /register
 Method: POST
-Body: {name: String, email: String, password: String, confirmPassword: String, date_of_birth: ISO8601}
+Body: {email: String, password: String}
 */
 userRouters.post('/register', registerValidator, wrapRequestHandler(registerController))
 
@@ -63,7 +63,7 @@ userRouters.post('/login', loginValidator, wrapRequestHandler(loginController))
 
 /*
 Description: Logout
-Path: /Logout
+Path: /logout
 Method: POST
 Body: {refresh_token: string}
 */

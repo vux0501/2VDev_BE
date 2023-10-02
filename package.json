@@ -42,6 +42,7 @@
     "@types/lodash": "^4.14.197",
     "@types/mime": "^3.0.1",
     "@types/minimist": "^1.2.2",
+    "@types/swagger-ui-express": "^4.1.4",
     "axios": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -53,6 +54,8 @@
     "mime": "^3.0.0",
     "minimist": "^1.2.8",
     "mongodb": "^5.7.0",
-    "sharp": "^0.32.5"
+    "sharp": "^0.32.5",
+    "swagger-ui-express": "^5.0.0",
+    "yaml": "^2.3.2"
   }
 }

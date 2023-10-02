@@ -1,0 +1,273 @@
+openapi: 3.0.3
+info:
+  title: 2VDEV - Q&A WEBSITE FOR DEVELOPERS (TypeScript)
+  description: |-
+    **This website is used for asking and answering questions about information technology.**
+
+    You can ask and answer questions about information technology here, and your account can accumulate points to climb the rankings. This can help you develop knowledge, enhance your skills, and build a reputation in your career.
+
+    **About website**
+
+
+    My team: 
+    - Front-end: Tran Nguyen Kha Vy
+    - Back-end: Nguyen Hoang Vu
+
+    Language: TypeScript
+
+
+    Technology:
+    - NodeJs
+    - ExpressJs
+    - MongoDB
+    - AWS
+    - Socket
+    ...
+
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:5000
+tags:
+  - name: users
+    description: API liên quan đến user
+paths:
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Đăng nhập
+      description: Đăng nhập vào website
+      operationId: login
+      requestBody:
+        description: Thông tin đăng nhập
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginBody'
+        required: true
+      responses:
+        '200':
+          description: Đăng nhập thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Đăng nhập thành công.
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
+
+        '422':
+          description: Invalid input
+
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Đăng ký
+      description: Đăng ký tài khoản
+      operationId: register
+      requestBody:
+        description: Thông tin đăng ký
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterBody'
+        required: true
+      responses:
+        '200':
+          description: Đăng ký thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Đăng ký thành công.
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
+
+        '422':
+          description: Invalid input
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Đăng xuất
+      description: Đăng xuất
+      operationId: logout
+      requestBody:
+        description: Đăng xuất khỏi hệ thống
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogoutBody'
+        required: true
+      responses:
+        '200':
+          description: Đăng xuất thành công.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Đăng xuất thành công.
+
+        '422':
+          description: Invalid input
+
+  /users/me:
+    get:
+      tags:
+        - users
+      summary: Trang cá nhân
+      description: Lấy thông tin tài khoản của mình
+      operationId: getMe
+      security:
+        - BearerAuth: []
+      responses:
+        default:
+          description: Lấy thông tin user thành công
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Lấy thông tin tài khoản hiện tại thành công.
+                  result:
+                    $ref: '#/components/schemas/User'
+
+        '422':
+          description: Invalid input
+
+components:
+  schemas:
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'hvudtkt@gmail.com'
+        password:
+          type: string
+          example: '12345678'
+    SuccessAuthentication:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjRmYzFmOTNhYzFhMmU5Y2ZkMDg4NGE2IiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJyb2xlIjowLCJpYXQiOjE2OTYwMDMyMjAsImV4cCI6MTY5NjAwNDEyMH0.sN8nfs94Rz34o-xO4sDaDUSAzKlypEVDnSwKl51_DJY
+        refresh_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjRmYzFmOTNhYzFhMmU5Y2ZkMDg4NGE2IiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJyb2xlIjowLCJpYXQiOjE2OTYwMDMyMjAsImV4cCI6MTcyNzUzOTIyMH0.HyfvSfI6kTXVOHUVWblcSYi-pmLvwG63BHzFFJ_78iM
+    RegisterBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'hvudtkt+2@gmail.com'
+        password:
+          type: string
+          example: '12345678'
+        confirm_password:
+          type: string
+          example: '12345678'
+        name:
+          type: string
+          example: 'Nguyen Hoang Vu'
+    LogoutBody:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          example: 'token'
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '64fc1f93ac1a2e9cfd0884a6'
+        name:
+          type: string
+          example: 'Nguyen Hoang Vu'
+        email:
+          type: string
+          example: 'hvudtkt@gmail.com'
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: '2001-05-01T00:00:00.000Z'
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2023-09-09T07:32:35.835Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2023-09-09T07:32:55.311Z'
+        verify:
+          type: integer
+          $ref: '#/components/schemas/UserVerifyStatus'
+        role:
+          type: integer
+          $ref: '#/components/schemas/UserRoleStatus'
+        point:
+          type: integer
+          example: 0
+        bio:
+          type: string
+          example: 'No bio yet1'
+        location:
+          type: string
+          example: 'TP.HCM'
+        website:
+          type: string
+          example: '2vdev.com'
+        username:
+          type: string
+          example: 'user64fc1eef'
+        avatar:
+          type: string
+          format: uri
+          example: 'https://res.cloudinary.com/dozeyxrdy/image/upload/v1692167930/2VDev-logo_cenlul.png'
+        cover_photo:
+          type: string
+          format: uri
+          example: 'https://res.cloudinary.com/dozeyxrdy/image/upload/v1692167930/2VDev-logo_cenlul.png'
+        following:
+          type: integer
+          example: 1
+        followers:
+          type: integer
+          example: 2
+    UserVerifyStatus:
+      type: number
+      enum: [Unverify, Verified, Banned]
+      example: 2
+    UserRoleStatus:
+      type: number
+      enum: [User, Admin]
+      example: 0
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
