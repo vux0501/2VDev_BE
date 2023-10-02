@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
-import { PostType } from '~/constants/enums'
 import { Pagination, PostParam, PostQuery, PostRequestBody } from '~/models/requests/Post.request'
 import { TokenPayload } from '~/models/requests/User.request'
 import postsService from '~/services/posts.services'

@@ -421,7 +421,8 @@ class UsersService {
         }
       }
     )
-    return user.value
+
+    return this.getMe(user_id)
   }
 
   async updateAccount(user_id: string, payload: UpdateAccountReqBody) {
