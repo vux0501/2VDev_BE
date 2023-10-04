@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
+import HTTP_STATUS from '~/constants/httpStatus'
+import { ErrorWithStatus } from '~/models/Errors'
 import { Pagination, PostParam, PostQuery, PostRequestBody } from '~/models/requests/Post.request'
 import { TokenPayload } from '~/models/requests/User.request'
 import postsService from '~/services/posts.services'
@@ -91,6 +93,11 @@ export const getNewFeedsController = async (req: Request<ParamsDictionary, any, 
         page,
         total_page: Math.ceil(result.total / limit)
       }
+    })
+  } else {
+    throw new ErrorWithStatus({
+      status: HTTP_STATUS.NOT_FOUND,
+      message: 'Newfeeds not found'
     })
   }
 }

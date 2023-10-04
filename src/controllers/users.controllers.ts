@@ -26,6 +26,7 @@ import databaseService from '~/services/database.services'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { UserVerifyStatus } from '~/constants/enums'
 import dotenv from 'dotenv'
+import { Console } from 'console'
 dotenv.config()
 
 export const registerController = async (
@@ -209,7 +210,8 @@ export const getListUsersController = async (req: Request, res: Response, next: 
 
 export const getListUsersFollowingController = async (req: Request, res: Response, next: NextFunction) => {
   const { user_id: current_user_id } = req.decoded_authorization as TokenPayload
-  const { user_id } = req.body
+  const user_id = req.params.user_id as string
+
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
 
@@ -233,9 +235,10 @@ export const getListUsersFollowingController = async (req: Request, res: Respons
 export const getListUsersFollowerController = async (req: Request, res: Response, next: NextFunction) => {
   const { user_id: current_user_id } = req.decoded_authorization as TokenPayload
 
-  const { user_id } = req.body
+  const user_id = req.params.user_id as string
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
+  console.log(user_id)
 
   const { list_users_following, totalPage, totalUser, currentPage, userPerPage } =
     await usersService.getListUsersFollower({

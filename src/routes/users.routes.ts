@@ -255,26 +255,24 @@ userRouters.delete(
 
 /**
  * Description: Get following
- * Path: /followers/list-users-following?limit={limit}&page={page}
+ * Path: /followers/list-users-following/:user_id?limit={limit}&page={page}
  * Method: GET
- * Body: user_id: string
  * Header: { Authorization: Bearer <access_token> }
  */
 userRouters.get(
-  '/followers/list-users-following',
+  '/followers/list-users-following/:user_id',
   accessTokenValidator,
   wrapRequestHandler(getListUsersFollowingController)
 )
 
 /**
  * Description: Get follower
- * Path: /followers/list-users-follower?limit={limit}&page={page}
+ * Path: /followers/list-users-follower/user_id?limit={limit}&page={page}
  * Method: GET
- * Body: user_id: string
  * Header: { Authorization: Bearer <access_token> }
  */
 userRouters.get(
-  '/followers/list-users-follower',
+  '/followers/list-users-follower/:user_id',
   accessTokenValidator,
   wrapRequestHandler(getListUsersFollowerController)
 )
