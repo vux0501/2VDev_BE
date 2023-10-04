@@ -78,7 +78,7 @@ export const USERS_MESSAGES = {
 export const POSTS_MESSAGES = {
   VALIDATION_ERROR: 'Validation error',
   TITLE_IS_REQUIRED: 'Tiêu đề của bài viết gốc không được rỗng.',
-  TITLE_LENGTH: 'Tiêu đề của bài viết từ 10 đến 5000 ký tự.',
+  TITLE_LENGTH: 'Tiêu đề của bài viết từ 10 đến 50 ký tự.',
 
   CONTENT_IS_REQUIRED: 'Nội dung không được để trống.',
   CONTENT_LENGTH: 'Nội dung phải từ 20 đến 5000 ký tự.',
@@ -91,7 +91,12 @@ export const POSTS_MESSAGES = {
   INVALID_TYPE: 'Kiểu của bài viết không đúng',
 
   PARENT_ID_MUST_BE_A_VALID_POST_ID: 'parent_id phải là id của bài viết cha',
-  PARENT_ID_MUST_BE_NULL: 'Bài viết gốc nên parent_id phải là null'
+  PARENT_ID_MUST_BE_NULL: 'Bài viết gốc nên parent_id phải là null',
+
+  PARENT_ID_MUST_BE_STRING: 'parent_id phải là string',
+
+  DELETE_POST_SUCCESS: 'Xóa thành công',
+  UPDATE_POST_SUCCESS: 'Cập nhập thành công'
 } as const
 
 export const BOOKMARK_MESSAGES = {

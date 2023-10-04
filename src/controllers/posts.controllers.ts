@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import HTTP_STATUS from '~/constants/httpStatus'
+import { BOOKMARK_MESSAGES, POSTS_MESSAGES, USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
-import { Pagination, PostParam, PostQuery, PostRequestBody } from '~/models/requests/Post.request'
+import { Pagination, PostParam, PostQuery, PostRequestBody, UpdatePostReqBody } from '~/models/requests/Post.request'
 import { TokenPayload } from '~/models/requests/User.request'
 import postsService from '~/services/posts.services'
 
@@ -100,4 +101,27 @@ export const getNewFeedsController = async (req: Request<ParamsDictionary, any, 
       message: 'Newfeeds not found'
     })
   }
+}
+
+export const deletePostController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+
+  await postsService.deletePost(user_id, req.params.post_id)
+  return res.json({
+    message: POSTS_MESSAGES.DELETE_POST_SUCCESS
+  })
+}
+
+export const updatePostController = async (
+  req: Request<ParamsDictionary, any, UpdatePostReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { body } = req
+  const post_id = req.params.post_id
+  await postsService.updatePost(user_id, post_id, body)
+  return res.json({
+    message: POSTS_MESSAGES.UPDATE_POST_SUCCESS
+  })
 }

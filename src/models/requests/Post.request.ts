@@ -1,5 +1,4 @@
 import { PostType } from '~/constants/enums'
-import { Media } from '../Other'
 import { ParamsDictionary, Query } from 'express-serve-static-core'
 
 export interface PostRequestBody {
@@ -8,7 +7,7 @@ export interface PostRequestBody {
   content: string
   parent_id: null | string
   hashtags: string[]
-  medias: Media[]
+  medias: string[]
 }
 
 export interface PostParam extends ParamsDictionary {
@@ -23,4 +22,11 @@ export interface Pagination {
   limit: string
   page: string
   type: string
+}
+
+export interface UpdatePostReqBody {
+  title?: string
+  content?: string
+  hashtags?: string[]
+  medias?: string[]
 }

@@ -10,7 +10,7 @@ interface PostConstructor {
   type: PostType
   parent_id: null | string
   hashtags: ObjectId[]
-  medias: Media[]
+  medias: string[]
   resolved?: ResolvedType
   guest_views?: number
   user_views?: number
@@ -24,7 +24,7 @@ export default class Post {
   title: string | null
   content: string
   hashtags: ObjectId[]
-  medias: Media[]
+  medias: string[]
   type: PostType
   parent_id: null | ObjectId
   resolved: ResolvedType

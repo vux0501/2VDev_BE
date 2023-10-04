@@ -337,3 +337,39 @@ export const paginationValidator = validate(
     ['query']
   )
 )
+
+export const updatePostValidator = validate(
+  checkSchema(
+    {
+      title: {
+        optional: true,
+        isString: {
+          errorMessage: POSTS_MESSAGES.TITLE_IS_REQUIRED
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 10,
+            max: 50
+          },
+          errorMessage: POSTS_MESSAGES.TITLE_LENGTH
+        }
+      },
+      content: {
+        optional: true,
+        isString: {
+          errorMessage: POSTS_MESSAGES.CONTENT_MUST_BE_A_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 20,
+            max: 5000
+          },
+          errorMessage: POSTS_MESSAGES.CONTENT_LENGTH
+        }
+      }
+    },
+    ['body']
+  )
+)

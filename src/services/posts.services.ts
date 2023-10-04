@@ -1,4 +1,4 @@
-import { PostRequestBody } from '~/models/requests/Post.request'
+import { PostRequestBody, UpdatePostReqBody } from '~/models/requests/Post.request'
 import databaseService from './database.services'
 import Post from '~/models/schemas/Post.schema'
 import { ObjectId, WithId } from 'mongodb'
@@ -492,6 +492,7 @@ class PostsService {
       total: total[0].total
     }
   }
+
   async getNewFeedsFollow({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
     const user_id_obj = new ObjectId(user_id)
     const followed_user_ids = await databaseService.followers
@@ -776,6 +777,37 @@ class PostsService {
       posts,
       total: total[0].total
     }
+  }
+
+  async deletePost(user_id: string, post_id: string) {
+    await databaseService.posts.findOneAndDelete({
+      user_id: new ObjectId(user_id),
+      _id: new ObjectId(post_id)
+    })
+
+    await databaseService.posts.deleteMany({
+      parent_id: new ObjectId(post_id)
+    })
+  }
+
+  async updatePost(user_id: string, post_id: string, payload: UpdatePostReqBody) {
+    await databaseService.posts.findOneAndUpdate(
+      {
+        _id: new ObjectId(post_id),
+        user_id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          ...(payload as any)
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        returnDocument: 'after'
+      }
+    )
   }
 }
 

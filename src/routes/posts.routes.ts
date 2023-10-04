@@ -1,17 +1,22 @@
 import { Router } from 'express'
 import {
   createPostController,
+  deletePostController,
   getNewFeedsController,
   getPostChildrenController,
-  getPostController
+  getPostController,
+  updatePostController
 } from '~/controllers/posts.controllers'
+import { filterMiddleware } from '~/middlewares/common.middleware'
 import {
   createPostValidator,
   getPostChildrenValidator,
   paginationValidator,
-  postIdValidator
+  postIdValidator,
+  updatePostValidator
 } from '~/middlewares/posts.middleware'
 import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
+import { UpdatePostReqBody } from '~/models/requests/Post.request'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const postRouters = Router()
@@ -76,6 +81,30 @@ postRouters.get(
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),
   wrapRequestHandler(getPostChildrenController)
+)
+
+/**
+ * Description: Delete post, children post
+ * Path: /:post_id
+ * Method: DELETE
+ * Header: { Authorization?: Bearer <access_token> }
+ * Params: {post_id: string}
+ */
+postRouters.delete('/:post_id', postIdValidator, accessTokenValidator, wrapRequestHandler(deletePostController))
+
+/**
+ * Description: update post, children post
+ * Path: /:user_id
+ * Method: PATCH
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: {title: string, content: string, hashtags: string[], medias: string[]}
+ */
+postRouters.patch(
+  '/:post_id',
+  accessTokenValidator,
+  updatePostValidator,
+  filterMiddleware<UpdatePostReqBody>(['title', 'content', 'hashtags', 'medias']),
+  wrapRequestHandler(updatePostController)
 )
 
 export default postRouters
