@@ -5,7 +5,7 @@ import { UPLOAD_IMAGE_DIR } from '~/constants/dir'
 import { getNameFromFullname, handleUploadImage } from '~/utils/file'
 import fs from 'fs'
 import fsPromise from 'fs/promises'
-import { isProduction } from '~/constants/config'
+import { envConfig, isProduction } from '~/constants/config'
 import dotenv from 'dotenv'
 import { MediaType } from '~/constants/enums'
 import { Media } from '~/models/Other'
@@ -35,8 +35,8 @@ class MediasService {
         }
         // return {
         //   url: isProduction
-        //     ? `${process.env.HOST}/static/image/${newFullFilename}`
-        //     : `http://localhost:${process.env.PORT}/static/image/${newFullFilename}`,
+        //     ? `${envConfig.host}/static/image/${newFullFilename}`
+        //     : `http://localhost:${envConfig.host}/static/image/${newFullFilename}`,
         //   type: MediaType.Image
         // }
       })

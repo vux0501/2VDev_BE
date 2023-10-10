@@ -8,17 +8,18 @@ import Bookmark from '~/models/schemas/Bookmark.schema'
 import Vote from '~/models/schemas/Vote.schema'
 import ReportPost from '~/models/schemas/Report.schema'
 import Follower from '~/models/schemas/Follower.schema'
+import { envConfig } from '~/constants/config'
 
 dotenv.config()
 
-const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.7kmsofb.mongodb.net/?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@cluster0.7kmsofb.mongodb.net/?retryWrites=true&w=majority`
 
 class DatabaseService {
   private client: MongoClient
   private db: Db
   constructor() {
     this.client = new MongoClient(uri)
-    this.db = this.client.db(process.env.DB_NAME)
+    this.db = this.client.db(envConfig.dbName)
   }
   async connect() {
     try {
@@ -74,29 +75,29 @@ class DatabaseService {
   }
 
   get users(): Collection<User> {
-    return this.db.collection(process.env.DB_USERS_COLLECTION as string)
+    return this.db.collection(envConfig.dbUsersCollection)
   }
   get refreshTokens(): Collection<RefreshToken> {
-    return this.db.collection(process.env.DB_REFRESH_TOKENS_COLLECTION as string)
+    return this.db.collection(envConfig.dbRefreshTokensCollection)
   }
   get posts(): Collection<Post> {
-    return this.db.collection(process.env.DB_POSTS_COLLECTION as string)
+    return this.db.collection(envConfig.dbPostsCollection)
   }
   get hashtags(): Collection<Hashtag> {
-    return this.db.collection(process.env.DB_HASHTAGS_COLLECTION as string)
+    return this.db.collection(envConfig.dbHashtagsCollection)
   }
 
   get bookmarks(): Collection<Bookmark> {
-    return this.db.collection(process.env.DB_BOOKMARKS_COLLECTION as string)
+    return this.db.collection(envConfig.dbBookmarksCollection)
   }
   get votes(): Collection<Vote> {
-    return this.db.collection(process.env.DB_VOTES_COLLECTION as string)
+    return this.db.collection(envConfig.dbVotesCollection)
   }
   get reports(): Collection<ReportPost> {
-    return this.db.collection(process.env.DB_REPORTS_COLLECTION as string)
+    return this.db.collection(envConfig.dbReportsCollection)
   }
   get followers(): Collection<Follower> {
-    return this.db.collection(process.env.DB_FOLLOWERS_COLLECTION as string)
+    return this.db.collection(envConfig.dbFollowersCollection)
   }
 }
 

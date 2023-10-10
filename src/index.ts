@@ -10,6 +10,7 @@ import YAML from 'yaml'
 import fs from 'fs'
 import path from 'path'
 import swaggerUi from 'swagger-ui-express'
+import { envConfig } from './constants/config'
 
 const file = fs.readFileSync(path.resolve('2vdev.swagger.yaml'), 'utf8')
 const swaggerDocument = YAML.parse(file)
@@ -37,6 +38,6 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 route(app)
 // Error Handler
 app.use(defaultErrorHandler)
-app.listen(process.env.PORT || 5000, () => {
-  console.log(`App listening on port ${process.env.PORT}`)
+app.listen(envConfig.port, () => {
+  console.log(`App listening on port ${envConfig.port}`)
 })
