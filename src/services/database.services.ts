@@ -31,12 +31,18 @@ class DatabaseService {
   }
 
   async indexUsers() {
-    const exists = await this.users.indexExists(['email_1_password_1', 'email_1', 'username_1'])
+    const exists = await this.users.indexExists([
+      'email_1_password_1',
+      'email_1',
+      'username_1',
+      'username_text_name_text'
+    ])
 
     if (!exists) {
       this.users.createIndex({ email: 1, password: 1 })
       this.users.createIndex({ email: 1 }, { unique: true })
       this.users.createIndex({ username: 1 }, { unique: true })
+      this.users.createIndex({ username: 'text', name: 'text' }, { default_language: 'none' })
     }
   }
   async indexRefreshTokens() {
@@ -57,6 +63,13 @@ class DatabaseService {
     const exists = await this.followers.indexExists(['user_id_1_followed_user_id_1'])
     if (!exists) {
       this.followers.createIndex({ user_id: 1, followed_user_id: 1 })
+    }
+  }
+
+  async indexPosts() {
+    const exists = await this.posts.indexExists(['content_text_title_text'])
+    if (!exists) {
+      this.posts.createIndex({ content: 'text', title: 'text' }, { default_language: 'none' })
     }
   }
 

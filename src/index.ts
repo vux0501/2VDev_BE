@@ -15,11 +15,11 @@ const file = fs.readFileSync(path.resolve('2vdev.swagger.yaml'), 'utf8')
 const swaggerDocument = YAML.parse(file)
 
 // Connect Database
-databaseService.connect()
 databaseService.connect().then(() => {
   databaseService.indexUsers()
   databaseService.indexRefreshTokens()
   databaseService.indexFollowers()
+  databaseService.indexPosts()
 })
 
 const app = express()
