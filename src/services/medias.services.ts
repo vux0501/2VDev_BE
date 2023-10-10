@@ -6,13 +6,11 @@ import { getNameFromFullname, handleUploadImage } from '~/utils/file'
 import fs from 'fs'
 import fsPromise from 'fs/promises'
 import { envConfig, isProduction } from '~/constants/config'
-import dotenv from 'dotenv'
 import { MediaType } from '~/constants/enums'
 import { Media } from '~/models/Other'
 import { uploadFileToS3 } from '~/utils/s3'
 import mime from 'mime'
 import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
-dotenv.config()
 
 class MediasService {
   async uploadImage(req: Request) {

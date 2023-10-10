@@ -1,5 +1,4 @@
 import { Collection, Db, MongoClient } from 'mongodb'
-import dotenv from 'dotenv'
 import User from '~/models/schemas/User.schema'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
 import Post from '~/models/schemas/Post.schema'
@@ -9,8 +8,6 @@ import Vote from '~/models/schemas/Vote.schema'
 import ReportPost from '~/models/schemas/Report.schema'
 import Follower from '~/models/schemas/Follower.schema'
 import { envConfig } from '~/constants/config'
-
-dotenv.config()
 
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@cluster0.7kmsofb.mongodb.net/?retryWrites=true&w=majority`
 

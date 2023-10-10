@@ -4,7 +4,6 @@ import { RegisterReqBody, UpdateAccountReqBody, UpdateMeReqBody } from '~/models
 import { hashPassword } from '~/utils/crypto'
 import { signToken, verifyToken } from '~/utils/jwt'
 import { TokenType, UserRoleStatus, UserVerifyStatus } from '~/constants/enums'
-import dotenv from 'dotenv'
 
 import { ObjectId } from 'mongodb'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
@@ -15,8 +14,6 @@ import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
 import axios from 'axios'
 import Follower from '~/models/schemas/Follower.schema'
 import { envConfig } from '~/constants/config'
-
-dotenv.config()
 
 class UsersService {
   private signAccessToken({

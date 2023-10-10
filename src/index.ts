@@ -1,5 +1,4 @@
 import express from 'express'
-import dotenv from 'dotenv'
 import route from './routes/index'
 import databaseService from '~/services/database.services'
 import { defaultErrorHandler } from './middlewares/errors.middlewares'
@@ -29,7 +28,6 @@ const app = express()
 initFolder()
 
 // Config
-dotenv.config()
 app.use(cors())
 app.use(express.json())
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))

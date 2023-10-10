@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses'
-import { config } from 'dotenv'
 import fs from 'fs'
 import path from 'path'
 import { envConfig } from '~/constants/config'
-config()
 // Create SES service object.
 const sesClient = new SESClient({
   region: envConfig.awsRegion,
