@@ -278,7 +278,7 @@ class SearchService {
 
     return {
       posts,
-      total: total[0].total
+      total: total[0]?.total
     }
   }
 
