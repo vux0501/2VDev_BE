@@ -1,5 +1,6 @@
 import { PostType } from '~/constants/enums'
 import { ParamsDictionary, Query } from 'express-serve-static-core'
+import { ObjectId } from 'mongodb'
 
 export interface PostRequestBody {
   type: PostType

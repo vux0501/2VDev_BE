@@ -22,6 +22,8 @@ class PostsService {
         )
       })
     )
+    console.log(hashtagDocuemts.map((hashtag) => (hashtag.value as WithId<Hashtag>)._id))
+
     return hashtagDocuemts.map((hashtag) => (hashtag.value as WithId<Hashtag>)._id)
   }
   async createPost(user_id: string, body: PostRequestBody) {
@@ -799,6 +801,8 @@ class PostsService {
       payload.hashtags = newHashtags.map(String)
     }
 
+    const hashtagsUpdate = payload.hashtags.map((hashtag: string) => new ObjectId(hashtag))
+
     await databaseService.posts.findOneAndUpdate(
       {
         _id: new ObjectId(post_id),
@@ -806,7 +810,8 @@ class PostsService {
       },
       {
         $set: {
-          ...(payload as any)
+          ...(payload as any),
+          hashtags: hashtagsUpdate
         },
         $currentDate: {
           updated_at: true
