@@ -791,6 +791,14 @@ class PostsService {
   }
 
   async updatePost(user_id: string, post_id: string, payload: UpdatePostReqBody) {
+    if (payload.hashtags) {
+      const hashtags = await this.checkAndCreateHashtags(payload.hashtags)
+      payload.hashtags = hashtags.map(String)
+    } else {
+      const newHashtags = await this.checkAndCreateHashtags([])
+      payload.hashtags = newHashtags.map(String)
+    }
+
     await databaseService.posts.findOneAndUpdate(
       {
         _id: new ObjectId(post_id),
