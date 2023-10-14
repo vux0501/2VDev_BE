@@ -1,0 +1,6 @@
+version: '3'
+services:
+  2vdev:
+    image: vux0501/2vdev_be:v0
+    ports:
+      - '5000:5000'
