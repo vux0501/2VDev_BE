@@ -1,4 +1,3 @@
-import Bookmark from '~/models/schemas/Bookmark.schema'
 import databaseService from './database.services'
 import { ObjectId, WithId } from 'mongodb'
 import Vote from '~/models/schemas/Vote.schema'

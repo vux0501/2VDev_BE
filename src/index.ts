@@ -32,7 +32,7 @@ initFolder()
 //rate limit
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 200, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  limit: 5000, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
   standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
   legacyHeaders: false // Disable the `X-RateLimit-*` headers
   // store: ... , // Use an external store for more precise rate limiting
@@ -49,6 +49,9 @@ app.use(limiter)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // Connect route
+app.get('/', (req, res) => {
+  res.send('Hello, these are the APIs from 2vdev.@2023 NGUYEN HOANG VU & TRAN NGUYEN KHA VY')
+})
 route(app)
 // Error Handler
 app.use(defaultErrorHandler)
