@@ -869,12 +869,16 @@ class PostsService {
     user_id,
     limit,
     page,
-    hashtag_id
+    hashtag_id,
+    sort_field,
+    sort_value
   }: {
     user_id: string
     limit: number
     page: number
     hashtag_id: string
+    sort_field: string
+    sort_value: number
   }) {
     const [posts, total] = await Promise.all([
       databaseService.posts
@@ -1079,6 +1083,11 @@ class PostsService {
               votes: 0,
               bookmarks: 0,
               reports: 0
+            }
+          },
+          {
+            $sort: {
+              [sort_field]: sort_value
             }
           },
           {
