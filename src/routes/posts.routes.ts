@@ -5,6 +5,7 @@ import {
   getNewFeedsController,
   getPostChildrenController,
   getPostController,
+  getPostsbyHashtagController,
   updatePostController
 } from '~/controllers/posts.controllers'
 import { filterMiddleware } from '~/middlewares/common.middleware'
@@ -105,6 +106,21 @@ postRouters.patch(
   updatePostValidator,
   filterMiddleware<UpdatePostReqBody>(['title', 'content', 'hashtags', 'medias']),
   wrapRequestHandler(updatePostController)
+)
+
+/**
+ * Description: Get post by Hashtag
+ * Path: /hashtags/:hashtag_id
+ * Method: GET
+ * Header: { Authorization?: Bearer <access_token> }
+ * Query: {limit: number, page: number, type: string}
+ */
+postRouters.get(
+  '/hashtags/:hashtag_id',
+  paginationValidator,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(getPostsbyHashtagController)
 )
 
 export default postRouters

@@ -125,3 +125,29 @@ export const updatePostController = async (
     message: POSTS_MESSAGES.UPDATE_POST_SUCCESS
   })
 }
+
+export const getPostsbyHashtagController = async (
+  req: Request<ParamsDictionary, any, any, Pagination>,
+  res: Response
+) => {
+  const hashtag_id = req.params.hashtag_id
+  const user_id = req.decoded_authorization?.user_id as string
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+
+  const result = await postsService.getPostsByHashtag({
+    user_id,
+    limit,
+    page,
+    hashtag_id
+  })
+  return res.json({
+    message: 'Get posts by hashtag Successfully',
+    result: {
+      posts: result.posts,
+      limit,
+      page,
+      total_page: Math.ceil(result.total / limit)
+    }
+  })
+}
