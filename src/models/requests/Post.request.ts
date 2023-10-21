@@ -23,6 +23,8 @@ export interface Pagination {
   limit: string
   page: string
   type: string
+  sort_field: string
+  sort_value: string
 }
 
 export interface UpdatePostReqBody {

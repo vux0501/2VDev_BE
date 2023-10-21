@@ -72,13 +72,17 @@ class PostsService {
     post_id,
     post_type,
     limit,
-    page
+    page,
+    sort_field,
+    sort_value
   }: {
     user_id: string
     post_id: string
     post_type: PostType
     limit: number
     page: number
+    sort_field: string
+    sort_value: number
   }) {
     const post_children = await databaseService.posts
       .aggregate([
@@ -218,6 +222,11 @@ class PostsService {
           }
         },
         {
+          $sort: {
+            [sort_field]: sort_value
+          }
+        },
+        {
           $skip: limit * (page - 1)
         },
         {
@@ -231,7 +240,19 @@ class PostsService {
     })
     return { post_children, total_children }
   }
-  async getNewFeeds({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+  async getNewFeeds({
+    user_id,
+    limit,
+    page,
+    sort_field,
+    sort_value
+  }: {
+    user_id: string
+    limit: number
+    page: number
+    sort_field: string
+    sort_value: number
+  }) {
     const [posts, total] = await Promise.all([
       databaseService.posts
         .aggregate([
@@ -327,12 +348,6 @@ class PostsService {
                 }
               }
             }
-          },
-          {
-            $skip: limit * (page - 1) // Công thức phân trang
-          },
-          {
-            $limit: limit
           },
           {
             $lookup: {
@@ -439,6 +454,17 @@ class PostsService {
               bookmarks: 0,
               reports: 0
             }
+          },
+          {
+            $sort: {
+              [sort_field]: sort_value
+            }
+          },
+          {
+            $skip: limit * (page - 1) // Công thức phân trang
+          },
+          {
+            $limit: limit
           }
         ])
         .toArray(),
@@ -495,7 +521,19 @@ class PostsService {
     }
   }
 
-  async getNewFeedsFollow({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+  async getNewFeedsFollow({
+    user_id,
+    limit,
+    page,
+    sort_field,
+    sort_value
+  }: {
+    user_id: string
+    limit: number
+    page: number
+    sort_field: string
+    sort_value: number
+  }) {
     const user_id_obj = new ObjectId(user_id)
     const followed_user_ids = await databaseService.followers
       .find(
@@ -612,12 +650,6 @@ class PostsService {
             }
           },
           {
-            $skip: limit * (page - 1) // Công thức phân trang
-          },
-          {
-            $limit: limit
-          },
-          {
             $lookup: {
               from: 'hashtags',
               localField: 'hashtags',
@@ -722,6 +754,17 @@ class PostsService {
               bookmarks: 0,
               reports: 0
             }
+          },
+          {
+            $sort: {
+              [sort_field]: sort_value
+            }
+          },
+          {
+            $skip: limit * (page - 1) // Công thức phân trang
+          },
+          {
+            $limit: limit
           }
         ])
         .toArray(),

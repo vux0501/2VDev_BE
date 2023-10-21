@@ -41,7 +41,7 @@ postRouters.post(
  * Path: /newfeeds
  * Method: GET
  * Header: { Authorization?: Bearer <access_token> }
- * Query: {limit: number, page: number, type: string}
+ * Query: {limit: number, page: number, type: string, sort_field: string, sort_value: number}
  */
 postRouters.get(
   '/newfeeds',
@@ -71,7 +71,7 @@ postRouters.get(
  * Path: /:post_id/children
  * Method: GET
  * Header: { Authorization?: Bearer <access_token> }
- * Query: {limit: number, page: number, post_type: PostType}
+ * Query: {limit: number, page: number, post_type: PostType, sort_field: string, sort_value: number}
  */
 postRouters.get(
   '/:post_id/children',

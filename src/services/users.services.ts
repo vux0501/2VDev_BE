@@ -512,7 +512,19 @@ class UsersService {
     return user
   }
 
-  async getListUsers({ user_id, limit, page }: { user_id: string; limit: number; page: number }) {
+  async getListUsers({
+    user_id,
+    limit,
+    page,
+    sort_field,
+    sort_value
+  }: {
+    user_id: string
+    limit: number
+    page: number
+    sort_field: string
+    sort_value: number
+  }) {
     const list_users = await databaseService.users
       .aggregate([
         {
@@ -555,6 +567,11 @@ class UsersService {
             password: 0,
             forgot_password_token: 0,
             email_verify_token: 0
+          }
+        },
+        {
+          $sort: {
+            [sort_field]: sort_value
           }
         },
         {
@@ -655,6 +672,11 @@ class UsersService {
           }
         },
         {
+          $sort: {
+            is_followed: -1
+          }
+        },
+        {
           $skip: (page - 1) * limit
         },
         {
@@ -749,6 +771,11 @@ class UsersService {
             user_follower_detail: 1,
             _id: 0,
             is_followed: 1
+          }
+        },
+        {
+          $sort: {
+            is_followed: -1
           }
         },
         {

@@ -158,7 +158,7 @@ userRouters.patch(
 
 /**
  * Description: Get all user
- * Path: /list-users?limit={limit}&page={page}
+ * Path: /list-users?limit={limit}&page={page}&sort_field={sort_field}&sort_value={sort_value}
  * Method: GET
  */
 userRouters.get('/list-users', accessTokenValidator, wrapRequestHandler(getListUsersController))

@@ -39,12 +39,16 @@ export const getPostChildrenController = async (req: Request<PostParam, any, any
   const post_type = Number(req.query.post_type as string)
   const limit = Number(req.query.limit as string)
   const page = Number(req.query.page as string)
+  const sort_field = req.query.sort_field
+  const sort_value = Number(req.query.sort_value)
   const { total_children, post_children } = await postsService.getPostChildren({
     user_id,
     post_id: req.params.post_id,
     post_type: post_type,
     limit: limit,
-    page: page
+    page: page,
+    sort_field,
+    sort_value
   })
   return res.json({
     message: 'Get children Successfully',
@@ -64,12 +68,16 @@ export const getNewFeedsController = async (req: Request<ParamsDictionary, any, 
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
   const type = req.query.type
+  const sort_field = req.query.sort_field
+  const sort_value = Number(req.query.sort_value)
 
   if (type === 'new') {
     const result = await postsService.getNewFeeds({
       user_id,
       limit,
-      page
+      page,
+      sort_field,
+      sort_value
     })
     return res.json({
       message: 'Get New Feeds Successfully',
@@ -84,7 +92,9 @@ export const getNewFeedsController = async (req: Request<ParamsDictionary, any, 
     const result = await postsService.getNewFeedsFollow({
       user_id,
       limit,
-      page
+      page,
+      sort_field,
+      sort_value
     })
     return res.json({
       message: 'Get New Feeds Follow Successfully',

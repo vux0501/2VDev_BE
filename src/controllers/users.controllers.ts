@@ -200,7 +200,9 @@ export const getListUsersController = async (req: Request, res: Response, next: 
   const { user_id } = req.decoded_authorization as TokenPayload
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const list_user = await usersService.getListUsers({ user_id, limit, page })
+  const sort_field = req.query.sort_field as string
+  const sort_value = Number(req.query.sort_value)
+  const list_user = await usersService.getListUsers({ user_id, limit, page, sort_field, sort_value })
   return res.json({
     message: USERS_MESSAGES.GET_LIST_USER_SUCCESS,
     result: list_user
@@ -237,7 +239,6 @@ export const getListUsersFollowerController = async (req: Request, res: Response
   const user_id = req.params.user_id as string
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  console.log(user_id)
 
   const { list_users_following, totalPage, totalUser, currentPage, userPerPage } =
     await usersService.getListUsersFollower({
