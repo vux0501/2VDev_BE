@@ -1084,6 +1084,41 @@ class PostsService {
       }
     )
   }
+
+  async resolvePost(user_id: string, post_id: string, resolve_id: string) {
+    if (resolve_id === null) {
+      await databaseService.posts.findOneAndUpdate(
+        {
+          _id: new ObjectId(post_id),
+          user_id: new ObjectId(user_id)
+        },
+        {
+          $set: {
+            resolved_id: null
+          },
+          $currentDate: {
+            updated_at: true
+          }
+        }
+      )
+    } else {
+      await databaseService.posts.findOneAndUpdate(
+        {
+          _id: new ObjectId(post_id),
+          user_id: new ObjectId(user_id)
+        },
+        {
+          $set: {
+            resolved_id: new ObjectId(resolve_id)
+          },
+          $currentDate: {
+            updated_at: true
+          }
+        }
+      )
+    }
+  }
+
   async getPostsByHashtag({
     user_id,
     limit,

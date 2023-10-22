@@ -96,7 +96,8 @@ export const POSTS_MESSAGES = {
   PARENT_ID_MUST_BE_STRING: 'parent_id phải là string',
 
   DELETE_POST_SUCCESS: 'Xóa thành công',
-  UPDATE_POST_SUCCESS: 'Cập nhập thành công'
+  UPDATE_POST_SUCCESS: 'Cập nhập thành công',
+  RESOLVE_POST_SUCCESS: 'Ghim câu trả lời đúng thành công'
 } as const
 
 export const BOOKMARK_MESSAGES = {

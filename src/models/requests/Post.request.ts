@@ -7,6 +7,7 @@ export interface PostRequestBody {
   title: string
   content: string
   parent_id: null | string
+  resolved: null
   hashtags: string[]
   medias: string[]
 }
@@ -32,4 +33,8 @@ export interface UpdatePostReqBody {
   content?: string
   hashtags?: string[]
   medias?: string[]
+}
+
+export interface ResolvePostReqBody {
+  resolved_id?: string
 }

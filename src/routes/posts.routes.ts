@@ -7,6 +7,7 @@ import {
   getPostChildrenController,
   getPostController,
   getPostsbyHashtagController,
+  resolvePostController,
   updatePostController
 } from '~/controllers/posts.controllers'
 import { filterMiddleware } from '~/middlewares/common.middleware'
@@ -18,7 +19,7 @@ import {
   updatePostValidator
 } from '~/middlewares/posts.middleware'
 import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
-import { UpdatePostReqBody } from '~/models/requests/Post.request'
+import { ResolvePostReqBody, UpdatePostReqBody } from '~/models/requests/Post.request'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const postRouters = Router()
@@ -104,7 +105,7 @@ postRouters.delete('/:post_id', postIdValidator, accessTokenValidator, wrapReque
 
 /**
  * Description: update post, children post
- * Path: /:user_id
+ * Path: /:post_id
  * Method: PATCH
  * Header: { Authorization: Bearer <access_token> }
  * Body: {title: string, content: string, hashtags: string[], medias: string[]}
@@ -116,6 +117,15 @@ postRouters.patch(
   filterMiddleware<UpdatePostReqBody>(['title', 'content', 'hashtags', 'medias']),
   wrapRequestHandler(updatePostController)
 )
+
+/**
+ * Description: resolve post
+ * Path: /:post_id
+ * Method: PATCH
+ * Header: { Authorization: Bearer <access_token> }
+ * Body: {resolved_id: string}
+ */
+postRouters.patch('/resolve/:post_id', accessTokenValidator, wrapRequestHandler(resolvePostController))
 
 /**
  * Description: Get post by Hashtag

@@ -11,7 +11,7 @@ interface PostConstructor {
   parent_id: null | string
   hashtags: ObjectId[]
   medias: string[]
-  resolved?: ResolvedType
+  resolved_id?: null | string
   guest_views?: number
   user_views?: number
   created_at?: Date
@@ -27,7 +27,7 @@ export default class Post {
   medias: string[]
   type: PostType
   parent_id: null | ObjectId
-  resolved: ResolvedType
+  resolved_id: null | ObjectId
   guest_views: number
   user_views: number
   created_at: Date
@@ -41,7 +41,7 @@ export default class Post {
     type,
     hashtags,
     medias,
-    resolved,
+    resolved_id,
     guest_views,
     user_views,
     created_at,
@@ -56,7 +56,7 @@ export default class Post {
     this.content = content
     this.hashtags = hashtags
     this.medias = medias
-    this.resolved = resolved || ResolvedType.unResolved
+    this.resolved_id = resolved_id ? new ObjectId(resolved_id) : null
     this.guest_views = guest_views || 0
     this.user_views = user_views || 0
     this.created_at = created_at || date

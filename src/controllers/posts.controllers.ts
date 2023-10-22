@@ -3,7 +3,14 @@ import { ParamsDictionary } from 'express-serve-static-core'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { BOOKMARK_MESSAGES, POSTS_MESSAGES, USERS_MESSAGES } from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
-import { Pagination, PostParam, PostQuery, PostRequestBody, UpdatePostReqBody } from '~/models/requests/Post.request'
+import {
+  Pagination,
+  PostParam,
+  PostQuery,
+  PostRequestBody,
+  ResolvePostReqBody,
+  UpdatePostReqBody
+} from '~/models/requests/Post.request'
 import { TokenPayload } from '~/models/requests/User.request'
 import postsService from '~/services/posts.services'
 
@@ -160,6 +167,20 @@ export const updatePostController = async (
   await postsService.updatePost(user_id, post_id, body)
   return res.json({
     message: POSTS_MESSAGES.UPDATE_POST_SUCCESS
+  })
+}
+
+export const resolvePostController = async (
+  req: Request<ParamsDictionary, any, ResolvePostReqBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const resolved_id = req.body.resolved_id as string
+  const post_id = req.params.post_id
+  await postsService.resolvePost(user_id, post_id, resolved_id)
+  return res.json({
+    message: POSTS_MESSAGES.RESOLVE_POST_SUCCESS
   })
 }
 
