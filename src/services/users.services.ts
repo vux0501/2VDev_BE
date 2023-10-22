@@ -359,6 +359,56 @@ class UsersService {
           },
           {
             $lookup: {
+              from: 'posts',
+              let: {
+                userId: '$_id'
+              },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        {
+                          $eq: ['$user_id', '$$userId']
+                        },
+                        {
+                          $eq: ['$type', 0]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              as: 'questions'
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              let: {
+                userId: '$_id'
+              },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        {
+                          $eq: ['$user_id', '$$userId']
+                        },
+                        {
+                          $eq: ['$type', 2]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              as: 'answers'
+            }
+          },
+          {
+            $lookup: {
               from: 'followers',
               localField: '_id',
               foreignField: 'user_id',
@@ -380,6 +430,12 @@ class UsersService {
               },
               followers: {
                 $size: '$followers'
+              },
+              questions: {
+                $size: '$questions'
+              },
+              answers: {
+                $size: '$answers'
               }
             }
           },
@@ -393,6 +449,7 @@ class UsersService {
         ])
         .toArray()
     )[0]
+
     return user
   }
 
@@ -460,6 +517,56 @@ class UsersService {
           },
           {
             $lookup: {
+              from: 'posts',
+              let: {
+                userId: '$_id'
+              },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        {
+                          $eq: ['$user_id', '$$userId']
+                        },
+                        {
+                          $eq: ['$type', 0]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              as: 'questions'
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              let: {
+                userId: '$_id'
+              },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $and: [
+                        {
+                          $eq: ['$user_id', '$$userId']
+                        },
+                        {
+                          $eq: ['$type', 2]
+                        }
+                      ]
+                    }
+                  }
+                }
+              ],
+              as: 'answers'
+            }
+          },
+          {
+            $lookup: {
               from: 'followers',
               localField: '_id',
               foreignField: 'user_id',
@@ -481,6 +588,12 @@ class UsersService {
               },
               followers: {
                 $size: '$followers'
+              },
+              questions: {
+                $size: '$questions'
+              },
+              answers: {
+                $size: '$answers'
               },
               is_followed: {
                 $cond: {
