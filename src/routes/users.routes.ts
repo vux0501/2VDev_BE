@@ -3,6 +3,7 @@ import {
   changePasswordController,
   followController,
   forgotPasswordController,
+  getDataController,
   getListUsersController,
   getListUsersFollowerController,
   getListUsersFollowingController,
@@ -130,6 +131,14 @@ userRouters.post('/reset-password', resetPasswordValidator, wrapRequestHandler(r
  * Header: { Authorization: Bearer <access_token> }
  */
 userRouters.get('/me', accessTokenValidator, wrapRequestHandler(getMeController))
+
+/**
+ * Description: Get data
+ * Path: /data
+ * Method: GET
+ * Header: { Authorization: Bearer <access_token> }
+ */
+userRouters.get('/data', wrapRequestHandler(getDataController))
 
 /**
  * Description: Update my profile

@@ -453,6 +453,16 @@ class UsersService {
     return user
   }
 
+  async getData() {
+    const [users, questions, answers] = await Promise.all([
+      databaseService.users.countDocuments({}),
+      databaseService.posts.countDocuments({ type: 0 }),
+      databaseService.posts.countDocuments({ type: 2 })
+    ])
+
+    return { users, questions, answers }
+  }
+
   async updateMe(user_id: string, payload: UpdateMeReqBody) {
     const _payload = payload.date_of_birth ? { ...payload, date_of_birth: new Date(payload.date_of_birth) } : payload
     const user = await databaseService.users.findOneAndUpdate(
