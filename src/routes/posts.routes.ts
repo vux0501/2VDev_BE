@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   createPostController,
   deletePostController,
+  getGuessNewFeedsController,
   getNewFeedsController,
   getPostChildrenController,
   getPostController,
@@ -50,6 +51,14 @@ postRouters.get(
   verifiedUserValidator,
   wrapRequestHandler(getNewFeedsController)
 )
+
+/**
+ * Description: Get new feeds
+ * Path: /guess-newfeeds
+ * Method: GET
+ * Query: {limit: number, page: number, type: string, sort_field: string, sort_value: number}
+ */
+postRouters.get('/guess-newfeeds', paginationValidator, wrapRequestHandler(getGuessNewFeedsController))
 
 /**
  * Description: Get Post detail

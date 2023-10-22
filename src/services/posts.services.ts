@@ -343,7 +343,225 @@ class PostsService {
                     name: '$$user.name',
                     avatar: '$$user.avatar',
                     role: '$$user.role',
-                    point: '$$user.point'
+                    point: '$$user.point',
+                    username: '$$user.username'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'hashtags',
+              localField: 'hashtags',
+              foreignField: '_id',
+              as: 'hashtags'
+            }
+          },
+          {
+            $addFields: {
+              hashtags: {
+                $map: {
+                  input: '$hashtags',
+                  as: 'hashtag',
+                  in: {
+                    _id: '$$hashtag._id',
+                    name: '$$hashtag.name'
+                  }
+                }
+              }
+            }
+          },
+          {
+            $lookup: {
+              from: 'bookmarks',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'bookmarks_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'votes',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'votes_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'reports',
+              localField: '_id',
+              foreignField: 'post_id',
+              as: 'reports_count'
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              localField: '_id',
+              foreignField: 'parent_id',
+              as: 'post_children'
+            }
+          },
+          {
+            $addFields: {
+              bookmarks_count: {
+                $size: '$bookmarks_count'
+              },
+              votes_count: {
+                $size: '$votes_count'
+              },
+              reports_count: {
+                $size: '$reports_count'
+              },
+              repost_count: {
+                $size: {
+                  $filter: {
+                    input: '$post_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', PostType.Repost]
+                    }
+                  }
+                }
+              },
+              comment_count: {
+                $size: {
+                  $filter: {
+                    input: '$post_children',
+                    as: 'item',
+                    cond: {
+                      $eq: ['$$item.type', PostType.Comment]
+                    }
+                  }
+                }
+              },
+              views_count: {
+                $add: ['$user_views', '$guest_views']
+              }
+            }
+          },
+          {
+            $unwind: {
+              path: '$user_detail'
+            }
+          },
+          {
+            $project: {
+              post_children: 0,
+              user_id: 0,
+              votes: 0,
+              bookmarks: 0,
+              reports: 0
+            }
+          },
+          {
+            $sort: {
+              [sort_field]: sort_value
+            }
+          },
+          {
+            $skip: limit * (page - 1) // Công thức phân trang
+          },
+          {
+            $limit: limit
+          }
+        ])
+        .toArray(),
+      databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              type: PostType.Post
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user'
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+    const post_ids = posts.map((post) => post._id as ObjectId)
+    const date = new Date()
+    await databaseService.posts.updateMany(
+      {
+        _id: {
+          $in: post_ids
+        }
+      },
+      {
+        $inc: { user_views: 1 },
+        $set: {
+          updated_at: date
+        }
+      }
+    )
+
+    posts.forEach((post) => {
+      post.updated_at = date
+      post.user_views += 1
+    })
+
+    return {
+      posts,
+      total: total[0].total
+    }
+  }
+
+  async getGuessNewFeeds({
+    limit,
+    page,
+    sort_field,
+    sort_value
+  }: {
+    limit: number
+    page: number
+    sort_field: string
+    sort_value: number
+  }) {
+    const [posts, total] = await Promise.all([
+      databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              type: PostType.Post
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user_detail'
+            }
+          },
+          {
+            $addFields: {
+              user_detail: {
+                $map: {
+                  input: '$user_detail',
+                  as: 'user',
+                  in: {
+                    _id: '$$user._id',
+                    name: '$$user.name',
+                    avatar: '$$user.avatar',
+                    role: '$$user.role',
+                    point: '$$user.point',
+                    username: '$$user.username'
                   }
                 }
               }
@@ -643,7 +861,8 @@ class PostsService {
                     name: '$$user.name',
                     avatar: '$$user.avatar',
                     role: '$$user.role',
-                    point: '$$user.point'
+                    point: '$$user.point',
+                    username: '$$user.username'
                   }
                 }
               }
@@ -973,7 +1192,8 @@ class PostsService {
                     name: '$$user.name',
                     avatar: '$$user.avatar',
                     role: '$$user.role',
-                    point: '$$user.point'
+                    point: '$$user.point',
+                    username: '$$user.username'
                   }
                 }
               }

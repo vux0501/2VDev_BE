@@ -63,6 +63,33 @@ export const getPostChildrenController = async (req: Request<PostParam, any, any
   })
 }
 
+export const getGuessNewFeedsController = async (
+  req: Request<ParamsDictionary, any, any, Pagination>,
+  res: Response
+) => {
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const type = req.query.type
+  const sort_field = req.query.sort_field
+  const sort_value = Number(req.query.sort_value)
+
+  const result = await postsService.getGuessNewFeeds({
+    limit,
+    page,
+    sort_field,
+    sort_value
+  })
+  return res.json({
+    message: 'Get Guess New Feeds Successfully',
+    result: {
+      posts: result.posts,
+      limit,
+      page,
+      total_page: Math.ceil(result.total / limit)
+    }
+  })
+}
+
 export const getNewFeedsController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
   const user_id = req.decoded_authorization?.user_id as string
   const limit = Number(req.query.limit)
