@@ -635,7 +635,6 @@ export const updateAccountValidator = validate(
             if (!params || !params.user_id) {
               throw Error(USERS_MESSAGES.PARAMS_NOT_FOUND)
             }
-            console.log(params.user_id)
             const user_id = new ObjectId(params.user_id)
 
             if (!REGEX_USERNAME.test(value)) {

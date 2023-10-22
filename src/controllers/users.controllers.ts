@@ -160,10 +160,10 @@ export const getMeController = async (req: Request, res: Response, next: NextFun
 }
 
 export const getDataController = async (req: Request, res: Response, next: NextFunction) => {
-  const { users, questions, answers } = await usersService.getData()
+  const { users, questions, answers, bestAnswers } = await usersService.getData()
   return res.json({
     message: 'Get data successfully!',
-    result: { users, questions, answers }
+    result: { users, questions, answers, bestAnswers }
   })
 }
 

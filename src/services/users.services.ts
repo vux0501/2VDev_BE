@@ -454,13 +454,14 @@ class UsersService {
   }
 
   async getData() {
-    const [users, questions, answers] = await Promise.all([
+    const [users, questions, answers, bestAnswers] = await Promise.all([
       databaseService.users.countDocuments({}),
       databaseService.posts.countDocuments({ type: 0 }),
-      databaseService.posts.countDocuments({ type: 2 })
+      databaseService.posts.countDocuments({ type: 2 }),
+      databaseService.posts.countDocuments({ resolved_id: { $ne: null } })
     ])
 
-    return { users, questions, answers }
+    return { users, questions, answers, bestAnswers }
   }
 
   async updateMe(user_id: string, payload: UpdateMeReqBody) {

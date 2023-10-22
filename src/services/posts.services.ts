@@ -22,7 +22,6 @@ class PostsService {
         )
       })
     )
-    console.log(hashtagDocuemts.map((hashtag) => (hashtag.value as WithId<Hashtag>)._id))
 
     return hashtagDocuemts.map((hashtag) => (hashtag.value as WithId<Hashtag>)._id)
   }
