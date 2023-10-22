@@ -7,6 +7,7 @@ import {
   getPostChildrenController,
   getPostController,
   getPostsbyHashtagController,
+  getUserPostsController,
   resolvePostController,
   updatePostController
 } from '~/controllers/posts.controllers'
@@ -60,6 +61,22 @@ postRouters.get(
  * Query: {limit: number, page: number, type: string, sort_field: string, sort_value: number}
  */
 postRouters.get('/guess-newfeeds', paginationValidator, wrapRequestHandler(getGuessNewFeedsController))
+
+/**
+ * Description: Get questions
+ * Path: /questions
+ * Method: GET
+ * Header: { Authorization?: Bearer <access_token> }
+ * Query: {limit: number, page: number}
+ * Body: {type: PostType}
+ */
+postRouters.get(
+  '/userposts/:user_id',
+  paginationValidator,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(getUserPostsController)
+)
 
 /**
  * Description: Get Post detail

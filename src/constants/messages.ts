@@ -77,6 +77,7 @@ export const USERS_MESSAGES = {
 
 export const POSTS_MESSAGES = {
   VALIDATION_ERROR: 'Validation error',
+  NOT_FOUND: 'Không có bài viết nào',
   TITLE_IS_REQUIRED: 'Tiêu đề của bài viết gốc không được rỗng.',
   TITLE_LENGTH: 'Tiêu đề của bài viết từ 10 đến 50 ký tự.',
 

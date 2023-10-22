@@ -147,6 +147,31 @@ export const getNewFeedsController = async (req: Request<ParamsDictionary, any, 
   }
 }
 
+export const getUserPostsController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+  const current_user_id = req.decoded_authorization?.user_id as string
+  const user_id = req.params.user_id
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const type = req.body.type
+
+  const result = await postsService.getUserPosts({
+    current_user_id,
+    user_id,
+    type,
+    limit,
+    page
+  })
+  return res.json({
+    message: 'Get Successfully',
+    result: {
+      posts: result.posts,
+      limit,
+      page,
+      total_page: Math.ceil(result.total / limit)
+    }
+  })
+}
+
 export const deletePostController = async (req: Request, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
 
