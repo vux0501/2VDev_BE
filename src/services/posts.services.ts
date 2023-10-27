@@ -193,7 +193,7 @@ class PostsService {
             reports_count: {
               $size: '$reports_count'
             },
-            comment_count: {
+            comments_count: {
               $size: {
                 $filter: {
                   input: '$post_children',
@@ -417,7 +417,7 @@ class PostsService {
               reports_count: {
                 $size: '$reports_count'
               },
-              repost_count: {
+              reposts_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -428,7 +428,7 @@ class PostsService {
                   }
                 }
               },
-              comment_count: {
+              comments_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -700,7 +700,7 @@ class PostsService {
               reports_count: {
                 $size: '$reports_count'
               },
-              repost_count: {
+              reposts_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -711,7 +711,7 @@ class PostsService {
                   }
                 }
               },
-              comment_count: {
+              comments_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -921,7 +921,7 @@ class PostsService {
               reports_count: {
                 $size: '$reports_count'
               },
-              repost_count: {
+              reposts_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -932,7 +932,7 @@ class PostsService {
                   }
                 }
               },
-              comment_count: {
+              comments_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -1222,7 +1222,7 @@ class PostsService {
               reports_count: {
                 $size: '$reports_count'
               },
-              repost_count: {
+              reposts_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -1233,7 +1233,7 @@ class PostsService {
                   }
                 }
               },
-              comment_count: {
+              comments_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -1588,7 +1588,7 @@ class PostsService {
               reports_count: {
                 $size: '$reports_count'
               },
-              repost_count: {
+              reposts_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -1599,7 +1599,7 @@ class PostsService {
                   }
                 }
               },
-              comment_count: {
+              comments_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',

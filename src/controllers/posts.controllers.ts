@@ -105,7 +105,7 @@ export const getNewFeedsController = async (req: Request<ParamsDictionary, any, 
   const sort_field = req.query.sort_field
   const sort_value = Number(req.query.sort_value)
 
-  if (type === 'new') {
+  if (type === 'all') {
     const result = await postsService.getNewFeeds({
       user_id,
       limit,
