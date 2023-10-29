@@ -103,6 +103,11 @@ class PostsService {
           }
         },
         {
+          $sort: {
+            [sort_field]: sort_value
+          }
+        },
+        {
           $lookup: {
             from: 'reports',
             localField: '_id',
@@ -223,11 +228,7 @@ class PostsService {
             reports: 0
           }
         },
-        {
-          $sort: {
-            [sort_field]: sort_value
-          }
-        },
+
         {
           $skip: limit * (page - 1)
         },
