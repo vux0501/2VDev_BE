@@ -102,11 +102,7 @@ class PostsService {
             as: 'user_detail'
           }
         },
-        {
-          $sort: {
-            [sort_field]: sort_value
-          }
-        },
+
         {
           $lookup: {
             from: 'reports',
@@ -209,6 +205,11 @@ class PostsService {
                 }
               }
             }
+          }
+        },
+        {
+          $sort: {
+            [sort_field]: sort_value
           }
         },
         {
