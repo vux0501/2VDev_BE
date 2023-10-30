@@ -30,7 +30,6 @@ class HashtagsService {
         },
         {
           $project: {
-            _id: 0,
             name: '$hashtag.name',
             count: 1
           }

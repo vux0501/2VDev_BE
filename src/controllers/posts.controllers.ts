@@ -234,7 +234,9 @@ export const getPostsbyHashtagController = async (
       posts: result.posts,
       limit,
       page,
-      total_page: Math.ceil(result.total / limit)
+      posts_count: result.total,
+      total_page: Math.ceil(result.total / limit),
+      hashtag_name: result.hashtag?.name
     }
   })
 }

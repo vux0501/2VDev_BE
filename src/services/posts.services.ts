@@ -1673,30 +1673,41 @@ class PostsService {
         ])
         .toArray()
     ])
-    const post_ids = posts.map((post) => post._id as ObjectId)
-    const date = new Date()
-    await databaseService.posts.updateMany(
-      {
-        _id: {
-          $in: post_ids
-        }
-      },
-      {
-        $inc: { user_views: 1 },
-        $set: {
-          updated_at: date
-        }
+
+    if (posts.length === 0) {
+      return {
+        posts: [],
+        total: 0
       }
-    )
+    } else {
+      const post_ids = posts.map((post) => post._id as ObjectId)
+      const date = new Date()
+      await databaseService.posts.updateMany(
+        {
+          _id: {
+            $in: post_ids
+          }
+        },
+        {
+          $inc: { user_views: 1 },
+          $set: {
+            updated_at: date
+          }
+        }
+      )
 
-    posts.forEach((post) => {
-      post.updated_at = date
-      post.user_views += 1
-    })
+      posts.forEach((post) => {
+        post.updated_at = date
+        post.user_views += 1
+      })
 
-    return {
-      posts,
-      total: total[0].total
+      const hashtag = await databaseService.hashtags.findOne(new ObjectId(hashtag_id))
+
+      return {
+        posts,
+        total: total[0].total,
+        hashtag
+      }
     }
   }
 }
