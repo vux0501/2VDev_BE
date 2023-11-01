@@ -234,7 +234,7 @@ export const postIdValidator = validate(
                       reports_count: {
                         $size: '$reports_count'
                       },
-                      repost_count: {
+                      reposts_count: {
                         $size: {
                           $filter: {
                             input: '$post_children',
@@ -245,7 +245,7 @@ export const postIdValidator = validate(
                           }
                         }
                       },
-                      comment_count: {
+                      comments_count: {
                         $size: {
                           $filter: {
                             input: '$post_children',

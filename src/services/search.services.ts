@@ -189,7 +189,7 @@ class SearchService {
               reports_count: {
                 $size: '$reports_count'
               },
-              repost_count: {
+              reposts_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
@@ -200,7 +200,7 @@ class SearchService {
                   }
                 }
               },
-              comment_count: {
+              comments_count: {
                 $size: {
                   $filter: {
                     input: '$post_children',
