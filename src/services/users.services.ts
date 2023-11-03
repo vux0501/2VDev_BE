@@ -809,7 +809,80 @@ class UsersService {
       ])
       .toArray()
 
-    const totalUser = await list_users_following.length
+    const listAll = await databaseService.followers
+      .aggregate([
+        {
+          $match: {
+            user_id: new ObjectId(user_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'followed_user_id',
+            foreignField: '_id',
+            as: 'user_following_detail'
+          }
+        },
+        {
+          $addFields: {
+            user_following_detail: {
+              $map: {
+                input: '$user_following_detail',
+                as: 'item',
+                in: {
+                  _id: '$$item._id',
+                  name: '$$item.name',
+                  username: '$$item.username',
+                  avatar: '$$item.avatar',
+                  point: '$$item.point'
+                }
+              }
+            }
+          }
+        },
+        {
+          $unwind: {
+            path: '$user_following_detail'
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: 'user_following_detail._id',
+            foreignField: 'followed_user_id',
+            as: 'result'
+          }
+        },
+        {
+          $addFields: {
+            is_followed: {
+              $cond: {
+                if: {
+                  $in: [new ObjectId(current_user_id), '$result.user_id']
+                },
+                then: 1,
+                else: 0
+              }
+            }
+          }
+        },
+        {
+          $project: {
+            user_following_detail: 1,
+            _id: 0,
+            is_followed: 1
+          }
+        },
+        {
+          $sort: {
+            is_followed: -1
+          }
+        }
+      ])
+      .toArray()
+
+    const totalUser = await listAll.length
     const totalPage = Math.ceil(totalUser / limit)
 
     if (list_users_following === null) {
@@ -911,7 +984,75 @@ class UsersService {
       ])
       .toArray()
 
-    const totalUser = await list_users_following.length
+    const listAll = await databaseService.followers
+      .aggregate([
+        {
+          $match: {
+            followed_user_id: new ObjectId(user_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user_follower_detail'
+          }
+        },
+        {
+          $addFields: {
+            user_follower_detail: {
+              $map: {
+                input: '$user_follower_detail',
+                as: 'item',
+                in: {
+                  _id: '$$item._id',
+                  name: '$$item.name',
+                  username: '$$item.username',
+                  avatar: '$$item.avatar',
+                  point: '$$item.point'
+                }
+              }
+            }
+          }
+        },
+        {
+          $unwind: {
+            path: '$user_follower_detail'
+          }
+        },
+        {
+          $lookup: {
+            from: 'followers',
+            localField: 'user_follower_detail._id',
+            foreignField: 'followed_user_id',
+            as: 'result'
+          }
+        },
+        {
+          $addFields: {
+            is_followed: {
+              $cond: {
+                if: {
+                  $in: [new ObjectId(current_user_id), '$result.user_id']
+                },
+                then: 1,
+                else: 0
+              }
+            }
+          }
+        },
+        {
+          $project: {
+            user_follower_detail: 1,
+            _id: 0,
+            is_followed: 1
+          }
+        }
+      ])
+      .toArray()
+
+    const totalUser = await listAll.length
     const totalPage = Math.ceil(totalUser / limit)
 
     if (list_users_following === null) {
