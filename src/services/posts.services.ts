@@ -156,7 +156,8 @@ class PostsService {
                   name: '$$user.name',
                   avatar: '$$user.avatar',
                   role: '$$user.role',
-                  point: '$$user.point'
+                  point: '$$user.point',
+                  username: '$$user.username'
                 }
               }
             }
