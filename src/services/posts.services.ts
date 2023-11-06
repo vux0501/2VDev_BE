@@ -745,6 +745,11 @@ class PostsService {
             }
           },
           {
+            $sort: {
+              created_at: -1
+            }
+          },
+          {
             $skip: limit * (page - 1) // Công thức phân trang
           },
           {

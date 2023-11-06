@@ -152,7 +152,7 @@ export const getUserPostsController = async (req: Request<ParamsDictionary, any,
   const user_id = req.params.user_id
   const limit = Number(req.query.limit)
   const page = Number(req.query.page)
-  const type = req.body.type
+  const type = Number(req.query.type)
 
   const result = await postsService.getUserPosts({
     current_user_id,
