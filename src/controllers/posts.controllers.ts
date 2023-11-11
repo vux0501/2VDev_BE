@@ -27,6 +27,19 @@ export const createPostController = async (
   })
 }
 
+export const createPostGPTController = async (
+  req: Request<ParamsDictionary, any, PostRequestBody>,
+  res: Response,
+  next: NextFunction
+) => {
+  const user_id = '64df5429b4d27e49184c1a42'
+  const result = await postsService.createPost(user_id, req.body)
+  return res.json({
+    message: 'Create new post successfully!',
+    data: result
+  })
+}
+
 export const getPostController = async (req: Request, res: Response) => {
   const result = await postsService.increaseView(req.params.post_id, req.decoded_authorization?.user_id)
   const post = {

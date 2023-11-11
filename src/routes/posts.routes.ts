@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   createPostController,
+  createPostGPTController,
   deletePostController,
   getGuessNewFeedsController,
   getNewFeedsController,
@@ -38,6 +39,14 @@ postRouters.post(
   createPostValidator,
   wrapRequestHandler(createPostController)
 )
+
+/*
+Description: Create post AI
+Path: /gpt
+Method: POST
+Body: PostRequestBody
+*/
+postRouters.post('/gpt', createPostValidator, wrapRequestHandler(createPostGPTController))
 
 /**
  * Description: Get new feeds
