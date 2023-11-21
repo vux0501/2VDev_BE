@@ -34,6 +34,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            docker rmi vux0501/2vdev:v4
             docker pull vux0501/2vdev:v4
             docker stop 2vdev_be
             docker rm 2vdev_be
