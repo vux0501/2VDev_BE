@@ -103,6 +103,7 @@ export const POSTS_MESSAGES = {
 
 export const BOOKMARK_MESSAGES = {
   BOOKMARK_SUCCESSFULLY: 'bookmark thành công',
+  GET_BOOKMARK_SUCCESSFULLY: 'get bookmark thành công',
   UNBOOKMARK_SUCCESSFULLY: 'Unbookmark thành công'
 }
 

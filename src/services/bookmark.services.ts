@@ -30,6 +30,99 @@ class BookmarksService {
     })
     return result
   }
+
+  async getMyBookmarks(user_id: string, limit: number, page: number) {
+    const [posts, total] = await Promise.all([
+      databaseService.bookmarks
+        .aggregate([
+          {
+            $match: {
+              user_id: new ObjectId(user_id)
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              localField: 'post_id',
+              foreignField: '_id',
+              as: 'post_detail'
+            }
+          },
+          {
+            $unwind: {
+              path: '$post_detail'
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'post_detail.user_id',
+              foreignField: '_id',
+              as: 'user_detail'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user_detail'
+            }
+          },
+          {
+            $lookup: {
+              from: 'hashtags',
+              localField: 'post_detail.hashtags',
+              foreignField: '_id',
+              as: 'hashtags'
+            }
+          },
+          {
+            $project: {
+              'user_detail.password': 0,
+              'user_detail.email_verify_token': 0,
+              'user_detail.forgot_password_token': 0,
+              user_id: 0,
+              post_id: 0,
+              'post_detail.hashtags': 0
+            }
+          },
+          {
+            $sort: {
+              created_at: -1
+            }
+          },
+          {
+            $skip: limit * (page - 1)
+          },
+          {
+            $limit: limit
+          }
+        ])
+        .toArray(),
+      databaseService.bookmarks
+        .aggregate([
+          {
+            $match: {
+              user_id: new ObjectId(user_id)
+            }
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+
+    if (posts.length === 0) {
+      return {
+        posts: [],
+        total: 0
+      }
+    }
+
+    return {
+      posts,
+      total: total[0].total
+    }
+  }
 }
 
 const bookmarksService = new BookmarksService()

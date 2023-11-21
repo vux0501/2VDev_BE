@@ -1,5 +1,9 @@
 import { Router } from 'express'
-import { bookmarkPostController, unbookmarkPostController } from '~/controllers/bookmarks.controllers'
+import {
+  bookmarkPostController,
+  getMyBookmarksController,
+  unbookmarkPostController
+} from '~/controllers/bookmarks.controllers'
 import { getAllHashtagsController } from '~/controllers/hashtags.controllers'
 import { postIdValidator } from '~/middlewares/posts.middleware'
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
@@ -35,5 +39,13 @@ bookmarkRouters.delete(
   postIdValidator,
   wrapRequestHandler(unbookmarkPostController)
 )
+
+/**
+ * Description: get my bookmark post
+ * Path: /
+ * Method: GET
+ * Header: { Authorization: Bearer <access_token> }
+ */
+bookmarkRouters.get('/', accessTokenValidator, verifiedUserValidator, wrapRequestHandler(getMyBookmarksController))
 
 export default bookmarkRouters

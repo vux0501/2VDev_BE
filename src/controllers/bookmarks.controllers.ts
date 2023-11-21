@@ -25,3 +25,18 @@ export const unbookmarkPostController = async (req: Request, res: Response) => {
     message: BOOKMARK_MESSAGES.UNBOOKMARK_SUCCESSFULLY
   })
 }
+
+export const getMyBookmarksController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const limit = Number(req.query.limit)
+  const page = Number(req.query.page)
+  const result = await bookmarksService.getMyBookmarks(user_id, limit, page)
+  return res.json({
+    message: BOOKMARK_MESSAGES.GET_BOOKMARK_SUCCESSFULLY,
+    result: result.posts,
+    limit,
+    page,
+    total_post: result.total,
+    total_page: Math.ceil(result.total / limit)
+  })
+}
