@@ -22,6 +22,13 @@ searchRouters.get('/post/', searchValidator, paginationValidator, searchPostCont
  * Header: { Authorization?: Bearer <access_token> }
  * Query: {limit: number, page: number, content: string}
  */
-searchRouters.get('/user/', searchValidator, paginationValidator, searchUserController)
+searchRouters.get(
+  '/user/',
+  accessTokenValidator,
+  verifiedUserValidator,
+  searchValidator,
+  paginationValidator,
+  searchUserController
+)
 
 export default searchRouters
