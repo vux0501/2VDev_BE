@@ -13,14 +13,7 @@ const searchRouters = Router()
  * Header: { Authorization?: Bearer <access_token> }
  * Query: {limit: number, page: number, content: string}
  */
-searchRouters.get(
-  '/post/',
-  accessTokenValidator,
-  verifiedUserValidator,
-  searchValidator,
-  paginationValidator,
-  searchPostController
-)
+searchRouters.get('/post/', searchValidator, paginationValidator, searchPostController)
 
 /**
  * Description: Search user
