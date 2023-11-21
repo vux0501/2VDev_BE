@@ -1351,6 +1351,16 @@ class PostsService {
     })
   }
 
+  async deletePostForAdmin(post_id: string) {
+    await databaseService.posts.findOneAndDelete({
+      _id: new ObjectId(post_id)
+    })
+
+    await databaseService.posts.deleteMany({
+      parent_id: new ObjectId(post_id)
+    })
+  }
+
   async updatePost(user_id: string, post_id: string, payload: UpdatePostReqBody) {
     if (payload.hashtags) {
       const hashtags = await this.checkAndCreateHashtags(payload.hashtags)

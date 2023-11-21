@@ -3,6 +3,7 @@ import {
   createPostController,
   createPostGPTController,
   deletePostController,
+  deletePostForAdminController,
   getGuessNewFeedsController,
   getNewFeedsController,
   getPostChildrenController,
@@ -20,7 +21,12 @@ import {
   postIdValidator,
   updatePostValidator
 } from '~/middlewares/posts.middleware'
-import { accessTokenValidator, isUserLoggedInValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
+import {
+  accessTokenValidator,
+  isAdminValidator,
+  isUserLoggedInValidator,
+  verifiedUserValidator
+} from '~/middlewares/users.middlewares'
 import { ResolvePostReqBody, UpdatePostReqBody } from '~/models/requests/Post.request'
 import { wrapRequestHandler } from '~/utils/handlers'
 
@@ -128,6 +134,21 @@ postRouters.get(
  * Params: {post_id: string}
  */
 postRouters.delete('/:post_id', postIdValidator, accessTokenValidator, wrapRequestHandler(deletePostController))
+
+/**
+ * Description: Delete post, children post for admin
+ * Path: /:post_id
+ * Method: DELETE
+ * Header: { Authorization?: Bearer <access_token> }
+ * Params: {post_id: string}
+ */
+postRouters.delete(
+  '/admin/:post_id',
+  postIdValidator,
+  accessTokenValidator,
+  isAdminValidator,
+  wrapRequestHandler(deletePostForAdminController)
+)
 
 /**
  * Description: update post, children post

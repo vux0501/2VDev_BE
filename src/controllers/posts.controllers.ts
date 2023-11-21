@@ -194,6 +194,13 @@ export const deletePostController = async (req: Request, res: Response) => {
   })
 }
 
+export const deletePostForAdminController = async (req: Request, res: Response) => {
+  await postsService.deletePostForAdmin(req.params.post_id)
+  return res.json({
+    message: POSTS_MESSAGES.DELETE_POST_SUCCESS
+  })
+}
+
 export const updatePostController = async (
   req: Request<ParamsDictionary, any, UpdatePostReqBody>,
   res: Response,
