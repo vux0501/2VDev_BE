@@ -4,6 +4,7 @@ import {
   createPostGPTController,
   deletePostController,
   deletePostForAdminController,
+  getDashboard,
   getGuessNewFeedsController,
   getNewFeedsController,
   getPostChildrenController,
@@ -31,6 +32,20 @@ import { ResolvePostReqBody, UpdatePostReqBody } from '~/models/requests/Post.re
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const postRouters = Router()
+
+/**
+ * Description: Get dashboard
+ * Path: /dashboard
+ * Method: GET
+ * Header: { Authorization?: Bearer <access_token> }
+ */
+postRouters.get(
+  '/dashboard',
+  accessTokenValidator,
+  verifiedUserValidator,
+  isAdminValidator,
+  wrapRequestHandler(getDashboard)
+)
 
 /*
 Description: Create post
@@ -173,6 +188,21 @@ postRouters.patch(
  * Body: {resolved_id: string}
  */
 postRouters.patch('/resolve/:post_id', accessTokenValidator, wrapRequestHandler(resolvePostController))
+
+/**
+ * Description: Get post by Hashtag
+ * Path: /hashtags/:hashtag_id
+ * Method: GET
+ * Header: { Authorization?: Bearer <access_token> }
+ * Query: {limit: number, page: number, type: string}
+ */
+postRouters.get(
+  '/hashtags/:hashtag_id',
+  paginationValidator,
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(getPostsbyHashtagController)
+)
 
 /**
  * Description: Get post by Hashtag

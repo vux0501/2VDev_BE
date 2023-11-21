@@ -260,3 +260,11 @@ export const getPostsbyHashtagController = async (
     }
   })
 }
+
+export const getDashboard = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+  const result = await postsService.getDashboard()
+  return res.json({
+    message: 'Get dashboard Successfully',
+    result
+  })
+}

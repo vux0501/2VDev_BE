@@ -1726,6 +1726,121 @@ class PostsService {
       }
     }
   }
+  async getDashboard() {
+    const dashboard = await databaseService.posts
+      .aggregate([
+        {
+          $match: {}
+        },
+        {
+          $project: {
+            _id: 0,
+            month: {
+              $month: '$created_at'
+            },
+            year: {
+              $year: '$created_at'
+            },
+            type: 1
+          }
+        },
+        {
+          $group: {
+            _id: {
+              year: '$year',
+              month: '$month',
+              type: '$type'
+            },
+            count: {
+              $sum: 1
+            }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            year: '$_id.year',
+            month: '$_id.month',
+            posts_count: {
+              $cond: {
+                if: {
+                  $eq: ['$_id.type', 0]
+                },
+                then: '$count',
+                else: 0
+              }
+            },
+            reposts_count: {
+              $cond: {
+                if: {
+                  $eq: ['$_id.type', 1]
+                },
+                then: '$count',
+                else: 0
+              }
+            },
+            comments_count: {
+              $cond: {
+                if: {
+                  $eq: ['$_id.type', 2]
+                },
+                then: '$count',
+                else: 0
+              }
+            },
+            date: {
+              $concat: [
+                {
+                  $toString: '$_id.month'
+                },
+                '-',
+                {
+                  $toString: '$_id.year'
+                }
+              ]
+            }
+          }
+        },
+        {
+          $group: {
+            _id: {
+              year: '$year',
+              month: '$month',
+              date: '$date'
+            },
+            posts_count: {
+              $sum: '$posts_count'
+            },
+            reposts_count: {
+              $sum: '$reposts_count'
+            },
+            comments_count: {
+              $sum: '$comments_count'
+            }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            year: '$_id.year',
+            month: '$_id.month',
+            date: '$_id.date',
+            posts_count: 1,
+            reposts_count: 1,
+            comments_count: 1
+          }
+        },
+        {
+          $sort: {
+            year: 1,
+            month: 1
+          }
+        }
+      ])
+      .toArray()
+
+    return { dashboard }
+  }
 }
 
 const postsService = new PostsService()
