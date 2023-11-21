@@ -3,6 +3,7 @@ import databaseService from './database.services'
 import { ObjectId, WithId } from 'mongodb'
 import Report from '~/models/schemas/Report.schema'
 import ReportPost from '~/models/schemas/Report.schema'
+import { PostType } from '~/constants/enums'
 
 class ReportsService {
   async reportPost(user_id: string, post_id: string, reason: string) {
@@ -33,6 +34,94 @@ class ReportsService {
       post_id: new ObjectId(post_id)
     })
     return result
+  }
+
+  async getReportPost({ limit, page }: { limit: number; page: number }) {
+    const [posts, total] = await Promise.all([
+      databaseService.reports
+        .aggregate([
+          {
+            $match: {}
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user_report'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user_report'
+            }
+          },
+          {
+            $lookup: {
+              from: 'posts',
+              localField: 'post_id',
+              foreignField: '_id',
+              as: 'post_detail'
+            }
+          },
+          {
+            $unwind: {
+              path: '$post_detail'
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'post_detail.user_id',
+              foreignField: '_id',
+              as: 'user_detail'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user_detail'
+            }
+          },
+          {
+            $project: {
+              post_detail: 1,
+              'user_detail.name': 1,
+              'user_detail._id': 1,
+              'user_report.name': 1,
+              'user_report._id': 1,
+              reason: 1,
+              created_at: 1
+            }
+          },
+          {
+            $sort: {
+              created_at: -1
+            }
+          },
+          {
+            $skip: limit * (page - 1) // Công thức phân trang
+          },
+          {
+            $limit: limit
+          }
+        ])
+        .toArray(),
+      databaseService.reports
+        .aggregate([
+          {
+            $match: {}
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+
+    return {
+      posts,
+      total: total[0].total
+    }
   }
 }
 

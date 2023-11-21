@@ -1,10 +1,14 @@
 import { Router } from 'express'
-import { reportPostController, unReportPostController } from '~/controllers/reports.controllers'
+import {
+  getReportPostController,
+  reportPostController,
+  unReportPostController
+} from '~/controllers/reports.controllers'
 
 import { unVotePostController, votePostController } from '~/controllers/votes.controllers'
 
 import { postIdValidator } from '~/middlewares/posts.middleware'
-import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
+import { accessTokenValidator, isAdminValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/handlers'
 
 const reportRouters = Router()
@@ -22,6 +26,21 @@ reportRouters.post(
   verifiedUserValidator,
   postIdValidator,
   wrapRequestHandler(reportPostController)
+)
+
+/*
+Description: Create report
+Path: /
+Method: POST
+body: {post_id: string, reason: string}
+Header: {Authorization: Bearer <access_token>}
+*/
+reportRouters.get(
+  '/',
+  accessTokenValidator,
+  verifiedUserValidator,
+  isAdminValidator,
+  wrapRequestHandler(getReportPostController)
 )
 
 /**
