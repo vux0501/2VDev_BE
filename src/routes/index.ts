@@ -8,6 +8,7 @@ import bookmarkRouters from './bookmark.routes'
 import voteRouters from './vote.routes'
 import reportRouters from './reports.routes'
 import searchRouters from './search.routes'
+import notificationRouters from './notifications.routes'
 
 function route(app: Express) {
   app.use('/users', userRouters)
@@ -19,6 +20,7 @@ function route(app: Express) {
   app.use('/votes', voteRouters)
   app.use('/reports', reportRouters)
   app.use('/search', searchRouters)
+  app.use('/notifications', notificationRouters)
 }
 
 export default route

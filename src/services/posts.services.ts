@@ -3,10 +3,11 @@ import databaseService from './database.services'
 import Post from '~/models/schemas/Post.schema'
 import { ObjectId, WithId } from 'mongodb'
 import Hashtag from '~/models/schemas/Hashtag.schema'
-import { PostType } from '~/constants/enums'
+import { NotificationType, PostType } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
 import { POSTS_MESSAGES } from '~/constants/messages'
 import HTTP_STATUS from '~/constants/httpStatus'
+import Notification from '~/models/schemas/Notification.schema'
 
 class PostsService {
   async checkAndCreateHashtags(hashtags: string[]) {
@@ -30,6 +31,7 @@ class PostsService {
   }
   async createPost(user_id: string, body: PostRequestBody) {
     const hashtags = await this.checkAndCreateHashtags(body.hashtags)
+
     const result = await databaseService.posts.insertOne(
       new Post({
         user_id: new ObjectId(user_id),
@@ -42,6 +44,28 @@ class PostsService {
       })
     )
     const post = await databaseService.posts.findOne({ _id: result.insertedId })
+    const post_type = post?.type
+
+    if (post_type === 2) {
+      const post_parent_id = post?.parent_id
+      const post_parent = await databaseService.posts.findOne({ _id: post_parent_id as ObjectId })
+      const post_parent_type = post_parent?.type
+
+      if (post_parent_type === 0) {
+        const receiver_id = post_parent?.user_id
+
+        if (new ObjectId(user_id).toString() !== receiver_id?.toString()) {
+          await databaseService.notifications.insertOne(
+            new Notification({
+              direct_id: post_parent_id as ObjectId,
+              sender_id: new ObjectId(user_id),
+              receiver_id: new ObjectId(receiver_id),
+              type: NotificationType.Comment
+            })
+          )
+        }
+      }
+    }
     return post
   }
   async increaseView(post_id: string, user_id?: string) {
@@ -1408,6 +1432,17 @@ class PostsService {
           }
         }
       )
+
+      const comment = await databaseService.posts.findOne({ _id: new ObjectId(resolve_id) })
+      const receiver_id = comment?.user_id
+      await databaseService.notifications.insertOne(
+        new Notification({
+          direct_id: new ObjectId(post_id),
+          sender_id: new ObjectId(user_id),
+          receiver_id: new ObjectId(receiver_id),
+          type: NotificationType.Pin
+        })
+      )
     } else {
       await databaseService.posts.findOneAndUpdate(
         {
@@ -1424,6 +1459,16 @@ class PostsService {
         }
       )
     }
+    const comment = await databaseService.posts.findOne({ _id: new ObjectId(resolve_id) })
+    const receiver_id = comment?.user_id
+    await databaseService.notifications.insertOne(
+      new Notification({
+        direct_id: new ObjectId(post_id),
+        sender_id: new ObjectId(user_id),
+        receiver_id: new ObjectId(receiver_id),
+        type: NotificationType.Pin
+      })
+    )
   }
 
   async getPostsByHashtag({

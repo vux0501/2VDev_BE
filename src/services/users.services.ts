@@ -1177,20 +1177,18 @@ class UsersService {
           followed_user_id: new ObjectId(followed_user_id)
         })
       )
+      await databaseService.notifications.insertOne(
+        new Notification({
+          direct_id: new ObjectId(user_id),
+          sender_id: new ObjectId(user_id),
+          receiver_id: new ObjectId(followed_user_id),
+          type: NotificationType.Follow
+        })
+      )
       return {
         message: USERS_MESSAGES.FOLLOW_SUCCESS
       }
     }
-
-    await databaseService.notifications.insertOne(
-      new Notification({
-        direct_id: new ObjectId(user_id),
-        sender_id: new ObjectId(user_id),
-        receive_id: new ObjectId(followed_user_id),
-        type: NotificationType.Follow
-      })
-    )
-
     return {
       message: USERS_MESSAGES.FOLLOWED
     }

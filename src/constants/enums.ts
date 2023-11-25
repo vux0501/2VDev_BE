@@ -29,12 +29,14 @@ export enum PostType {
 
 export enum NotificationType {
   VotePost,
+  VoteRepost,
   VoteComment,
   Comment,
   Repost,
   Pin,
   Bookmark,
-  Follow
+  Follow,
+  AdminDelete
 }
 
 export enum ResolvedType {

@@ -21,8 +21,6 @@ config({
 })
 export const isProduction = env === 'production'
 
-console.log(process.env.DB_NOTIFICATIONS_COLLECTION)
-
 export const envConfig = {
   port: (process.env.PORT as string) || 5000,
   host: process.env.HOST as string,
