@@ -21,6 +21,8 @@ config({
 })
 export const isProduction = env === 'production'
 
+console.log(process.env.DB_NOTIFICATIONS_COLLECTION)
+
 export const envConfig = {
   port: (process.env.PORT as string) || 5000,
   host: process.env.HOST as string,
@@ -34,6 +36,7 @@ export const envConfig = {
   dbVotesCollection: process.env.DB_VOTES_COLLECTION as string,
   dbRefreshTokensCollection: process.env.DB_REFRESH_TOKENS_COLLECTION as string,
   dbFollowersCollection: process.env.DB_FOLLOWERS_COLLECTION as string,
+  dbNotificationsCollection: process.env.DB_NOTIFICATIONS_COLLECTION as string,
   dbReportsCollection: process.env.DB_REPORTS_COLLECTION as string,
   passwordSecret: process.env.PASSWORD_SECRET as string,
   jwtSecretAccessToken: process.env.JWT_SECRET_ACCESS_TOKEN as string,

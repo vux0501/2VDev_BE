@@ -3,7 +3,7 @@ import databaseService from './database.services'
 import { RegisterReqBody, UpdateAccountReqBody, UpdateMeReqBody } from '~/models/requests/User.request'
 import { hashPassword } from '~/utils/crypto'
 import { signToken, verifyToken } from '~/utils/jwt'
-import { TokenType, UserRoleStatus, UserVerifyStatus } from '~/constants/enums'
+import { NotificationType, TokenType, UserRoleStatus, UserVerifyStatus } from '~/constants/enums'
 
 import { ObjectId } from 'mongodb'
 import RefreshToken from '~/models/schemas/RefreshToken.schema'
@@ -14,6 +14,7 @@ import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
 import axios from 'axios'
 import Follower from '~/models/schemas/Follower.schema'
 import { envConfig } from '~/constants/config'
+import Notification from '~/models/schemas/Notification.schema'
 
 class UsersService {
   private signAccessToken({
@@ -1180,6 +1181,16 @@ class UsersService {
         message: USERS_MESSAGES.FOLLOW_SUCCESS
       }
     }
+
+    await databaseService.notifications.insertOne(
+      new Notification({
+        direct_id: new ObjectId(user_id),
+        sender_id: new ObjectId(user_id),
+        receive_id: new ObjectId(followed_user_id),
+        type: NotificationType.Follow
+      })
+    )
+
     return {
       message: USERS_MESSAGES.FOLLOWED
     }

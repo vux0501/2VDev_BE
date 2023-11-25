@@ -7,6 +7,7 @@ import Bookmark from '~/models/schemas/Bookmark.schema'
 import Vote from '~/models/schemas/Vote.schema'
 import ReportPost from '~/models/schemas/Report.schema'
 import Follower from '~/models/schemas/Follower.schema'
+import Notification from '~/models/schemas/Notification.schema'
 import { envConfig } from '~/constants/config'
 
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@cluster0.7kmsofb.mongodb.net/?retryWrites=true&w=majority`
@@ -95,6 +96,9 @@ class DatabaseService {
   }
   get followers(): Collection<Follower> {
     return this.db.collection(envConfig.dbFollowersCollection)
+  }
+  get notifications(): Collection<Notification> {
+    return this.db.collection(envConfig.dbNotificationsCollection)
   }
 }
 

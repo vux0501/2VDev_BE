@@ -69,7 +69,7 @@ export const USERS_MESSAGES = {
   UPLOAD_SUCCESS: 'Upload thành công.',
 
   FOLLOW_SUCCESS: 'Follow thành công',
-  FOLLOWED: 'Đã follow rồi người ngày rồi.',
+  FOLLOWED: 'Đã follow rồi người này rồi.',
   ALREADY_UNFOLLOWED: 'Đã unfollow người này rồi.',
   UNFOLLOW_SUCCESS: 'Unfollow thành công',
   UPDATE_POINT_SUCCESS: 'Cập nhập điểm thành công.'

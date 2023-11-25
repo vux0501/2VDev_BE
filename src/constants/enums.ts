@@ -27,6 +27,16 @@ export enum PostType {
   Comment
 }
 
+export enum NotificationType {
+  VotePost,
+  VoteComment,
+  Comment,
+  Repost,
+  Pin,
+  Bookmark,
+  Follow
+}
+
 export enum ResolvedType {
   unResolved,
   Resolved
