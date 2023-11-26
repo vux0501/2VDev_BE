@@ -65,6 +65,25 @@ class PostsService {
           )
         }
       }
+    } else if (post_type === 1) {
+      const post_parent_id = post?.parent_id
+      const post_parent = await databaseService.posts.findOne({ _id: post_parent_id as ObjectId })
+      const post_parent_type = post_parent?.type
+
+      if (post_parent_type === 0) {
+        const receiver_id = post_parent?.user_id
+
+        if (new ObjectId(user_id).toString() !== receiver_id?.toString()) {
+          await databaseService.notifications.insertOne(
+            new Notification({
+              direct_id: post_parent_id as ObjectId,
+              sender_id: new ObjectId(user_id),
+              receiver_id: new ObjectId(receiver_id),
+              type: NotificationType.Repost
+            })
+          )
+        }
+      }
     }
     return post
   }
