@@ -85,9 +85,13 @@ class ReportsService {
           {
             $project: {
               post_detail: 1,
-              'user_detail.name': 1,
               'user_detail._id': 1,
+              'user_detail.avatar': 1,
+              'user_detail.username': 1,
+              'user_detail.name': 1,
               'user_report.name': 1,
+              'user_report.username': 1,
+              'user_report.avatar': 1,
               'user_report._id': 1,
               reason: 1,
               created_at: 1
