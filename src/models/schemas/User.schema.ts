@@ -56,9 +56,9 @@ export default class User {
     this.verify = user.verify || UserVerifyStatus.Unverified
     this.role = user.role || UserRoleStatus.User
     this.point = user.point || 0
-    this.bio = user.bio || ''
-    this.location = user.location || ''
-    this.website = user.website || ''
+    this.bio = user.bio || 'update...'
+    this.location = user.location || 'update...'
+    this.website = user.website || 'https://2vdev.xyz'
     this.username = user.username || ''
     this.avatar = user.avatar || ''
     this.cover_photo = user.cover_photo || ''
