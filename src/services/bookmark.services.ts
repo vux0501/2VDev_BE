@@ -59,25 +59,13 @@ class BookmarksService {
           },
           {
             $lookup: {
-              from: 'votes',
+              from: 'posts',
               localField: 'post_id',
-              foreignField: 'post_id',
-              as: 'votes'
+              foreignField: 'parent_id',
+              as: 'post_children'
             }
           },
-          {
-            $addFields: {
-              is_voted: {
-                $cond: {
-                  if: {
-                    $in: [new ObjectId(user_id), '$votes.user_id']
-                  },
-                  then: 1,
-                  else: 0
-                }
-              }
-            }
-          },
+
           {
             $lookup: {
               from: 'posts',
@@ -87,101 +75,12 @@ class BookmarksService {
             }
           },
           {
-            $lookup: {
-              from: 'bookmarks',
-              localField: 'post_id',
-              foreignField: 'post_id',
-              as: 'bookmarks'
+            $unwind: {
+              path: '$post_detail'
             }
           },
           {
             $addFields: {
-              is_bookmarked: {
-                $cond: {
-                  if: {
-                    $in: [new ObjectId(user_id), '$bookmarks.user_id']
-                  },
-                  then: 1,
-                  else: 0
-                }
-              }
-            }
-          },
-          {
-            $lookup: {
-              from: 'reports',
-              localField: 'post_id',
-              foreignField: 'post_id',
-              as: 'reports'
-            }
-          },
-          {
-            $addFields: {
-              is_reported: {
-                $cond: {
-                  if: {
-                    $in: [new ObjectId(user_id), '$reports.user_id']
-                  },
-                  then: 1,
-                  else: 0
-                }
-              }
-            }
-          },
-          {
-            $lookup: {
-              from: 'bookmarks',
-              localField: 'post_id',
-              foreignField: 'post_id',
-              as: 'bookmarks_count'
-            }
-          },
-          {
-            $lookup: {
-              from: 'votes',
-              localField: 'post_id',
-              foreignField: 'post_id',
-              as: 'votes_count'
-            }
-          },
-          {
-            $lookup: {
-              from: 'reports',
-              localField: 'post_id',
-              foreignField: 'post_id',
-              as: 'reports_count'
-            }
-          },
-          {
-            $lookup: {
-              from: 'posts',
-              localField: 'post_id',
-              foreignField: 'parent_id',
-              as: 'post_children'
-            }
-          },
-          {
-            $addFields: {
-              bookmarks_count: {
-                $size: '$bookmarks_count'
-              },
-              votes_count: {
-                $size: '$votes_count'
-              },
-              reports_count: {
-                $size: '$reports_count'
-              },
-              reposts_count: {
-                $size: {
-                  $filter: {
-                    input: '$post_children',
-                    as: 'item',
-                    cond: {
-                      $eq: ['$$item.type', PostType.Repost]
-                    }
-                  }
-                }
-              },
               comments_count: {
                 $size: {
                   $filter: {
@@ -194,13 +93,8 @@ class BookmarksService {
                 }
               },
               views_count: {
-                $add: ['$user_views', '$guest_views']
+                $add: ['$post_detail.user_views', '$post_detail.guest_views']
               }
-            }
-          },
-          {
-            $unwind: {
-              path: '$post_detail'
             }
           },
           {
@@ -231,11 +125,8 @@ class BookmarksService {
               'user_detail.forgot_password_token': 0,
               user_id: 0,
               post_id: 0,
-              post_children: 0,
-              votes: 0,
-              bookmarks: 0,
-              reports: 0,
-              'post_detail.hashtags': 0
+              'post_detail.hashtags': 0,
+              post_children: 0
             }
           },
           {
