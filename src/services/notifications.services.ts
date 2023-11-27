@@ -4,8 +4,6 @@ import { ObjectId, WithId } from 'mongodb'
 
 class NotificationsService {
   async getNotifications(user_id: string, limit: number, page: number) {
-    console.log(user_id)
-
     const notifications = await databaseService.notifications
       .aggregate([
         {
@@ -67,7 +65,7 @@ class NotificationsService {
 
     if (notifications.length === 0) {
       return {
-        posts: [],
+        notifications: [],
         total: 0
       }
     }
@@ -80,12 +78,12 @@ class NotificationsService {
   async readedNotification(notification_id: string) {
     await databaseService.notifications.updateOne({ _id: new ObjectId(notification_id) }, { $set: { is_readed: 1 } })
   }
-  async getCountNotification(user: string) {
+  async getCountNotification(user_id: string) {
     const noti_count = await databaseService.notifications
       .aggregate([
         {
           $match: {
-            receiver_id: new ObjectId('64df48cc7295b028891a264d'),
+            receiver_id: new ObjectId(user_id),
             is_readed: 0
           }
         },
@@ -94,6 +92,12 @@ class NotificationsService {
         }
       ])
       .toArray()
+
+    if (noti_count.length === 0) {
+      return {
+        noti_count: 0
+      }
+    }
     return {
       noti_count: noti_count[0].total
     }
