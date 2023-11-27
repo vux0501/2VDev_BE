@@ -96,6 +96,7 @@ class ReportsService {
               'user_report.point': 1,
               'user_report._id': 1,
               reason: 1,
+              is_readed: 1,
               created_at: 1
             }
           },
@@ -128,6 +129,9 @@ class ReportsService {
       posts,
       total: total[0].total
     }
+  }
+  async readedReport(post_id: string) {
+    await databaseService.reports.updateOne({ _id: new ObjectId(post_id) }, { $set: { is_readed: 1 } })
   }
 }
 

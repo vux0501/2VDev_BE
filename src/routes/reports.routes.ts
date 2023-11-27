@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
   getReportPostController,
+  readedReportController,
   reportPostController,
   unReportPostController
 } from '~/controllers/reports.controllers'
@@ -56,5 +57,7 @@ reportRouters.delete(
   postIdValidator,
   wrapRequestHandler(unReportPostController)
 )
+
+reportRouters.post('/:post_id', wrapRequestHandler(readedReportController))
 
 export default reportRouters

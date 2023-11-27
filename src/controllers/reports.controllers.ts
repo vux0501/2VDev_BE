@@ -46,3 +46,12 @@ export const getReportPostController = async (req: Request<ParamsDictionary, any
     }
   })
 }
+
+export const readedReportController = async (req: Request<ParamsDictionary, any, any, Pagination>, res: Response) => {
+  const post_id = req.params.post_id
+
+  await reportsService.readedReport(post_id)
+  return res.json({
+    message: 'Readed'
+  })
+}
