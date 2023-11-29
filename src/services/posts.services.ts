@@ -1482,14 +1482,16 @@ class PostsService {
     }
     const comment = await databaseService.posts.findOne({ _id: new ObjectId(resolve_id) })
     const receiver_id = comment?.user_id
-    await databaseService.notifications.insertOne(
-      new Notification({
-        direct_id: new ObjectId(post_id),
-        sender_id: new ObjectId(user_id),
-        receiver_id: new ObjectId(receiver_id),
-        type: NotificationType.Pin
-      })
-    )
+    if (new ObjectId(user_id).toString() !== receiver_id?.toString()) {
+      await databaseService.notifications.insertOne(
+        new Notification({
+          direct_id: new ObjectId(post_id),
+          sender_id: new ObjectId(user_id),
+          receiver_id: new ObjectId(receiver_id),
+          type: NotificationType.Pin
+        })
+      )
+    }
   }
 
   async getPostsByHashtag({
