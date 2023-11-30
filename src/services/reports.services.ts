@@ -7,9 +7,12 @@ import { PostType } from '~/constants/enums'
 
 class ReportsService {
   async reportPost(user_id: string, post_id: string, reason: string) {
-    const post = await databaseService.posts.findOne({ _id: new ObjectId(user_id) })
+    const post = await databaseService.posts.findOne({ _id: new ObjectId(post_id) })
     const post_type = post?.type
     const parent_id = post?.parent_id
+
+    console.log(post_type)
+    console.log(parent_id)
 
     if (post_type === 2) {
       const result = await databaseService.reports.findOneAndUpdate(
