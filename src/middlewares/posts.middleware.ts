@@ -364,7 +364,7 @@ export const updatePostValidator = validate(
         trim: true,
         isLength: {
           options: {
-            min: 20,
+            min: 50,
             max: 5000
           },
           errorMessage: POSTS_MESSAGES.CONTENT_LENGTH

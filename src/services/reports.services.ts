@@ -11,9 +11,6 @@ class ReportsService {
     const post_type = post?.type
     const parent_id = post?.parent_id
 
-    console.log(post_type)
-    console.log(parent_id)
-
     if (post_type === 2) {
       const result = await databaseService.reports.findOneAndUpdate(
         {

@@ -82,7 +82,7 @@ export const POSTS_MESSAGES = {
   TITLE_LENGTH: 'Title length must be from 10 to 50.',
 
   CONTENT_IS_REQUIRED: 'Content is required.',
-  CONTENT_LENGTH: 'CONTENT length must be from 20 to 5000.',
+  CONTENT_LENGTH: 'CONTENT length must be from 50 to 5000.',
   CONTENT_MUST_BE_A_STRING: 'Content must be a string.',
 
   HASHTAGS_MUST_BE_AN_ARRAY_OF_STRING: 'Hashtag must be an array of string.',
