@@ -7,6 +7,7 @@ export interface PostRequestBody {
   title: string
   content: string
   parent_id: null | string
+  root_id: null | string
   resolved: null
   hashtags: string[]
   medias: string[]

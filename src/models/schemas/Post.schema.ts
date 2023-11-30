@@ -9,6 +9,7 @@ interface PostConstructor {
   content: string
   type: PostType
   parent_id: null | string
+  root_id: null | string
   hashtags: ObjectId[]
   medias: string[]
   resolved_id?: null | string
@@ -27,6 +28,7 @@ export default class Post {
   medias: string[]
   type: PostType
   parent_id: null | ObjectId
+  root_id: null | ObjectId
   resolved_id: null | ObjectId
   guest_views: number
   user_views: number
@@ -38,6 +40,7 @@ export default class Post {
     title,
     content,
     parent_id,
+    root_id,
     type,
     hashtags,
     medias,
@@ -53,6 +56,7 @@ export default class Post {
     this.title = title || null
     this.type = type
     this.parent_id = parent_id ? new ObjectId(parent_id) : null
+    this.root_id = root_id ? new ObjectId(root_id) : null
     this.content = content
     this.hashtags = hashtags
     this.medias = medias

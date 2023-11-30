@@ -40,6 +40,7 @@ class PostsService {
         hashtags,
         medias: body.medias,
         parent_id: body.parent_id,
+        root_id: body.root_id,
         type: body.type
       })
     )
