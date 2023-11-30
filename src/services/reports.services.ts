@@ -7,55 +7,25 @@ import { PostType } from '~/constants/enums'
 
 class ReportsService {
   async reportPost(user_id: string, post_id: string, reason: string) {
-    const post = await databaseService.posts.findOne({ _id: new ObjectId(post_id) })
-    const post_type = post?.type
-    const parent_id = post?.parent_id
-
-    if (post_type === 2) {
-      const result = await databaseService.reports.findOneAndUpdate(
-        {
+    const result = await databaseService.reports.findOneAndUpdate(
+      {
+        user_id: new ObjectId(user_id),
+        post_id: new ObjectId(post_id),
+        reason: reason
+      },
+      {
+        $setOnInsert: new ReportPost({
           user_id: new ObjectId(user_id),
           post_id: new ObjectId(post_id),
-          root_id: parent_id,
           reason: reason
-        },
-        {
-          $setOnInsert: new ReportPost({
-            user_id: new ObjectId(user_id),
-            post_id: new ObjectId(post_id),
-            root_id: parent_id,
-            reason: reason
-          })
-        },
-        {
-          upsert: true,
-          returnDocument: 'after'
-        }
-      )
-      return result.value as WithId<ReportPost>
-    } else {
-      const result = await databaseService.reports.findOneAndUpdate(
-        {
-          user_id: new ObjectId(user_id),
-          post_id: new ObjectId(post_id),
-          root_id: null,
-          reason: reason
-        },
-        {
-          $setOnInsert: new ReportPost({
-            user_id: new ObjectId(user_id),
-            post_id: new ObjectId(post_id),
-            root_id: null,
-            reason: reason
-          })
-        },
-        {
-          upsert: true,
-          returnDocument: 'after'
-        }
-      )
-      return result.value as WithId<ReportPost>
-    }
+        })
+      },
+      {
+        upsert: true,
+        returnDocument: 'after'
+      }
+    )
+    return result.value as WithId<ReportPost>
   }
 
   async unReportPost(user_id: string, post_id: string) {
