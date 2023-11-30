@@ -16,14 +16,14 @@ class ReportsService {
         {
           user_id: new ObjectId(user_id),
           post_id: new ObjectId(post_id),
-          root_id: new ObjectId(parent_id as ObjectId),
+          root_id: parent_id,
           reason: reason
         },
         {
           $setOnInsert: new ReportPost({
             user_id: new ObjectId(user_id),
             post_id: new ObjectId(post_id),
-            root_id: new ObjectId(parent_id as ObjectId),
+            root_id: parent_id,
             reason: reason
           })
         },
