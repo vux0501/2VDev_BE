@@ -12,6 +12,7 @@ import {
   getPostsbyHashtagController,
   getUserPostsController,
   resolvePostController,
+  unDeletePostForAdminController,
   updatePostController
 } from '~/controllers/posts.controllers'
 import { filterMiddleware } from '~/middlewares/common.middleware'
@@ -163,6 +164,21 @@ postRouters.delete(
   accessTokenValidator,
   isAdminValidator,
   wrapRequestHandler(deletePostForAdminController)
+)
+
+/**
+ * Description: unDelete post, children post for admin
+ * Path: /:post_id
+ * Method: DELETE
+ * Header: { Authorization?: Bearer <access_token> }
+ * Params: {post_id: string}
+ */
+postRouters.delete(
+  '/admin-undelete/:post_id',
+  postIdValidator,
+  accessTokenValidator,
+  isAdminValidator,
+  wrapRequestHandler(unDeletePostForAdminController)
 )
 
 /**
