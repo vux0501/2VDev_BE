@@ -1390,14 +1390,8 @@ class PostsService {
   }
 
   async deletePost(user_id: string, post_id: string) {
-    await databaseService.posts.findOneAndDelete({
-      user_id: new ObjectId(user_id),
-      _id: new ObjectId(post_id)
-    })
-
-    await databaseService.posts.deleteMany({
-      parent_id: new ObjectId(post_id)
-    })
+    await databaseService.posts.updateOne({ _id: new ObjectId(post_id) }, { $set: { is_deleted: 1 } })
+    await databaseService.posts.updateOne({ root_id: new ObjectId(post_id) }, { $set: { is_deleted: 1 } })
   }
 
   async deletePostForAdmin(post_id: string) {

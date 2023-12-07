@@ -149,7 +149,7 @@ postRouters.get(
  * Header: { Authorization?: Bearer <access_token> }
  * Params: {post_id: string}
  */
-postRouters.delete('/:post_id', postIdValidator, accessTokenValidator, wrapRequestHandler(deletePostController))
+postRouters.post('/:post_id', postIdValidator, accessTokenValidator, wrapRequestHandler(deletePostController))
 
 /**
  * Description: Delete post, children post for admin
@@ -158,7 +158,7 @@ postRouters.delete('/:post_id', postIdValidator, accessTokenValidator, wrapReque
  * Header: { Authorization?: Bearer <access_token> }
  * Params: {post_id: string}
  */
-postRouters.delete(
+postRouters.post(
   '/admin/:post_id',
   postIdValidator,
   accessTokenValidator,
@@ -173,7 +173,7 @@ postRouters.delete(
  * Header: { Authorization?: Bearer <access_token> }
  * Params: {post_id: string}
  */
-postRouters.delete(
+postRouters.post(
   '/admin-undelete/:post_id',
   postIdValidator,
   accessTokenValidator,
