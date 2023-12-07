@@ -135,7 +135,8 @@ class PostsService {
         {
           $match: {
             parent_id: new ObjectId(post_id),
-            type: post_type
+            type: post_type,
+            is_deleted: 0
           }
         },
         {
@@ -307,7 +308,8 @@ class PostsService {
         .aggregate([
           {
             $match: {
-              type: PostType.Post
+              type: PostType.Post,
+              is_deleted: 0
             }
           },
           {
@@ -590,7 +592,8 @@ class PostsService {
           {
             $match: {
               type: type,
-              user_id: new ObjectId(user_id)
+              user_id: new ObjectId(user_id),
+              is_deleted: 0
             }
           },
           {
@@ -879,7 +882,8 @@ class PostsService {
         .aggregate([
           {
             $match: {
-              type: PostType.Post
+              type: PostType.Post,
+              is_deleted: 0
             }
           },
           {
@@ -1117,7 +1121,8 @@ class PostsService {
               user_id: {
                 $in: ids
               },
-              type: PostType.Post
+              type: PostType.Post,
+              is_deleted: 0
             }
           },
           {
@@ -1396,13 +1401,21 @@ class PostsService {
   }
 
   async deletePostForAdmin(post_id: string) {
-    await databaseService.posts.findOneAndDelete({
-      _id: new ObjectId(post_id)
-    })
+    await databaseService.posts.updateOne({ _id: new ObjectId(post_id) }, { $set: { is_deleted: 1 } })
 
-    await databaseService.posts.deleteMany({
-      parent_id: new ObjectId(post_id)
-    })
+    await databaseService.posts.updateOne({ root_id: new ObjectId(post_id) }, { $set: { is_deleted: 1 } })
+    const post = await databaseService.posts.findOne({ _id: new ObjectId(post_id) })
+    const user_id = post?.user_id
+    const admin_id = new ObjectId('64df48cc7295b028891a264d')
+
+    await databaseService.notifications.insertOne(
+      new Notification({
+        direct_id: new ObjectId(post_id),
+        sender_id: admin_id,
+        receiver_id: user_id as ObjectId,
+        type: NotificationType.AdminDelete
+      })
+    )
   }
 
   async updatePost(user_id: string, post_id: string, payload: UpdatePostReqBody) {
@@ -1518,7 +1531,8 @@ class PostsService {
               hashtags: {
                 $in: [new ObjectId(hashtag_id)]
               },
-              type: 0
+              type: 0,
+              is_deleted: 0
             }
           },
           {
@@ -1736,7 +1750,8 @@ class PostsService {
               hashtags: {
                 $in: [new ObjectId(hashtag_id)]
               },
-              type: PostType.Post
+              type: PostType.Post,
+              is_deleted: 0
             }
           },
           {

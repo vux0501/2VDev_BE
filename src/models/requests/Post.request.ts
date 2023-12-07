@@ -7,6 +7,7 @@ export interface PostRequestBody {
   title: string
   content: string
   parent_id: null | string
+  is_deleted: null | number
   root_id: null | string
   resolved: null
   hashtags: string[]

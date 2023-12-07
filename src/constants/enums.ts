@@ -35,7 +35,8 @@ export enum NotificationType {
   Repost,
   Pin,
   Bookmark,
-  Follow
+  Follow,
+  AdminDelete
 }
 
 export enum ResolvedType {
