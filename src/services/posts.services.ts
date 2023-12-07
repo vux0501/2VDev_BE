@@ -1418,6 +1418,11 @@ class PostsService {
     )
   }
 
+  async unDeletePostForAdmin(post_id: string) {
+    await databaseService.posts.updateOne({ _id: new ObjectId(post_id) }, { $set: { is_deleted: 0 } })
+    await databaseService.posts.updateOne({ root_id: new ObjectId(post_id) }, { $set: { is_deleted: 0 } })
+  }
+
   async updatePost(user_id: string, post_id: string, payload: UpdatePostReqBody) {
     if (payload.hashtags) {
       const hashtags = await this.checkAndCreateHashtags(payload.hashtags)

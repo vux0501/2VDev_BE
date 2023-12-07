@@ -97,6 +97,7 @@ export const POSTS_MESSAGES = {
   PARENT_ID_MUST_BE_STRING: 'parent_id must be a string',
 
   DELETE_POST_SUCCESS: 'Delete post success',
+  UNDELETE_POST_SUCCESS: 'unDelete post success',
   UPDATE_POST_SUCCESS: 'Update post success',
   RESOLVE_POST_SUCCESS: 'Resolve post success'
 } as const
