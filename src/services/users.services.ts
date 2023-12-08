@@ -457,9 +457,9 @@ class UsersService {
   async getData() {
     const [users, questions, answers, bestAnswers] = await Promise.all([
       databaseService.users.countDocuments({}),
-      databaseService.posts.countDocuments({ type: 0 }),
-      databaseService.posts.countDocuments({ type: 2 }),
-      databaseService.posts.countDocuments({ resolved_id: { $ne: null } })
+      databaseService.posts.countDocuments({ type: 0, is_deleted: 0 }),
+      databaseService.posts.countDocuments({ type: 2, is_deleted: 0 }),
+      databaseService.posts.countDocuments({ resolved_id: { $ne: null }, is_deleted: 0 })
     ])
 
     return { users, questions, answers, bestAnswers }

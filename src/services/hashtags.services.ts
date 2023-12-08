@@ -9,6 +9,12 @@ class HashtagsService {
     const result = await databaseService.posts
       .aggregate([
         {
+          $match: {
+            is_deleted: 0
+          }
+        },
+
+        {
           $unwind: '$hashtags'
         },
         {

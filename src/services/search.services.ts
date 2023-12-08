@@ -27,7 +27,10 @@ class SearchService {
       databaseService.posts
         .aggregate([
           {
-            $match
+            $match: {
+              type: PostType.Post,
+              is_deleted: 0
+            }
           },
           {
             $lookup: {
@@ -195,7 +198,9 @@ class SearchService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Repost]
+                      cond: {
+                        $and: [{ $eq: ['$$item.type', PostType.Repost] }, { $eq: ['$$item.is_deleted', 0] }]
+                      }
                     }
                   }
                 }
@@ -206,7 +211,9 @@ class SearchService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Comment]
+                      cond: {
+                        $and: [{ $eq: ['$$item.type', PostType.Comment] }, { $eq: ['$$item.is_deleted', 0] }]
+                      }
                     }
                   }
                 }
@@ -235,7 +242,10 @@ class SearchService {
       databaseService.posts
         .aggregate([
           {
-            $match
+            $match: {
+              type: PostType.Post,
+              is_deleted: 0
+            }
           },
           {
             $lookup: {
