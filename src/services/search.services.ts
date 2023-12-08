@@ -21,16 +21,14 @@ class SearchService {
       $text: {
         $search: content
       },
-      type: PostType.Post
+      type: PostType.Post,
+      is_deleted: 0
     }
     const [posts, total] = await Promise.all([
       databaseService.posts
         .aggregate([
           {
-            $match: {
-              type: PostType.Post,
-              is_deleted: 0
-            }
+            $match
           },
           {
             $lookup: {
