@@ -472,7 +472,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Repost]
+                      $and: [{ $eq: ['$$item.type', PostType.Repost] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -483,7 +483,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Comment]
+                      $and: [{ $eq: ['$$item.type', PostType.Comment] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -756,7 +756,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Repost]
+                      $and: [{ $eq: ['$$item.type', PostType.Repost] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -767,7 +767,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Comment]
+                      $and: [{ $eq: ['$$item.type', PostType.Comment] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -983,7 +983,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Repost]
+                      $and: [{ $eq: ['$$item.type', PostType.Repost] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -994,7 +994,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Comment]
+                      $and: [{ $eq: ['$$item.type', PostType.Comment] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -1285,7 +1285,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Repost]
+                      $and: [{ $eq: ['$$item.type', PostType.Repost] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -1296,7 +1296,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Comment]
+                      $and: [{ $eq: ['$$item.type', PostType.Comment] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -1694,7 +1694,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Repost]
+                      $and: [{ $eq: ['$$item.type', PostType.Repost] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
@@ -1705,7 +1705,7 @@ class PostsService {
                     input: '$post_children',
                     as: 'item',
                     cond: {
-                      $eq: ['$$item.type', PostType.Comment]
+                      $and: [{ $eq: ['$$item.type', PostType.Comment] }, { $eq: ['$$item.is_deleted', 0] }]
                     }
                   }
                 }
