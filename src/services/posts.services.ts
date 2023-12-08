@@ -246,7 +246,7 @@ class PostsService {
                   input: '$post_children',
                   as: 'item',
                   cond: {
-                    $eq: ['$$item.type', PostType.Comment]
+                    $and: [{ $eq: ['$$item.type', PostType.Comment] }, { $eq: ['$$item.is_deleted', 0] }]
                   }
                 }
               }
@@ -1390,8 +1390,8 @@ class PostsService {
   }
 
   async deletePost(user_id: string, post_id: string) {
-    await databaseService.posts.updateOne({ _id: new ObjectId(post_id) }, { $set: { is_deleted: 1 } })
-    await databaseService.posts.updateOne({ root_id: new ObjectId(post_id) }, { $set: { is_deleted: 1 } })
+    await databaseService.posts.updateOne({ _id: new ObjectId(post_id) }, { $set: { is_deleted: 2 } })
+    await databaseService.posts.updateOne({ root_id: new ObjectId(post_id) }, { $set: { is_deleted: 2 } })
   }
 
   async deletePostForAdmin(post_id: string) {
